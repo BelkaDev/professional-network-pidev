@@ -1,7 +1,14 @@
+###### CONFIG (mara barka)
+git config --global user.name "name"
+git config --global user.email "email"
+
 ###### BRANCHES 
 git branch name // create branch "name"
 git checkout name // switch to branch "name"
 git status // check el branch eli tekhdem fih
+
+kif tbadel el branch yetbadel contenu el dossier el akher commit saret fel 
+branch edhika
 
 ###### 1) LOCAL
 git init (awel marra bark)
