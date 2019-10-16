@@ -3,11 +3,18 @@ git branch name // create branch "name"
 git checkout name // switch to branch "name"
 git status // check el branch eli tekhdem fih
 
-###### LOCAL
-git init (awel marra barka)
-git add "path"
+###### 1) LOCAL
+git init (awel marra bark)
+git add "path" / "file" / .  // el point = current directory
 git commit
 git staus // bech tchouf chnoua zedt fi enehi branch
-git restore?
 
+git restore "file" --staged // bech tfasakh fichier,dossier mel commit
+(moch sûr)
+
+git commit 
+
+###### 2) REMOTE
+git remote add origin https://github.com/BelkaDev/professional-network-pidev.git
+// awel mara bark
 
