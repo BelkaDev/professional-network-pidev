@@ -1,0 +1,9 @@
+git add
+###### BRANCHES 
+git branch name // create branch "name"
+git checkout name // switch to branch "name"
+git status // check el branch eli tekhdem fih
+
+
+
+
