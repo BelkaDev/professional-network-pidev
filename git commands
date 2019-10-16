@@ -10,18 +10,21 @@ git status // check el branch eli tekhdem fih
 kif tbadel el branch yetbadel contenu el dossier el akher commit saret fel 
 branch edhika
 
-###### 1) LOCAL
+###### LOCAL
 git init (awel marra bark)
 git add "path" / "file" / .  // el point = current directory
 git commit
-git staus // bech tchouf chnoua zedt fi enehi branch
+git staus // tchouf chnoua zedt fi enehi branch
 
-git restore "file" --staged // bech tfasakh fichier,dossier mel commit
+git restore "file" --staged // tfasakh fichier,dossier mel commit
 (moch sûr)
 
 git commit 
 
-###### 2) REMOTE
+###### REMOTE
 git remote add origin https://github.com/BelkaDev/professional-network-pidev.git
 // awel mara bark
-
+git pull origin "essm branch" --allow-unrelated-histories 
+// thabet eli fi branch 
+get push origin "essm branch"
+git rm "file" // tfasakh fichier mel git repo
