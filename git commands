@@ -1,9 +1,13 @@
-git add
 ###### BRANCHES 
 git branch name // create branch "name"
 git checkout name // switch to branch "name"
 git status // check el branch eli tekhdem fih
 
-
+###### LOCAL
+git init (awel marra barka)
+git add "path"
+git commit
+git staus // bech tchouf chnoua zedt fi enehi branch
+git restore?
 
 
