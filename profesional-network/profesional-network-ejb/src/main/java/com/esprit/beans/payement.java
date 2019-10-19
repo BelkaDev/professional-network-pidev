@@ -7,16 +7,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Claim {
+public class payement {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
-	@Column(name="description")
-	private String description;
-	@Column(name="etat")
-	private Etat etat;
-	@Column(name="type")
-	private String type;
+	
 	
 }
