@@ -1,9 +1,28 @@
 package com.esprit.beans;
 
-public class Answer {
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+@Entity()
+public class Answer implements Serializable {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="answer_id")
 	private int id;
+	@Column(name = "answer")
 	private String answer;
+	@Column(name = "isCorrect")
 	private boolean isCorrect;
+	@ManyToOne
+	@JoinColumn(name = "question_id", nullable = false)
+	private Question question;
 
 	public int getId() {
 		return id;
@@ -27,6 +46,14 @@ public class Answer {
 
 	public void setCorrect(boolean isCorrect) {
 		this.isCorrect = isCorrect;
+	}
+
+	public Question getQuestion() {
+		return question;
+	}
+
+	public void setQuestion(Question question) {
+		this.question = question;
 	}
 
 	public Answer(int id, String answer, boolean isCorrect) {
