@@ -56,13 +56,14 @@ public class Answer implements Serializable {
 		this.question = question;
 	}
 
-	public Answer(int id, String answer, boolean isCorrect) {
+	public Answer(int id, String answer) {
 		this.id = id;
 		this.answer = answer;
-		this.isCorrect = isCorrect;
+		this.isCorrect = false;
 	}
 
 	public Answer() {
+		this.isCorrect=false;
 	}
 
 }
