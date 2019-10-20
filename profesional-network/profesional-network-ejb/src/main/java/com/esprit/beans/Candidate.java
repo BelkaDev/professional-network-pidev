@@ -2,7 +2,7 @@ package com.esprit.beans;
 
 import java.io.Serializable;
 
-public class Condidate extends User implements Serializable{
+public class Candidate extends User implements Serializable{
 
 	/**
 	 * 

@@ -23,6 +23,8 @@ public class User implements Serializable {
 	private String password;
     private Gender gender;
 	private Date birthDate;
+	// address is complex type
+	private Address address;
 	@Column(name="isPremimum")
 	private boolean isPpremimum;
 	@Column(name="dateDebutP")
@@ -173,6 +175,12 @@ public class User implements Serializable {
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
+	@Embedded
+	public Address getAddress()
+	{
+		return address;
+	}
+
 
   // #----------------------Relations----------------------#
 
