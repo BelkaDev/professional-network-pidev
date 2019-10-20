@@ -3,6 +3,7 @@ package com.esprit.beans;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import com.esprit.enums.Gender;
 import javax.persistence.*;
@@ -12,6 +13,9 @@ import javax.persistence.*;
 public class User implements Serializable {
 	
     private static final long serialVersionUID = 1L;	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
 	private Integer id;
 	private String email;
 	private String firstName;
@@ -19,13 +23,30 @@ public class User implements Serializable {
 	private String password;
     private Gender gender;
 	private Date birthDate;
+	@Column(name="isPremimum")
+	private boolean isPpremimum;
+	@Column(name="dateDebutP")
+	private Date dateDebutP;
+	@Column(name="dateFinP")
+	private Date dateFinP;
 	
 	//****************************
 
+  @OneToMany(mappedBy = "user")
 	private List<Post> Posts;
+  @OneToMany(mappedBy = "commentingUser")
 	private List<Comment> Comments;
+  @OneToMany(mappedBy = "reactingUser")
 	private List<Reaction> Reactions;
+  @OneToMany(mappedBy="sender",fetch = FetchType.LAZY)
 	private List<Message> Messages;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy="whoClaim")
+  private Set<Claim> Whoclaims;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy="claimsOn")
+  private Set<Claim> claimsOn;
+  @ManyToOne
+	private Pack pack; 
+
 
 	//****************************
 	
@@ -35,14 +56,64 @@ public class User implements Serializable {
 
 	public User(Integer idUser) {
 		super();
-		this.id = id;
+		this.id = idUser;
 	}
 	
 	public User() {
 		super();
 	}
 
-	@Id
+	
+	
+
+	public boolean isPpremimum() {
+		return isPpremimum;
+	}
+
+	public void setPpremimum(boolean isPpremimum) {
+		this.isPpremimum = isPpremimum;
+	}
+
+	public Date getDateDebutP() {
+		return dateDebutP;
+	}
+
+	public void setDateDebutP(Date dateDebutP) {
+		this.dateDebutP = dateDebutP;
+	}
+
+	public Date getDateFinP() {
+		return dateFinP;
+	}
+
+	public void setDateFinP(Date dateFinP) {
+		this.dateFinP = dateFinP;
+	}
+
+	public Pack getPack() {
+		return pack;
+	}
+
+	public void setPack(Pack pack) {
+		this.pack = pack;
+	}
+
+	public Set<Claim> getWhoclaims() {
+		return Whoclaims;
+	}
+
+	public void setWhoclaims(Set<Claim> whoclaims) {
+		Whoclaims = whoclaims;
+	}
+
+	public Set<Claim> getClaimsOn() {
+		return claimsOn;
+	}
+
+	public void setClaimsOn(Set<Claim> claimsOn) {
+		this.claimsOn = claimsOn;
+	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -108,7 +179,7 @@ public class User implements Serializable {
 	
   // Posts of the user
 	
-	@OneToMany(mappedBy = "user")
+	
 	public List<Post> getPosts() {
 		return Posts;
 	}
@@ -127,7 +198,7 @@ public class User implements Serializable {
 	
 	// Comments of the user (on all posts)
 	
-	@OneToMany(mappedBy = "commentingUser")
+	
 	public List<Comment> getComments() {
 		return Comments;
 	}
@@ -147,7 +218,7 @@ public class User implements Serializable {
   // Reactions of the user (on all posts)
 	
 	
-	@OneToMany(mappedBy = "reactingUser")
+	
 	public List<Reaction> getReactions() {
 		return Reactions;
 	}
@@ -166,7 +237,7 @@ public class User implements Serializable {
 	
   // Messages sent by the user
 	
-	@OneToMany(mappedBy="sender",fetch = FetchType.LAZY)
+	
 	public List<Message> getMessages() {
 		return Messages;
 	}

@@ -13,6 +13,7 @@ public class Entreprise extends User implements Serializable {
 	public Entreprise() {
 		super();
 	}
+	
 
 
 }
