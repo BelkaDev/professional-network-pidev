@@ -13,6 +13,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import com.esprit.enums.Posts;
@@ -23,11 +25,12 @@ import com.esprit.enums.Reactions;
 @Entity
 public class Comment implements Serializable { 
     
+	
 	private int id;
     private String content;
     private Timestamp date;
-    private int userId;
-    private int postId;
+    private Post commentedPost;
+    private User commentingUser;
      
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,40 +64,51 @@ public class Comment implements Serializable {
     public void setContent(String content) {
         this.content = content;
     }
-    
-    @Column(name = "userId", nullable = false)
-    public int getUserId() {
-        return userId;
-    }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    @Basic
-    @Column(name = "postId", nullable = false)
-    public int getPostypetId() {
-        return postId;
-    }
-
-    public void setPostId(int postId) {
-        this.postId = postId;
-    }
-	
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Comment that = (Comment) o;
         return id == that.id &&
-                userId == that.userId &&
                 Objects.equals(content, that.content) &&
                 Objects.equals(date, that.date) &&
-                Objects.equals(postId, that.postId);
+                Objects.equals(commentedPost, that.commentedPost) && 
+                Objects.equals(commentingUser, that.commentingUser) ;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, content, date, userId,postId);
+        return Objects.hash(id, content, date, commentedPost, commentingUser);
     }
+    
+    
+    // #----------------------Relations----------------------#
+    
+    // The post of the comment
+    
+	@ManyToOne
+	@JoinColumn(name = "postId" , referencedColumnName = "id")
+	public Post getCommentedPost() {
+		return commentedPost;
+	}
+
+	public void setCommentedPost(Post commentedPost) {
+		this.commentedPost = commentedPost;
+	}
+    
+	
+	// The user who posted the comment
+	
+	@ManyToOne
+	@JoinColumn(name = "userId" , referencedColumnName = "id")
+	public User getCommentingUser() {
+		return commentingUser;
+	}
+
+	public void setCommentingUser(User commentingUser) {
+		this.commentingUser = commentingUser;
+	}       
+    
+    
 }

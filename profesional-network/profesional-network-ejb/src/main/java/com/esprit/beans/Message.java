@@ -6,19 +6,24 @@ import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 
 @Entity
 public class Message implements Serializable { 
+
     
 	private int id;
     private Timestamp date;
-    private int sender;
+	private User sender;
     private int recipient;
     private String body;
+
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +36,7 @@ public class Message implements Serializable {
         this.id = id;
     }
 
-    @Basic
+    
     @Column(name = "date", nullable = false)
     public Timestamp getDate() {
         return date;
@@ -41,17 +46,7 @@ public class Message implements Serializable {
         this.date = date;
     }
 
-    @Basic
-    @Column(name = "sender", nullable = false)
-    public int getSender() {
-        return sender;
-    }
 
-    public void setSender(int sender) {
-        this.sender = sender;
-    }
-
-    @Basic
     @Column(name = "recipient", nullable = false)
     public int getRecipient() {
         return recipient;
@@ -61,7 +56,7 @@ public class Message implements Serializable {
         this.recipient = recipient;
     }
 
-    @Basic
+    
     @Column(name = "body", nullable = false, length = 1000)
     public String getBody() {
         return body;
@@ -71,6 +66,13 @@ public class Message implements Serializable {
         this.body = body;
     }
 
+	@Override
+	public String toString() {
+		return "Message [id=" + id + ", date=" + date + ", body=" + body
+				+ ", recipient=" + recipient + "]";
+	}
+
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -87,4 +89,20 @@ public class Message implements Serializable {
     public int hashCode() {
         return Objects.hash(id, date, sender, recipient, body);
     }
+    
+    
+    
+    // #----------------------Relations----------------------#
+    
+
+	@JoinColumn(name = "User", referencedColumnName = "id")
+	@ManyToOne(fetch=FetchType.EAGER)
+	
+	public User getSender() {
+		return sender;
+	}
+
+	public void setSender(User sender) {
+		this.sender = sender;
+	}
 }

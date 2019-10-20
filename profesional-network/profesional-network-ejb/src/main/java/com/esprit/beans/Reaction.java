@@ -13,6 +13,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import com.esprit.enums.Reactions;
@@ -20,12 +22,14 @@ import com.esprit.enums.Reactions;
 
 @Entity
 public class Reaction implements Serializable { 
+	
     
 	private int id;
     private Timestamp date;
-    private int idPublication;
-    private int idUtilisateur;
+    private int idPost;
     private Reactions type;
+    private Post reactedPost;
+    private User reactingUser;
      
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,24 +54,15 @@ public class Reaction implements Serializable {
     }
 
     
-    @Column(name = "id_publication", nullable = false)
-    public int getIdPublication() {
-        return idPublication;
+    @Column(name = "idPost", nullable = false)
+    public int getIdPost() {
+        return idPost;
     }
 
-    public void setIdPublication(int idPublication) {
-        this.idPublication = idPublication;
+    public void setIdPost(int idPost) {
+        this.idPost = idPost;
     }
 
-    
-    @Column(name = "id_utilisateur", nullable = false)
-    public int getIdUtilisateur() {
-        return idUtilisateur;
-    }
-
-    public void setIdUtilisateur(int idUtilisateur) {
-        this.idUtilisateur = idUtilisateur;
-    }
     
 	@Enumerated(EnumType.STRING)
 	public Reactions getType() {
@@ -85,8 +80,7 @@ public class Reaction implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reaction reaction = (Reaction) o;
-        return idPublication == reaction.idPublication &&
-                idUtilisateur == reaction.idUtilisateur &&
+        return idPost == reaction.idPost &&
                 id == reaction.id &&
                 Objects.equals(date, reaction.date) &&
         		Objects.equals(type, reaction.type); // check to compare 2 enums  
@@ -94,6 +88,36 @@ public class Reaction implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(date, idPublication, idUtilisateur, id, type);
+        return Objects.hash(date, idPost, id, type);
     }
+    
+    
+    
+    // #----------------------Relations----------------------#
+    
+    
+    // The post of the reaction
+    
+	@ManyToOne
+	@JoinColumn(name = "postId" , referencedColumnName = "id")
+	public Post getReactedPost() {
+		return reactedPost;
+	}
+
+	public void setReactedPost(Post reactedPost) {
+		this.reactedPost = reactedPost;
+	}
+	
+	// The user who reacted
+	
+	@ManyToOne
+	@JoinColumn(name = "userId" , referencedColumnName = "id")
+	public User getReactingUser() {
+		return reactingUser;
+	}
+
+	public void setReactingUser(User reactingUser) {
+		this.reactingUser = reactingUser;
+	}
+    
 }

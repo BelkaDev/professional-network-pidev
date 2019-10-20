@@ -3,6 +3,7 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Basic;
@@ -13,6 +14,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.esprit.enums.Posts;
@@ -22,12 +26,16 @@ import com.esprit.enums.Reactions;
 
 @Entity
 public class Post implements Serializable { 
-    
+	
+
 	private int id;
     private String content;
     private Timestamp date;
-    private int userId;
+    private User user;
     private Posts type;
+	public List<Comment> Comments;
+	public List<Reaction> Reactions;
+	
      
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,15 +69,6 @@ public class Post implements Serializable {
     public void setContent(String content) {
         this.content = content;
     }
-    
-    @Column(name = "userId", nullable = false)
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 
 	@Enumerated(EnumType.STRING)
 	public Posts getType() {
@@ -87,7 +86,6 @@ public class Post implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Post that = (Post) o;
         return id == that.id &&
-                userId == that.userId &&
                 Objects.equals(content, that.content) &&
                 Objects.equals(date, that.date) &&
                 Objects.equals(type, that.type);
@@ -95,6 +93,65 @@ public class Post implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, content, date, userId,type);
+        return Objects.hash(id, content, date,type);
     }
+    
+    
+    
+ // #----------------------Relations----------------------#
+    
+    
+    // User who posted the post
+    
+    
+ 	@ManyToOne
+ 	@JoinColumn(name = "userId" , referencedColumnName = "id")
+ 	public User getUser() {
+ 		return user;
+ 	}
+
+ 	public void setUser(User user) {
+ 		this.user = user;
+ 	}
+     
+ 	
+ 	// Comments on the post
+    
+	@OneToMany(mappedBy = "commentedPost")
+	public List<Comment> getComments() {
+		return Comments;
+	}
+	public void setComments(List<Comment> Comments) {
+		this.Comments = Comments;
+	}
+
+	public void addCommentsToThisPost(List<Comment> Comments)
+	{
+		this.setComments(Comments);
+		for(Comment c : Comments)
+		{
+			c.setCommentedPost(this);
+		}
+	}
+	
+	
+	// Reactions on the post
+	
+	@OneToMany(mappedBy = "reactedPost")
+	public List<Reaction> getReactions() {
+		return Reactions;
+	}
+	public void setReactions(List<Reaction> Reactions) {
+		this.Reactions = Reactions;
+	}
+
+	public void addReactsToThisPost(List<Reaction> Reactions)
+	{
+		this.setReactions(Reactions);
+		for(Reaction r : Reactions)
+		{
+			r.setReactedPost(this);
+		}
+	}
+    
 }
