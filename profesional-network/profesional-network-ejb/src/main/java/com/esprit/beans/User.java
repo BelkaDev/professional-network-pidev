@@ -42,9 +42,9 @@ public class User implements Serializable {
 	private List<Reaction> Reactions;
   @OneToMany(mappedBy="sender",fetch = FetchType.LAZY)
 	private List<Message> Messages;
-  @OneToMany(cascade = CascadeType.ALL, mappedBy="whoClaim")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy="whoClaim",fetch = FetchType.EAGER)
   private Set<Claim> Whoclaims;
-  @OneToMany(cascade = CascadeType.ALL, mappedBy="claimsOn")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy="claimsOn",fetch = FetchType.EAGER)
   private Set<Claim> claimsOn;
   @ManyToOne
 	private Pack pack; 
