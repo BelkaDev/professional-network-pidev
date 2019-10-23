@@ -79,14 +79,16 @@ public class Interview implements Serializable {
 	}
 
 	public Interview() {
+		this.state=InterviewState.Undefined;
+		this.score=0;
 	}
 
-	public Interview(int id, Date date, Time time, double score, InterviewState state) {
+	public Interview(int id, Date date, Time time, double score) {
 		this.id = id;
 		this.date = date;
 		this.time = time;
 		this.score = score;
-		this.state = state;
+		this.state = InterviewState.Undefined;
 	}
 
 }

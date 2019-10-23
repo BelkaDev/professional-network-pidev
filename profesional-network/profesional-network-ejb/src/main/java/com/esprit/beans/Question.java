@@ -3,6 +3,7 @@ package com.esprit.beans;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,10 +22,9 @@ public class Question implements Serializable {
 	private int id;
 	@Column(name = "question")
 	private String question;
-	@OneToMany(mappedBy = "question",fetch=FetchType.EAGER)
+	@OneToMany(mappedBy = "question",fetch=FetchType.EAGER,cascade = CascadeType.ALL)
 	private List<Answer> answers;
 	@ManyToOne
-	@JoinColumn(name = "quiz_id", nullable = false)
 	private Quiz quiz;
 
 	public int getId() {
@@ -66,5 +66,6 @@ public class Question implements Serializable {
 
 	public Question() {
 	}
+
 
 }

@@ -2,43 +2,54 @@ package com.esprit.services;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.esprit.Iservice.IQuestionServiceLocal;
 import com.esprit.Iservice.IQuestionServiceRemote;
 import com.esprit.beans.Answer;
+import com.esprit.beans.Question;
 
 @Stateless
 @LocalBean
-public class QuestionService implements IQuestionServiceLocal,IQuestionServiceRemote {
+public class QuestionService implements IQuestionServiceLocal, IQuestionServiceRemote {
+	@PersistenceContext(unitName = "pidevtwin-ejb")
+	EntityManager em;
 
 	@Override
 	public void addQuestion(String question) {
-		// TODO Auto-generated method stub
-		
+		Question q = new Question();
+		q.setQuestion(question);
+		em.persist(q);
+
 	}
 
 	@Override
 	public void deleteQuestion(int question_id) {
-		// TODO Auto-generated method stub
-		
+		em.remove(em.find(Question.class, question_id));
 	}
 
 	@Override
-	public void updateQuestion(int question_id) {
-		// TODO Auto-generated method stub
-		
+	public void updateQuestion(int question_id,String question) {
+		Question q=em.find(Question.class, question_id);
+		q.setQuestion(question);
+
 	}
 
 	@Override
-	public void assignResponseToQuestion(int question_id, Answer a) {
-		// TODO Auto-generated method stub
+	public void assignResponseToQuestion(int question_id, int answer_id) {
+		Question q=em.find(Question.class, question_id);
+		Answer a=em.find(Answer.class, answer_id);
+		a.setQuestion(q);
 		
+
 	}
 
 	@Override
-	public void DisplayQuestion(int question_id) {
-		// TODO Auto-generated method stub
-		
+	public Question DisplayQuestion(int question_id) {
+	Question q=	em.find(Question.class, question_id);
+	return q;
+
 	}
 
 }

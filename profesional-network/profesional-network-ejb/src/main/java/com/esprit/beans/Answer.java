@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,7 +22,6 @@ public class Answer implements Serializable {
 	@Column(name = "isCorrect")
 	private boolean isCorrect;
 	@ManyToOne
-	@JoinColumn(name = "question_id", nullable = false)
 	private Question question;
 
 	public int getId() {
