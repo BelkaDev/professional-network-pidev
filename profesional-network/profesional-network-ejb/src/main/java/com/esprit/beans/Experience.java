@@ -44,18 +44,32 @@ public class Experience implements Serializable {
 	public void setDesignation(String designation) {
 		this.designation = designation;
 	}
-	public Date getStart_date() {
+
+	public Date getStartDate() {
 		return startDate;
 	}
-	public void setStart_date(Date start_date) {
-		this.startDate = start_date;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
-	public Date getEnd_date() {
+	public Date getEndDate() {
 		return endDate;
 	}
-	public void setEnd_date(Date end_date) {
-		this.endDate = end_date;
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public Candidate getCandidate() {
+		return candidate;
+	}
+	public void setCandidate(Candidate candidate) {
+		this.candidate = candidate;
+	}
+	
 	
 	
 	

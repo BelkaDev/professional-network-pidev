@@ -35,6 +35,56 @@ public class Candidate implements Serializable{
 	private Set<Skill> skills;
 	@ManyToMany(cascade = CascadeType.ALL)
 	private Set<Candidate> candidates;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getBiography() {
+		return biography;
+	}
+	public void setBiography(String biography) {
+		this.biography = biography;
+	}
+	public double getRating() {
+		return rating;
+	}
+	public void setRating(double rating) {
+		this.rating = rating;
+	}
+	public Set<Experience> getExperiences() {
+		return experiences;
+	}
+	public void setExperiences(Set<Experience> experiences) {
+		this.experiences = experiences;
+	}
+	public Set<Certification> getCertifications() {
+		return certifications;
+	}
+	public void setCertifications(Set<Certification> certifications) {
+		this.certifications = certifications;
+	}
+	public Set<Activity> getActivities() {
+		return activities;
+	}
+	public void setActivities(Set<Activity> activities) {
+		this.activities = activities;
+	}
+	public Set<Skill> getSkills() {
+		return skills;
+	}
+	public void setSkills(Set<Skill> skills) {
+		this.skills = skills;
+	}
+	public Set<Candidate> getCandidates() {
+		return candidates;
+	}
+	public void setCandidates(Set<Candidate> candidates) {
+		this.candidates = candidates;
+	}
+	
+	
 	
 	
 	
