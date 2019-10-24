@@ -35,6 +35,8 @@ public class Candidate implements Serializable {
 	private Set<Skill> skills;
 	@ManyToMany(cascade = CascadeType.ALL)
 	private Set<Candidate> candidates;
+	@OneToMany(mappedBy="candidate")
+	private Set<Quiz> quizs;
 	public int getId() {
 		return id;
 	}
@@ -76,6 +78,12 @@ public class Candidate implements Serializable {
 	}
 	public void setSkills(Set<Skill> skills) {
 		this.skills = skills;
+	}
+	public Set<Quiz> getQuizs() {
+		return quizs;
+	}
+	public void setQuizs(Set<Quiz> quizs) {
+		this.quizs = quizs;
 	}
 
 	
