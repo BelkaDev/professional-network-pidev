@@ -41,5 +41,9 @@ public class AnswerService implements IAnswerServiceLocal,IAnswerServiceRemote {
 		a.setAnswer(answer);
 		
 	}
+	public Answer displayAnswer(int answer_id) {
+		Answer a=em.find(Answer.class, answer_id);
+		return a;
+	}
 
 }

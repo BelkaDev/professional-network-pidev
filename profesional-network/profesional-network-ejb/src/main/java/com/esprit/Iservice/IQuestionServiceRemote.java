@@ -1,5 +1,8 @@
 package com.esprit.Iservice;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.ejb.Remote;
 
 import com.esprit.beans.Answer;

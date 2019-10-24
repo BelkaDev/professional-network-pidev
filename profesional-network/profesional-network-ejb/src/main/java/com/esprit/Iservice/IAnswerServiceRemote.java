@@ -10,5 +10,6 @@ public interface IAnswerServiceRemote {
 	public void deleteAnswer(int answer_id);
 	public void SetCorrectAnswer(int answer_id);
 	public void updateAnswer(int answer_id,String answer);
+	public Answer displayAnswer(int answer_id);
 
 }

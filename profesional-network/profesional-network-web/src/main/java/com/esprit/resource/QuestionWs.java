@@ -1,5 +1,9 @@
 package com.esprit.resource;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.ejb.EJB;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -12,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.esprit.beans.Answer;
 import com.esprit.beans.Question;
 import com.esprit.services.QuestionService;
 
@@ -46,7 +51,7 @@ public class QuestionWs {
 	@Path("displayQuesiton")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response displayQusetion(@QueryParam("id")int question_id) {
-		Question q=questionService.DisplayQuestion(question_id);
+		Question q =questionService.DisplayQuestion(question_id);
 		return Response.status(Status.OK).entity(q).build();
 	}
 	@PUT

@@ -21,9 +21,6 @@ public class Answer implements Serializable {
 	private String answer;
 	@Column(name = "isCorrect")
 	private boolean isCorrect;
-	@ManyToOne
-	private Question question;
-
 	public int getId() {
 		return id;
 	}
@@ -47,15 +44,6 @@ public class Answer implements Serializable {
 	public void setCorrect(boolean isCorrect) {
 		this.isCorrect = isCorrect;
 	}
-
-	public Question getQuestion() {
-		return question;
-	}
-
-	public void setQuestion(Question question) {
-		this.question = question;
-	}
-
 	public Answer(int id, String answer) {
 		this.id = id;
 		this.answer = answer;

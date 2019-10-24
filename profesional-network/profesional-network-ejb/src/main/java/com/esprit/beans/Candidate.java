@@ -14,31 +14,28 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Candidate")
-public class Candidate implements Serializable{
-	
+@Table(name = "Candidate")
+public class Candidate implements Serializable {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="ID")
+	@Column(name = "ID")
 	private int id;
-	@Column(name="biography")
+	@Column(name = "biography")
 	private String biography;
-	@Column(name="candidate_rating")
+	@Column(name = "candidate_rating")
 	private double rating;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="candidate")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "candidate")
 	private Set<Experience> experiences;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="candidate")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "candidate")
 	private Set<Certification> certifications;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="candidate")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "candidate")
 	private Set<Activity> activities;
 	@ManyToMany(cascade = CascadeType.ALL)
 	private Set<Skill> skills;
 	@ManyToMany(cascade = CascadeType.ALL)
 	private Set<Candidate> candidates;
-	
-	
-	
-	
-	
+	@OneToMany(mappedBy="candidate")
+	private Set<Quiz> quizs;
 
 }
