@@ -4,18 +4,25 @@ import java.util.List;
 
 import java.sql.Timestamp;
 import javax.ejb.Local;
+
+import com.esprit.beans.Post;
 import com.esprit.beans.Reaction;
+import com.esprit.beans.User;
+import com.esprit.enums.Reactions;
 
 
 @Local
 public interface IReactionServiceLocal {
 	
-	 void addReaction(Reaction reaction);
-	 void updateReaction(Reaction reaction);
-	 void deleteReaction(Reaction reaction);
-	 Reaction findReaction(Integer id);
-	 List<Reaction> findAllPostReactions(Integer id);
-	 List<Reaction> findAllUserReactions(Integer id);
+	 void addReaction(Timestamp date, Reactions type
+			 ,int idPost,int idUser);
+	 void updateReaction(Timestamp date, Reactions type
+			 ,int idPost,int idUser);
+	 void deleteReaction(int it);
+	 Reaction findReaction(int id);
+	 List<Reaction> findAllPostReactions(int id);
+	 List<Reaction> findAllUserReactions(int id);
 	 List<Reaction> findReactionsByDate(Timestamp date);
-	
+
+
 }

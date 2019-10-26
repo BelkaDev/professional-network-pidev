@@ -18,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import com.esprit.enums.Reactions;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 @Entity
@@ -26,7 +27,6 @@ public class Reaction implements Serializable {
     
 	private int id;
     private Timestamp date;
-    private int idPost;
     private Reactions type;
     private Post reactedPost;
     private User reactingUser;
@@ -53,17 +53,6 @@ public class Reaction implements Serializable {
         this.date = date;
     }
 
-    
-    @Column(name = "idPost", nullable = false)
-    public int getIdPost() {
-        return idPost;
-    }
-
-    public void setIdPost(int idPost) {
-        this.idPost = idPost;
-    }
-
-    
 	@Enumerated(EnumType.STRING)
 	public Reactions getType() {
 		return type;
@@ -80,15 +69,14 @@ public class Reaction implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reaction reaction = (Reaction) o;
-        return idPost == reaction.idPost &&
-                id == reaction.id &&
+                return id == reaction.id &&
                 Objects.equals(date, reaction.date) &&
         		Objects.equals(type, reaction.type); // check to compare 2 enums  
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(date, idPost, id, type);
+        return Objects.hash(date, id, type);
     }
     
     
@@ -112,6 +100,7 @@ public class Reaction implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name = "userId" , referencedColumnName = "id")
+	@JsonBackReference
 	public User getReactingUser() {
 		return reactingUser;
 	}

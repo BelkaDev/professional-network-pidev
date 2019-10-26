@@ -17,14 +17,30 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Message implements Serializable { 
 
-    
+   
+	private static final long serialVersionUID = 1L;
 	private int id;
     private Timestamp date;
 	private User sender;
     private int recipient;
     private String body;
-
+    private int status;
     
+    
+	public Message() {
+		super();
+	}
+
+	public Message(int id, Timestamp date, User sender, int recipient, String body, int status) {
+		super();
+		this.id = id;
+		this.date = date;
+		this.sender = sender;
+		this.recipient = recipient;
+		this.body = body;
+		this.status = status;
+	}
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -65,39 +81,79 @@ public class Message implements Serializable {
     public void setBody(String body) {
         this.body = body;
     }
+    
+    @Column(name = "status", nullable = false, length = 1000)
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
 
 	@Override
 	public String toString() {
 		return "Message [id=" + id + ", date=" + date + ", body=" + body
 				+ ", recipient=" + recipient + "]";
 	}
+	
+	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((body == null) ? 0 : body.hashCode());
+		result = prime * result + ((date == null) ? 0 : date.hashCode());
+		result = prime * result + id;
+		result = prime * result + recipient;
+		result = prime * result + ((sender == null) ? 0 : sender.hashCode());
+		result = prime * result + status;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Message other = (Message) obj;
+		if (body == null) {
+			if (other.body != null)
+				return false;
+		} else if (!body.equals(other.body))
+			return false;
+		if (date == null) {
+			if (other.date != null)
+				return false;
+		} else if (!date.equals(other.date))
+			return false;
+		if (id != other.id)
+			return false;
+		if (recipient != other.recipient)
+			return false;
+		if (sender == null) {
+			if (other.sender != null)
+				return false;
+		} else if (!sender.equals(other.sender))
+			return false;
+		if (status != other.status)
+			return false;
+		return true;
+	}
 
     
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Message message = (Message) o;
-        return id == message.id &&
-                sender == message.sender &&
-                recipient == message.recipient &&
-                Objects.equals(date, message.date) &&
-                Objects.equals(body, message.body);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, date, sender, recipient, body);
-    }
-    
-    
+   
     
     // #----------------------Relations----------------------#
-    
 
-	@JoinColumn(name = "User", referencedColumnName = "id")
-	@ManyToOne(fetch=FetchType.EAGER)
 	
+	@JoinColumn(name = "Sender", referencedColumnName = "id")
+	@ManyToOne(fetch=FetchType.EAGER)
 	public User getSender() {
 		return sender;
 	}

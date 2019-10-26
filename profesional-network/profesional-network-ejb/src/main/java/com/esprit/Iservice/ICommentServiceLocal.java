@@ -8,12 +8,14 @@ import com.esprit.beans.Comment;
 @Local
 public interface ICommentServiceLocal {
 	
-	 void addComment(Comment comment);
-	 void updateComment(Comment comment);
-	 void deleteComment(Comment comment);
-	 Comment findComment(Integer id);
-	 List<Comment> findAllPostComments(Integer id);
-	 List<Comment> findAllUserComments(Integer id);
+	 void addComment(String content,Timestamp date
+				,int idPost, int idUser);
+	 void updateComment(String content,Timestamp date
+				,int idPost, int idUser);
+	 void deleteComment(int id);
+	 Comment findComment(int id);
+	 List<Comment> findAllPostComments(int id);
+	 List<Comment> findAllUserComments(int id);
 	 List<Comment> findCommentsByDate(Timestamp date);
 	
 }

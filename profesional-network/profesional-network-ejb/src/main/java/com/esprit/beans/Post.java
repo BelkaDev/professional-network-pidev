@@ -3,14 +3,16 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Set;
 import java.util.Objects;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,10 +20,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderColumn;
+
 
 import com.esprit.enums.Posts;
-import com.esprit.enums.Reactions;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @Entity
@@ -31,10 +36,14 @@ public class Post implements Serializable {
 	private int id;
     private String content;
     private Timestamp date;
+	//@JsonIgnoreProperties({"Comments","Reactions","user","Posts"})
+	@JsonIgnore
     private User user;
     private Posts type;
-	public List<Comment> Comments;
-	public List<Reaction> Reactions;
+
+	public Set<Comment> Comments;
+ 
+	public Set<Reaction> Reactions;
 	
      
     @Id
@@ -78,7 +87,10 @@ public class Post implements Serializable {
 	public void setType(Posts type) {
 		this.type = type;
 	}
-
+	
+	public Post() {
+		super();
+	}
 	
     @Override
     public boolean equals(Object o) {
@@ -103,7 +115,7 @@ public class Post implements Serializable {
     
     // User who posted the post
     
-    
+	@JsonIgnore
  	@ManyToOne
  	@JoinColumn(name = "userId" , referencedColumnName = "id")
  	public User getUser() {
@@ -116,16 +128,17 @@ public class Post implements Serializable {
      
  	
  	// Comments on the post
-    
-	@OneToMany(mappedBy = "commentedPost")
-	public List<Comment> getComments() {
+ 	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL,mappedBy = "commentedPost",fetch = FetchType.EAGER)
+	@OrderColumn(name="orderIndex")
+	public Set<Comment> getComments() {
 		return Comments;
 	}
-	public void setComments(List<Comment> Comments) {
+	public void setComments(Set<Comment> Comments) {
 		this.Comments = Comments;
 	}
 
-	public void addCommentsToThisPost(List<Comment> Comments)
+	public void addCommentsToThisPost(Set<Comment> Comments)
 	{
 		this.setComments(Comments);
 		for(Comment c : Comments)
@@ -136,16 +149,17 @@ public class Post implements Serializable {
 	
 	
 	// Reactions on the post
-	
-	@OneToMany(mappedBy = "reactedPost")
-	public List<Reaction> getReactions() {
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL,mappedBy = "reactedPost",fetch = FetchType.EAGER)
+	@OrderColumn(name="orderIndex")
+	public Set<Reaction> getReactions() {
 		return Reactions;
 	}
-	public void setReactions(List<Reaction> Reactions) {
+	public void setReactions(Set<Reaction> Reactions) {
 		this.Reactions = Reactions;
 	}
 
-	public void addReactsToThisPost(List<Reaction> Reactions)
+	public void addReactsToThisPost(Set<Reaction> Reactions)
 	{
 		this.setReactions(Reactions);
 		for(Reaction r : Reactions)
