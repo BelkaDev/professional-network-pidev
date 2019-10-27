@@ -1,4 +1,4 @@
-package com.esprit.beans;
+package com.esprit.beans.candidate;
 
 
 import java.io.Serializable;

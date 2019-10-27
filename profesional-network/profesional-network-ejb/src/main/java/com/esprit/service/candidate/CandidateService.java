@@ -1,13 +1,13 @@
-package com.esprit.services;
+package com.esprit.service.candidate;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.esprit.Iservice.ICandidateServiceLocal;
-import com.esprit.Iservice.ICandidateServiceRemote;
-import com.esprit.beans.Experience;
+import com.esprit.Iservice.candidate.ICandidateServiceLocal;
+import com.esprit.Iservice.candidate.ICandidateServiceRemote;
+import com.esprit.beans.candidate.Experience;
 
 @Stateless
 @LocalBean

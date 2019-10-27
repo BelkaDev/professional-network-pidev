@@ -1,8 +1,8 @@
-package com.esprit.Iservice;
+package com.esprit.Iservice.candidate;
 
 import javax.ejb.Local;
 
-import com.esprit.beans.Experience;
+import com.esprit.beans.candidate.Experience;
 
 @Local
 public interface ICandidateServiceLocal {

@@ -1,4 +1,4 @@
-package com.esprit.beans;
+package com.esprit.beans.candidate;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.esprit.beans.Quiz;
 
 @Entity
 @Table(name = "Candidate")

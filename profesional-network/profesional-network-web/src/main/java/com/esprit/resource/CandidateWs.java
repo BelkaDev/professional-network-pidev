@@ -14,8 +14,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.esprit.beans.Experience;
-import com.esprit.services.CandidateService;
+import com.esprit.beans.candidate.Experience;
+import com.esprit.service.candidate.CandidateService;
 
 @Path("candidate")
 public class CandidateWs {
