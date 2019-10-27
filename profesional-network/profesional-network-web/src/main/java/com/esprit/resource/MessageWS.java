@@ -3,7 +3,6 @@ package com.esprit.resource;
 
 import java.sql.Timestamp;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -21,9 +20,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import com.esprit.beans.Message;
-import com.esprit.beans.User;
 import com.esprit.services.MessageService;
-import com.esprit.services.UserService;
 
 @Path("message")
 public class MessageWS {
@@ -79,21 +76,10 @@ public class MessageWS {
 
 	}
 
-
-	/*@GET
-	@Path("/finddate/{id}/{iddest}")
-	@Produces("application/json")
-	public Response findbydate(@PathParam("id") Integer iduser, @PathParam("iddest") Integer iddest) {
-
-		String m = MessageService.findmesgbydate(iduser, iddest);
-		return Response.status(Status.OK).entity(m).build();
-
-	}*/
-
 	@GET
-	@Path("/search")
-	@Produces("application/json")
-	public Response findMessageBySender(@PathParam("id") int sender) {
+	@Path("/sender={sender}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findMessageBySender(@PathParam("sender") int sender) {
 
 
 		List<Message> messages = MessageService.findMsgBySender(sender);
@@ -106,33 +92,44 @@ public class MessageWS {
 	}
 
 	@GET
-	@Path("/findmesgdest/{sender}")
-	@Produces("application/json")
+	@Path("/reciever={reciever}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findMessageByReciever(@PathParam("reciever") int reciever) {
 
-	public Response findMessageByReciever(@PathParam("sender") Integer sender) {
-
-		List<Message> messages = MessageService.findMsgByReciever(sender);
+		List<Message> messages = MessageService.findMsgByReciever(reciever);
 
 		if (messages == null)
 			return Response.status(Status.NOT_FOUND).entity("No Messages Found").build();
 		else
-			return Response.ok(messages).build();
+			return Response.status(Status.OK).entity(messages).build();
 
 	}
 
 
 	@GET
-	@Produces("application/json")
-	@Path("/all")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("all")
 	public Response findAllMessages() {
 
 		List<Message> Messages = MessageService.findAllMessages();
 
 		if (Messages == null)
-			return Response.status(Status.NOT_FOUND).entity("No Participants Found").build();
+			return Response.status(Status.NOT_FOUND).entity("No Messages Found").build();
 		else
 			return Response.ok(Messages).build();
 
 	}
+	
+	/* Trash / Uncomplete
+	
+	@GET
+	@Path("/finddate/{id}/{iddest}")
+	@Produces("application/json")
+	public Response findbydate(@PathParam("id") Integer iduser, @PathParam("iddest") Integer iddest) {
+
+		String m = MessageService.findmesgbydate(iduser, iddest);
+		return Response.status(Status.OK).entity(m).build();
+
+	}*/
 
 }

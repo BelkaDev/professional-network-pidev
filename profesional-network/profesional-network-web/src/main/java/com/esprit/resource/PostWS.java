@@ -22,7 +22,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.esprit.beans.Post;
+import com.esprit.beans.Post;
 import com.esprit.beans.Question;
+import com.esprit.beans.User;
 import com.esprit.enums.Posts;
 import com.esprit.services.PostService;
 
@@ -37,7 +39,7 @@ public class PostWS {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/add")
+	@Path("add")
 	public Response addPost(@QueryParam("idUser") int idUser,
 			@QueryParam("content") String content
 	) {
@@ -51,7 +53,7 @@ public class PostWS {
 	
 
 	@DELETE
-	@Path("/delete")
+	@Path("delete")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response removePost(@QueryParam("id") int id) {
 		PostService.deletePost(id);
@@ -60,9 +62,9 @@ public class PostWS {
 	
 
 	@PUT
-	@Path("/edit")
+	@Path("update")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response editPost(@QueryParam("idUser") int idUser,
+	public Response updatePost(@QueryParam("idUser") int idUser,
 			@QueryParam("content") String content
 	) {
 		Posts typePost = Posts.Text;
@@ -71,12 +73,26 @@ public class PostWS {
 		return Response.status(Status.OK).entity("post updated").build();
 	}
 	@GET
-	@Path("show")
+	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response displayQusetion(@QueryParam("id")int id
+	public Response displayQusetion(@PathParam("id")int id
 			) {
-		System.out.print(id);
 		Post p = PostService.findPost(id);
 		return Response.status(Status.OK).entity(p).build();
+	}
+	
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("all")
+	public Response findAllPosts() {
+
+		List<Post> Posts = PostService.findAllPosts();
+
+		if (Posts == null)
+			return Response.status(Status.NOT_FOUND).entity("No Posts Found").build();
+		else
+			return Response.ok(Posts).build();
+
 	}
 }

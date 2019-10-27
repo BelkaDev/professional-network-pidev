@@ -10,6 +10,6 @@ public interface IUserServiceRemote {
 	//void editUser(int id);
 	void deleteUser(int id);
 	public User findUser(int id);
-	//List<User> findAllUsers();
+	List<User> findAllUsers();
 	
 }

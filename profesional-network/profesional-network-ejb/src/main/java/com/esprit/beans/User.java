@@ -7,7 +7,14 @@ import java.util.Set;
 
 import com.esprit.enums.Gender;
 import javax.persistence.FetchType;
+
+import org.hibernate.validator.constraints.Email;
+
 import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 
 @Entity
@@ -19,6 +26,7 @@ public class User implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private int id;
+    @Email
 	private String email;
 	private String firstName;
 	private String lastName;
@@ -26,7 +34,7 @@ public class User implements Serializable {
 	
 	@Enumerated(EnumType.STRING)
     private Gender gender;
-	
+
 	private Date birthDate;
 	
 	// address is complex type
@@ -42,36 +50,39 @@ public class User implements Serializable {
 
 
   @OneToMany(cascade = CascadeType.ALL,mappedBy = "user",fetch = FetchType.EAGER)
-	private Set<Post> Posts;
+  private Set<Post> Posts;
   
-  
+
   @OneToMany(cascade = CascadeType.ALL,mappedBy = "commentingUser",fetch = FetchType.EAGER)
 	private Set<Comment> Comments;
   
-  
+
   @OneToMany(cascade =CascadeType.ALL,mappedBy = "reactingUser",fetch = FetchType.EAGER) 
 	private Set<Reaction> Reactions;
 
-  
+
   @OneToMany(cascade =CascadeType.ALL,mappedBy="sender",fetch = FetchType.EAGER)
 	private Set<Message> Messages;
 
+
   
   @OneToMany(cascade = CascadeType.ALL, mappedBy="whoClaim",fetch = FetchType.EAGER)
-
   private Set<Claim> Whoclaims;
   
-  
+
   @OneToMany(cascade = CascadeType.ALL, mappedBy="claimsOn",fetch = FetchType.EAGER)
+  @JsonIgnore
   private Set<Claim> claimsOn;
-  @ManyToOne
+  
+  
+  	@ManyToOne
+	@JsonIgnore
 	private Pack pack; 
 
 
 	//****************************
 	
-	
-  
+
 	public User(int idUser) {
 		super();
 		this.id = idUser;
@@ -115,7 +126,8 @@ public class User implements Serializable {
 	public void setPack(Pack pack) {
 		this.pack = pack;
 	}
-
+	
+	@JsonIgnore
 	public Set<Claim> getWhoclaims() {
 		return Whoclaims;
 	}
@@ -211,7 +223,7 @@ public class User implements Serializable {
 	
   // Posts of the user
 	
-	
+	@JsonIgnore
 	public Set<Post> getPosts() {
 		return Posts;
 	}

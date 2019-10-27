@@ -19,6 +19,9 @@ import javax.persistence.OneToOne;
 
 import com.esprit.enums.Reactions;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @Entity
@@ -28,7 +31,9 @@ public class Reaction implements Serializable {
 	private int id;
     private Timestamp date;
     private Reactions type;
+    @JsonIgnore
     private Post reactedPost;
+    @JsonIgnore
     private User reactingUser;
      
     @Id
@@ -87,7 +92,7 @@ public class Reaction implements Serializable {
     // The post of the reaction
     
 	@ManyToOne
-	@JoinColumn(name = "postId" , referencedColumnName = "id")
+	@JoinColumn(name = "post" , referencedColumnName = "id")
 	public Post getReactedPost() {
 		return reactedPost;
 	}
@@ -99,8 +104,7 @@ public class Reaction implements Serializable {
 	// The user who reacted
 	
 	@ManyToOne
-	@JoinColumn(name = "userId" , referencedColumnName = "id")
-	@JsonBackReference
+	@JoinColumn(name = "reacter" , referencedColumnName = "id")
 	public User getReactingUser() {
 		return reactingUser;
 	}

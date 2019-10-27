@@ -2,6 +2,8 @@ package com.esprit.resource;
 
 
 import java.sql.Timestamp;
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -15,6 +17,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import com.esprit.beans.Comment;
 import com.esprit.beans.Comment;
 import com.esprit.services.CommentService;
 
@@ -69,6 +72,36 @@ public class CommentWS {
 			Comment c = CommentService.findComment(idComment);	
 			return Response.status(Status.OK).entity(c).build();
 	}
+	
+	
+	@GET
+	@Path("/user={user}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findCommentsByUser(@PathParam("user") int id) {
+
+		List<Comment> reactions = CommentService.findUserComments(id);
+
+		if (reactions == null)
+			return Response.status(Status.NOT_FOUND).entity("No Comments Found").build();
+		else
+			return Response.status(Status.OK).entity(reactions).build();
+
+	}
+
+	@GET
+	@Path("/post={post}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findCommentsOnPost(@PathParam("post") int id) {
+
+		List<Comment> reactions = CommentService.findPostComments(id);
+
+		if (reactions == null)
+			return Response.status(Status.NOT_FOUND).entity("No Comments Found").build();
+		else
+			return Response.status(Status.OK).entity(reactions).build();
+
+	}
+	
 
 
 }

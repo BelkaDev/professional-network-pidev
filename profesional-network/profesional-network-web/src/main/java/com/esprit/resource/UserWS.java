@@ -1,10 +1,11 @@
 package com.esprit.resource;
 
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 
 import javax.ejb.EJB;
+import javax.websocket.server.PathParam;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,24 +17,38 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.esprit.beans.Answer;
-import com.esprit.beans.Question;
-import com.esprit.beans.User;
 import com.esprit.services.UserService;
+import com.esprit.beans.User;
+
 
 @Path("user")
 public class UserWS {
 	
 	@EJB
 	UserService UserService = new UserService();
-	
+		
 	@GET
+	@Produces("application/json")
 	@Path("show")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response displayUser(@QueryParam("id")int id) {
-		System.out.println("the fucking id : "+ id);
-		return Response.status(Status.OK).entity(UserService.findUser(id).getPack().getListUser()).build();
+	public Response showUser(@QueryParam("id")int id) {
+		System.out.println(id);
+		return Response.status(Status.OK).entity(UserService.findUser(id)).build();
 	}
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("all")
+	public Response showAllUsers() {
+
+		List<User> Users = UserService.findAllUsers();
+
+		if (Users == null)
+			return Response.status(Status.NOT_FOUND).entity("No Users Found").build();
+		else
+			return Response.ok(Users).build();
+
+	}
+
+	
 }
 

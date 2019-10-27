@@ -79,31 +79,34 @@ public class ReactionService implements IReactionServiceLocal,IReactionServiceRe
 		return em.find(Reaction.class, id);
 	}
 
+	@Override
+	public List<Reaction> findPostReactions(int id) {
+		List<Reaction> reacts = em.createQuery("select r from Reaction r where r.post.id=:Id",Reaction.class)
+				.setParameter("Id", id).getResultList();
+		return reacts;
+	}
 
 
+
+	@Override
+	public List<Reaction> findUserReactions(int id) {
+		List<Reaction> reacts = em.createQuery("select r from Reaction r where r.reacter.id=:Id",Reaction.class)
+				.setParameter("Id", id).getResultList();
+		return reacts;
+	}
+
+	
+	@Override
+	public Reaction findUserReactionOnPost(int idUser, int idPost) {
+		Reaction react = em.createQuery("select r from Reaction r where r.reacter.id=:IdU AND r.post.id=:IdP",Reaction.class)
+				.setParameter("IdU", idUser).setParameter("IdP", idPost ).getSingleResult();
+		return react;
+	}
 
 	@Override
 	public List<Reaction> findReactionsByDate(Timestamp date) {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
-
-
-	@Override
-	public List<Reaction> findAllPostReactions(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
-	@Override
-	public List<Reaction> findAllUserReactions(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 
 
 }

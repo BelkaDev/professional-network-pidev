@@ -14,6 +14,7 @@ import javax.persistence.Query;
 import com.esprit.Iservice.IUserServiceLocal;
 import com.esprit.Iservice.IUserServiceRemote;
 import com.esprit.beans.Answer;
+import com.esprit.beans.Message;
 import com.esprit.beans.User;
 
 @Stateless
@@ -37,6 +38,14 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 	public User findUser(int idUser) {
 	User user= em.find(User.class, idUser);
 	return user;
+
+	}
+	
+	@Override
+	public List<User> findAllUsers() {
+		return em
+				.createQuery("select user from User user", User.class)
+				.getResultList();
 
 	}
 

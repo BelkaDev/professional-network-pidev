@@ -84,15 +84,12 @@ public class MessageService implements IMessageServiceLocal,IMessageServiceRemot
 		List<Message> msgs = em.createQuery("select msg from Message msg  where msg.sender.id=:Id", Message.class)
 				.setParameter("Id", iduser).getResultList();
 
-		for (Message msg : msgs) {
-			System.out.println(msg.getSender().getId());
-		}
 		return msgs;
 	}
-;
+	
 	@Override
 	public List<Message> findMsgByReciever(int iduser) {
-		List<Message> msgs = em.createQuery("select msg from Message msg where msg.recipient.id=:Id")
+		List<Message> msgs = em.createQuery("select msg from Message msg where msg.recipient=:Id",Message.class)
 				.setParameter("Id", iduser).getResultList();
 		for (Message msg : msgs){
 			msg.setStatus(1);
@@ -128,11 +125,6 @@ public class MessageService implements IMessageServiceLocal,IMessageServiceRemot
 			}
 		System.out.println(content);
 		return content;
-		
-
-		
-		
-
 		
 	}
 

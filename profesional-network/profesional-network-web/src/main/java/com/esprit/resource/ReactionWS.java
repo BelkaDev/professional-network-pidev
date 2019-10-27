@@ -2,6 +2,7 @@ package com.esprit.resource;
 
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.ejb.EJB;
 
@@ -19,6 +20,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.esprit.beans.Reaction;
+import com.esprit.beans.Reaction;
 import com.esprit.enums.Reactions;
 import com.esprit.services.ReactionService;
 
@@ -30,7 +32,7 @@ public class ReactionWS {
 	private final String out = "success";
 
 	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
+		@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/add")	
 	public Response addReaction(@QueryParam("idUser") int idUser,
 			@QueryParam("idPost") int idPost
@@ -71,6 +73,38 @@ public class ReactionWS {
 			Reaction c = ReactionService.findReaction(idReaction);	
 			return Response.status(Status.OK).entity(c).build();
 	}
+
+	
+	@GET
+	@Path("/user={user}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findReactionsByUser(@PathParam("user") int id) {
+
+		List<Reaction> reactions = ReactionService.findUserReactions(id);
+
+		if (reactions == null)
+			return Response.status(Status.NOT_FOUND).entity("No Reactions Found").build();
+		else
+			return Response.status(Status.OK).entity(reactions).build();
+
+	}
+
+	@GET
+	@Path("/post={post}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findReactionsOnPost(@PathParam("post") int id) {
+
+		List<Reaction> reactions = ReactionService.findPostReactions(id);
+
+		if (reactions == null)
+			return Response.status(Status.NOT_FOUND).entity("No Reactions Found").build();
+		else
+			return Response.status(Status.OK).entity(reactions).build();
+
+	}
+	
+
+
 
 	
 }

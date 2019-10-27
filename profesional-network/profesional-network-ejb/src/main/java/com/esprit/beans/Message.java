@@ -13,6 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class Message implements Serializable { 
@@ -21,6 +24,7 @@ public class Message implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
     private Timestamp date;
+    @JsonIgnoreProperties({"whoclaims","messages","comments","reactions"})
 	private User sender;
     private int recipient;
     private String body;
@@ -29,16 +33,6 @@ public class Message implements Serializable {
     
 	public Message() {
 		super();
-	}
-
-	public Message(int id, Timestamp date, User sender, int recipient, String body, int status) {
-		super();
-		this.id = id;
-		this.date = date;
-		this.sender = sender;
-		this.recipient = recipient;
-		this.body = body;
-		this.status = status;
 	}
 	
     @Id
@@ -89,6 +83,20 @@ public class Message implements Serializable {
 
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	   
+    
+    // #----------------------Relations----------------------#
+
+	
+	@JoinColumn(name = "Sender", referencedColumnName = "id")
+	@ManyToOne(fetch=FetchType.EAGER)
+	public User getSender() {
+		return sender;
+	}
+
+	public void setSender(User sender) {
+		this.sender = sender;
 	}
 
 
@@ -147,18 +155,5 @@ public class Message implements Serializable {
 	}
 
     
-   
-    
-    // #----------------------Relations----------------------#
 
-	
-	@JoinColumn(name = "Sender", referencedColumnName = "id")
-	@ManyToOne(fetch=FetchType.EAGER)
-	public User getSender() {
-		return sender;
-	}
-
-	public void setSender(User sender) {
-		this.sender = sender;
-	}
 }

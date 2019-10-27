@@ -20,9 +20,10 @@ public interface IReactionServiceLocal {
 			 ,int idPost,int idUser);
 	 void deleteReaction(int it);
 	 Reaction findReaction(int id);
-	 List<Reaction> findAllPostReactions(int id);
-	 List<Reaction> findAllUserReactions(int id);
+	 List<Reaction> findPostReactions(int id);
+	 List<Reaction> findUserReactions(int id);
 	 List<Reaction> findReactionsByDate(Timestamp date);
+	 Reaction findUserReactionOnPost(int idUser,int idPost);
 
 
 }

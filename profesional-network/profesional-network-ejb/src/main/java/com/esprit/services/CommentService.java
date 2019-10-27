@@ -14,6 +14,8 @@ import com.esprit.beans.Comment;
 import com.esprit.beans.Message;
 import com.esprit.beans.Post;
 import com.esprit.beans.Quiz;
+import com.esprit.beans.Comment;
+import com.esprit.beans.Comment;
 import com.esprit.beans.User;
 
 
@@ -82,24 +84,34 @@ public class CommentService implements ICommentServiceLocal,ICommentServiceRemot
 
 
 	@Override
-	public List<Comment> findAllPostComments(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Comment> findPostComments(int id) {
+		List<Comment> reacts = em.createQuery("select c from Comment c where c.post.id=:Id",Comment.class)
+				.setParameter("Id", id).getResultList();
+		return reacts;
 	}
 
 
 	@Override
-	public List<Comment> findAllUserComments(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Comment> findUserComments(int id) {
+		List<Comment> reacts = em.createQuery("select c from Comment c where c.commenter.id=:Id",Comment.class)
+				.setParameter("Id", id).getResultList();
+		return reacts;
 	}
 
+
+	@Override
+	public List<Comment> findUserCommentsOnPost(int idUser, int idPost) {
+		List<Comment> reacts = em.createQuery("select c from Comment c where c.commenter.id=:IdU AND c.post.id=:IdP",Comment.class)
+				.setParameter("IdU", idUser).setParameter("IdP", idPost ).getResultList();
+		return reacts;
+	}
+	
 
 	@Override
 	public List<Comment> findCommentsByDate(Timestamp date) {
-		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 
 }

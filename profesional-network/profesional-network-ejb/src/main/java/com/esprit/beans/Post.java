@@ -30,19 +30,19 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @Entity
+
 public class Post implements Serializable { 
 	
-
+    
 	private int id;
     private String content;
     private Timestamp date;
-	//@JsonIgnoreProperties({"Comments","Reactions","user","Posts"})
-	@JsonIgnore
+    @JsonIgnoreProperties({"whoclaims","messages","comments","reactions"})
     private User user;
     private Posts type;
-
+    @JsonIgnore
 	public Set<Comment> Comments;
- 
+    @JsonIgnore
 	public Set<Reaction> Reactions;
 	
      
@@ -115,7 +115,7 @@ public class Post implements Serializable {
     
     // User who posted the post
     
-	@JsonIgnore
+	
  	@ManyToOne
  	@JoinColumn(name = "userId" , referencedColumnName = "id")
  	public User getUser() {
@@ -128,9 +128,9 @@ public class Post implements Serializable {
      
  	
  	// Comments on the post
- 	@JsonIgnore
+ 	
+ 	
 	@OneToMany(cascade = CascadeType.ALL,mappedBy = "commentedPost",fetch = FetchType.EAGER)
-	@OrderColumn(name="orderIndex")
 	public Set<Comment> getComments() {
 		return Comments;
 	}
@@ -149,9 +149,8 @@ public class Post implements Serializable {
 	
 	
 	// Reactions on the post
-	@JsonIgnore
+	
 	@OneToMany(cascade = CascadeType.ALL,mappedBy = "reactedPost",fetch = FetchType.EAGER)
-	@OrderColumn(name="orderIndex")
 	public Set<Reaction> getReactions() {
 		return Reactions;
 	}
