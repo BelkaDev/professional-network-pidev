@@ -81,7 +81,7 @@ public class PostWS {
 		return Response.status(Status.OK).entity(p).build();
 	}
 	
-
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("all")

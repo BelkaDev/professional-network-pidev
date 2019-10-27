@@ -20,7 +20,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.esprit.beans.Reaction;
-import com.esprit.beans.Reaction;
 import com.esprit.enums.Reactions;
 import com.esprit.services.ReactionService;
 

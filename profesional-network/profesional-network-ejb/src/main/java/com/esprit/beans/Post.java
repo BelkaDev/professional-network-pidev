@@ -68,45 +68,6 @@ public class Post implements Serializable {
         this.date = date;
     }
 
-
-    
-    @Column(name = "content", nullable = false, length = 200)
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-	@Enumerated(EnumType.STRING)
-	public Posts getType() {
-		return type;
-	}
-
-	public void setType(Posts type) {
-		this.type = type;
-	}
-	
-	public Post() {
-		super();
-	}
-	
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Post that = (Post) o;
-        return id == that.id &&
-                Objects.equals(content, that.content) &&
-                Objects.equals(date, that.date) &&
-                Objects.equals(type, that.type);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, content, date,type);
-    }
     
     
     
@@ -167,4 +128,43 @@ public class Post implements Serializable {
 		}
 	}
     
+    
+    @Column(name = "content", nullable = false, length = 200)
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+	@Enumerated(EnumType.STRING)
+	public Posts getType() {
+		return type;
+	}
+
+	public void setType(Posts type) {
+		this.type = type;
+	}
+	
+	public Post() {
+		super();
+	}
+	
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Post that = (Post) o;
+        return id == that.id &&
+                Objects.equals(content, that.content) &&
+                Objects.equals(date, that.date) &&
+                Objects.equals(type, that.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, content, date,type);
+    }
+
 }

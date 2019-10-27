@@ -12,6 +12,7 @@ import com.esprit.Iservice.IPostServiceLocal;
 import com.esprit.Iservice.IPostServiceRemote;
 import com.esprit.beans.Comment;
 import com.esprit.beans.Post;
+import com.esprit.beans.Reaction;
 import com.esprit.beans.User;
 import com.esprit.enums.Posts;
 
@@ -74,29 +75,29 @@ public class PostService implements IPostServiceLocal,IPostServiceRemote {
 
 	@Override
 	public List<Post> findAllPosts() {
-		// TODO Auto-generated method stub
-		return null;
+		return em
+				.createQuery("select post from Post post", Post.class)
+				.getResultList();
 	}
 
 
 	@Override
 	public List<Post> findAllUserPosts(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Post> posts = em.createQuery("select post from Post post where usr.id=:Id",Post.class)
+				.setParameter("Id", id).getResultList();
+		return posts;
 	}
 
 
 	@Override
 	public Post find(int id) {
 		Post p = em.find(Post.class, id);
-
 		return p;
 	}
 
 
 	@Override
 	public List<Post> findFriendsPosts(int Userid) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
