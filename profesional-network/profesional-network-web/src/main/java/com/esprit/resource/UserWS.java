@@ -28,14 +28,11 @@ public class UserWS {
 	UserService UserService = new UserService();
 		
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces("application/json")
 	@Path("show")
-	public Response showUser(@QueryParam("id")int id) {	
-		User user = UserService.findUser(id);
-		if (user == null)
-		return Response.status(Response.Status.NOT_FOUND).entity("User doesn't exist").build();
-		else
-		return Response.status(Status.OK).entity(user).build();
+	public Response showUser(@QueryParam("id")int id) {
+		System.out.println(id);
+		return Response.status(Status.OK).entity(UserService.findUser(id)).build();
 	}
 
 	@GET
