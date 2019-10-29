@@ -3,14 +3,20 @@ package com.esprit.beans.candidate;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity()
 @Table(name="Experience")
@@ -18,8 +24,8 @@ public class Experience implements Serializable {
 	
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
-	@Column(name="ID")
-	private int id;
+	@Column(name="Experience_ID")
+	private int experienceId;
 	@Column(name="designation")
 	private String designation;
 	@Column(name="type")
@@ -28,15 +34,15 @@ public class Experience implements Serializable {
 	private Date startDate;
 	@Column(name="end_date")
 	private Date endDate;
-	
-	@ManyToOne
-	Candidate candidate;
+	@Transient
+	@ManyToMany( cascade=CascadeType.ALL,mappedBy="experiences")
+	private Set<Candidate> candidates = new HashSet<Candidate>();
 	
 	public int getId() {
-		return id;
+		return experienceId;
 	}
 	public void setId(int id) {
-		this.id = id;
+		this.experienceId = id;
 	}
 	public String getDesignation() {
 		return designation;
@@ -63,12 +69,20 @@ public class Experience implements Serializable {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public Candidate getCandidate() {
-		return candidate;
+	public Set<Candidate> getCandidates() {
+		return candidates;
 	}
-	public void setCandidate(Candidate candidate) {
-		this.candidate = candidate;
+	public void setCandidates(Set<Candidate> candidates) {
+		this.candidates = candidates;
 	}
+
+	
+
+
+	
+	
+	
+	
 	
 	
 	

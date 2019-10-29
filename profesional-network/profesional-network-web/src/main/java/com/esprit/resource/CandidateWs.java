@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.esprit.beans.candidate.Candidate;
 import com.esprit.beans.candidate.Experience;
 import com.esprit.service.candidate.CandidateService;
 
@@ -48,8 +49,15 @@ public class CandidateWs {
 	@GET
 	@Path("getExperience")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response displayQuiz(@QueryParam("id")int id) {
+	public Response displayExperience(@QueryParam("id")int id) {
 		return Response.status(Status.FOUND).entity(cs.displayExperience(id)).build();
+	}
+	
+	@GET
+	@Path("getCandidateByExperience")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response displayCandidateByExperience(@QueryParam("id")int id) {
+		return Response.status(Status.FOUND).entity(cs.displayCandidatesByExperience(id)).build();
 	}
 	
 	@PUT
@@ -59,4 +67,14 @@ public class CandidateWs {
 		cs.updateExperience(id, designation);
 		return Response.status(Status.OK).entity("Experience updated").build();
 	}
+	
+	@POST
+	@Path("addCandidate")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addCandidate() {
+			cs.addCandidate();
+		return Response.status(Status.CREATED).entity("Experience Added").build();
+	}
+	
+	
 }
