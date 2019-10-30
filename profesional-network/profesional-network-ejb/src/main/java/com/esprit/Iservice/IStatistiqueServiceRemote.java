@@ -4,7 +4,7 @@ import java.sql.Date;
 
 import javax.ejb.Remote;
 
-import com.esprit.beans.Entreprise;
+import com.esprit.beans.Enterprise;
 import com.esprit.beans.Statistique;
 
 @Remote
@@ -13,11 +13,11 @@ public interface IStatistiqueServiceRemote {
 	public void statistiqueCompetenece();
 
 	
-	//Entreprise
-	public void nbreEntrepriseAdded(Date debut,Date fin);
-	public void statistiqueRecrutement(Entreprise e);
-	public void nbreProjetAdded(Entreprise e,Date debut,Date fin);
-	public void nbreCondidateRecruted(Entreprise e,Date debut,Date fin);
+	//Enterprise
+	public void nbreEnterpriseAdded(Date debut,Date fin);
+	public void statistiqueRecrutement(Enterprise e);
+	public void nbreProjetAdded(Enterprise e,Date debut,Date fin);
+	public void nbreCondidateRecruted(Enterprise e,Date debut,Date fin);
 	
 
 	//Condidate 

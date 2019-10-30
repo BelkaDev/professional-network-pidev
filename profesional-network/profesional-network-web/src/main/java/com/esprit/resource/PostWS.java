@@ -75,7 +75,7 @@ public class PostWS {
 	@GET
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response displayQusetion(@PathParam("id")int id
+	public Response displayPost(@PathParam("id")int id
 			) {
 		Post p = PostService.findPost(id);
 		return Response.status(Status.OK).entity(p).build();

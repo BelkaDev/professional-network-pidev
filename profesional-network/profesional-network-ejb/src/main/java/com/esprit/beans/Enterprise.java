@@ -37,8 +37,17 @@ public class Enterprise implements Serializable {
 	
 	
 	
+	
+	
+	
+	//@OneToMany(cascade = CascadeType.ALL, mappedBy = "enterprise")
+		//private Set<JobOffer> joboffer;
+	
 	//@OneToMany(cascade = CascadeType.ALL, mappedBy = "enterprise")
 	//private Set<EnterpriseEvent> event;
+	
+	//@OneToMany(cascade = CascadeType.ALL, mappedBy = "enterprise")
+		//private Set<EnterpriseUser> Euser;
 	
 	public Enterprise() {
 		super();
@@ -71,6 +80,12 @@ public class Enterprise implements Serializable {
 		Employeesnumber = employeesnumber;
 		Edescription = edescription;
 	}
+
+
+
+
+
+	
 
 
 
@@ -114,6 +129,8 @@ public class Enterprise implements Serializable {
 	public void setEdomain(String edomain) {
 		Edomain = edomain;
 	}
+
+	
 	
 	
 	
