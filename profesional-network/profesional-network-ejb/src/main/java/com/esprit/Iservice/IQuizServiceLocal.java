@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-import com.esprit.beans.Candidate;
+import com.esprit.beans.candidate.Candidate;
 import com.esprit.beans.Quiz;
 import com.esprit.beans.QuizState;
 
