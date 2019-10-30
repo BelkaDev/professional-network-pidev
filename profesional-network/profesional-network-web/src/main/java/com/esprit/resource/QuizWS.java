@@ -1,5 +1,7 @@
 package com.esprit.resource;
 
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -23,8 +25,8 @@ public class QuizWS {
 	@POST
 	@Path("addQuiz")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addQuiz(@QueryParam("idC")int candidate_id,@QueryParam("idO")int offer_id) {
-		quizService.addQuiz(candidate_id,offer_id);
+	public Response addQuiz(@QueryParam("idC") int candidate_id, @QueryParam("idO") int offer_id) {
+		quizService.addQuiz(candidate_id, offer_id);
 		return Response.status(Status.OK).entity("the quiz has been successfully created").build();
 	}
 
@@ -78,6 +80,31 @@ public class QuizWS {
 	public Response setScore(@QueryParam("id") int quiz_id, @QueryParam("score") double score) {
 		quizService.setScore(quiz_id, score);
 		return Response.status(Status.OK).entity("your score is " + score).build();
+	}
+
+	@GET
+	@Path("OfferQuiz")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response showOfferQuiz(@QueryParam("idOffer") int offer_id) {
+		return Response.status(Status.FOUND).entity(quizService.getCandidateForOffer(offer_id)).build();
+	}
+
+	@PUT
+	@Path("passQuiz")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response takeQuiz(@QueryParam("idQuiz") int quiz_id, @QueryParam("list") List<Integer> answersList) {
+		if (quizService.CorrectQuiz(quiz_id, answersList))
+			return Response.status(Status.OK).entity("your quiz has been corrected check if you passed or failed")
+					.build();
+		return Response.status(Status.OK).entity("you have already taken the quiz").build();
+	}
+
+	@PUT
+	@Path("validateQuiz")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response validate(@QueryParam("idOffer") int offer_id) {
+		quizService.ChooseCnadidate(offer_id);
+		return Response.status(Status.OK).entity("the selection process for interviews has been completed").build();
 	}
 
 }

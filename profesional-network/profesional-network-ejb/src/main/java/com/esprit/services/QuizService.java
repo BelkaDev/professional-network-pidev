@@ -2,12 +2,14 @@ package com.esprit.services;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import com.esprit.Iservice.IQuizServiceLocal;
 import com.esprit.Iservice.IQuizServiceRemote;
@@ -26,9 +28,9 @@ public class QuizService implements IQuizServiceLocal, IQuizServiceRemote {
 	EntityManager em;
 
 	@Override
-	public void addQuiz(int candidate_id,int jobOffer_id) {
-		Candidate c=em.find(Candidate.class, candidate_id);
-		JobOffer o=em.find(JobOffer.class, jobOffer_id);
+	public void addQuiz(int candidate_id, int jobOffer_id) {
+		Candidate c = em.find(Candidate.class, candidate_id);
+		JobOffer o = em.find(JobOffer.class, jobOffer_id);
 		Quiz qz = new Quiz();
 		qz.setCandidate(c);
 		qz.setJobOffer(o);
@@ -64,12 +66,14 @@ public class QuizService implements IQuizServiceLocal, IQuizServiceRemote {
 	@Override
 	public boolean setInterview(int quiz_id) {
 		Quiz q = em.find(Quiz.class, quiz_id);
-		if (q.getState().equals(QuizState.Validated)) {
-			Interview in = new Interview();
-			in.setScore(q.getScore());
-			in.setQuiz(q);
-			em.persist(in);
-			return true;
+		if (q.getInterview() == null) {
+			if (q.getState()==QuizState.Validated) {
+				Interview in = new Interview();
+				in.setScore(q.getScore());
+				q.setInterview(in);
+				em.persist(in);
+				return true;
+			}
 		}
 		return false;
 
@@ -98,10 +102,59 @@ public class QuizService implements IQuizServiceLocal, IQuizServiceRemote {
 
 	@Override
 	public boolean correctAnswer(int answer_id) {
-		Answer a=em.find(Answer.class,answer_id);
-		if(a.isCorrect())
+		Answer a = em.find(Answer.class, answer_id);
+		if (a.isCorrect())
 			return true;
 		return false;
 	}
-	
+
+	@Override
+	public List<Quiz> getCandidateForOffer(int offer_id) {
+		JobOffer o = em.find(JobOffer.class, offer_id);
+		Query q = em.createQuery("SELECT quiz FROM Quiz quiz where quiz.jobOffer = :jobOffer ORDER BY quiz.score DESC");
+		q.setParameter("jobOffer", o);
+		return (List<Quiz>) q.getResultList();
+	}
+
+	@Override
+	public void ChooseCnadidate(int offer_id) {
+		List<Quiz> list = getCandidateForOffer(offer_id);
+		for (Quiz q : list) {
+			setState(q.getId());
+		}
+	}
+
+	@Override
+	public boolean CorrectQuiz(int quiz_id, List<Integer> answersList) {
+		double s = 0;
+		Quiz q = em.find(Quiz.class, quiz_id);
+		if (q.getScore() == 0) {
+			for (int a : answersList) {
+				if (correctAnswer(a))
+					s++;
+			}
+			setScore(quiz_id, s);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean checkCandidateDate(int candidate_id, Date d) {
+		List<Quiz> list = getCandidateQuiz(candidate_id);
+		for (Quiz q : list) {
+			if (q.getInterview().getDate().equals(d))
+				return true;
+		}
+		return false;
+	}
+
+	@Override
+	public List<Quiz> getCandidateQuiz(int candidate_id) {
+		Candidate c = em.find(Candidate.class, candidate_id);
+		Query q = em.createQuery("SELECT quiz FROM Quiz quiz where quiz.candidate = :candidate");
+		q.setParameter("candidate", c);
+		return (List<Quiz>) q.getResultList();
+	}
+
 }
