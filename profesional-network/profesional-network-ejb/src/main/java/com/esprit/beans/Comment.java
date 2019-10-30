@@ -17,10 +17,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+
 import com.esprit.enums.Posts;
 import com.esprit.enums.Reactions;
 
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class Comment implements Serializable { 
@@ -29,8 +32,31 @@ public class Comment implements Serializable {
 	private int id;
     private String content;
     private Timestamp date;
+    @JsonIgnore
     private Post commentedPost;
+    @JsonIgnore
     private User commentingUser;
+    
+    public Comment() {
+    	super();
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Comment that = (Comment) o;
+        return id == that.id &&
+                Objects.equals(content, that.content) &&
+                Objects.equals(date, that.date) &&
+                Objects.equals(commentedPost, that.commentedPost) && 
+                Objects.equals(commentingUser, that.commentingUser) ;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, content, date, commentedPost, commentingUser);
+    }
      
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,31 +90,13 @@ public class Comment implements Serializable {
     public void setContent(String content) {
         this.content = content;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Comment that = (Comment) o;
-        return id == that.id &&
-                Objects.equals(content, that.content) &&
-                Objects.equals(date, that.date) &&
-                Objects.equals(commentedPost, that.commentedPost) && 
-                Objects.equals(commentingUser, that.commentingUser) ;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, content, date, commentedPost, commentingUser);
-    }
-    
     
     // #----------------------Relations----------------------#
     
     // The post of the comment
     
 	@ManyToOne
-	@JoinColumn(name = "postId" , referencedColumnName = "id")
+	@JoinColumn(name = "post" , referencedColumnName = "id")
 	public Post getCommentedPost() {
 		return commentedPost;
 	}
@@ -101,7 +109,7 @@ public class Comment implements Serializable {
 	// The user who posted the comment
 	
 	@ManyToOne
-	@JoinColumn(name = "userId" , referencedColumnName = "id")
+	@JoinColumn(name = "commenter" , referencedColumnName = "id")
 	public User getCommentingUser() {
 		return commentingUser;
 	}
