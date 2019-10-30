@@ -18,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.esprit.beans.candidate.Candidate;
+
 @Entity()
 public class Quiz implements Serializable {
 	@Id

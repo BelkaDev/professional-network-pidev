@@ -14,12 +14,12 @@ import javax.persistence.Query;
 import com.esprit.Iservice.IQuizServiceLocal;
 import com.esprit.Iservice.IQuizServiceRemote;
 import com.esprit.beans.Answer;
-import com.esprit.beans.Candidate;
 import com.esprit.beans.Interview;
 import com.esprit.beans.JobOffer;
 import com.esprit.beans.Question;
 import com.esprit.beans.Quiz;
 import com.esprit.beans.QuizState;
+import com.esprit.beans.candidate.Candidate;
 
 @Stateless
 @LocalBean

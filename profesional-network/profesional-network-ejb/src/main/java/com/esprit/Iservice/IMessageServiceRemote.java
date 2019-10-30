@@ -1,4 +1,5 @@
 package com.esprit.Iservice;
+import java.sql.Timestamp;
 import java.util.List;
 import javax.ejb.Remote;
 import com.esprit.beans.Message;
@@ -7,13 +8,13 @@ import com.esprit.beans.Message;
 @Remote
 public interface IMessageServiceRemote {
 	
-	void addMessage(Message msg);
-	void editMessage(Message msg);
-	void deleteMessage(Message  msg);
-	public Message findMessage(Integer id);
-	List<Message> findMsgBySender(Integer id);
-	List<Message> findMsgByReciever(Integer id);
-	String fetchContent(Integer idUser,Integer idDest);
+	void addMessage(Timestamp timestamp, int sender, int idRecipient, String body, int status);
+	void editMessage(Timestamp timestamp, int sender, int idRecipient, String body, int status);
+	void deleteMessage(int id);
+	public Message findMessage(int id);
+	List<Message> findMsgBySender(int id);
+	List<Message> findMsgByReciever(int id);
+	String fetchContent(int idUser,int idDest);
 	List<Message> findAllMessages();	
 
 }

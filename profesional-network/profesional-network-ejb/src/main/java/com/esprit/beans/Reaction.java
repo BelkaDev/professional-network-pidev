@@ -18,6 +18,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import com.esprit.enums.Reactions;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @Entity
@@ -26,9 +30,10 @@ public class Reaction implements Serializable {
     
 	private int id;
     private Timestamp date;
-    private int idPost;
     private Reactions type;
+    @JsonIgnore
     private Post reactedPost;
+    @JsonIgnore
     private User reactingUser;
      
     @Id
@@ -53,17 +58,6 @@ public class Reaction implements Serializable {
         this.date = date;
     }
 
-    
-    @Column(name = "idPost", nullable = false)
-    public int getIdPost() {
-        return idPost;
-    }
-
-    public void setIdPost(int idPost) {
-        this.idPost = idPost;
-    }
-
-    
 	@Enumerated(EnumType.STRING)
 	public Reactions getType() {
 		return type;
@@ -80,15 +74,14 @@ public class Reaction implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reaction reaction = (Reaction) o;
-        return idPost == reaction.idPost &&
-                id == reaction.id &&
+                return id == reaction.id &&
                 Objects.equals(date, reaction.date) &&
         		Objects.equals(type, reaction.type); // check to compare 2 enums  
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(date, idPost, id, type);
+        return Objects.hash(date, id, type);
     }
     
     
@@ -99,7 +92,7 @@ public class Reaction implements Serializable {
     // The post of the reaction
     
 	@ManyToOne
-	@JoinColumn(name = "postId" , referencedColumnName = "id")
+	@JoinColumn(name = "post" , referencedColumnName = "id")
 	public Post getReactedPost() {
 		return reactedPost;
 	}
@@ -111,7 +104,7 @@ public class Reaction implements Serializable {
 	// The user who reacted
 	
 	@ManyToOne
-	@JoinColumn(name = "userId" , referencedColumnName = "id")
+	@JoinColumn(name = "reacter" , referencedColumnName = "id")
 	public User getReactingUser() {
 		return reactingUser;
 	}
