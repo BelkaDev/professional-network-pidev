@@ -10,44 +10,30 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.esprit.beans.candidate.Candidate;
-import com.esprit.beans.candidate.Experience;
-import com.esprit.service.candidate.CandidateService;
+import com.esprit.beans.Experience;
+import com.esprit.services.CandidateService;
 
 @Path("candidate")
 public class CandidateWs {
 
 	@EJB
 	CandidateService cs;
-	
-	@POST
-	@Path("addCandidate")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response addCandidate(@QueryParam("biography") String biography,
-			@QueryParam("rating") double rating) {
-		Candidate c = new Candidate();
-		c.setBiography(biography);
-		c.setRating(rating);
-		cs.addCandidate(c);
-		return Response.status(Status.CREATED).entity("Candidate Added").build();
-	}
 
 	@POST
 	@Path("addExperience")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addExperience(@QueryParam("designation") String designation,
-			@QueryParam("type") String type,@QueryParam("startDate") Date startDate,@QueryParam("startDate") Date endDate,@QueryParam("candidateID") int candidateID) {
+			@QueryParam("type") String type,@QueryParam("startDate") Date startDate,@QueryParam("startDate") Date endDate) {
 		Experience e = new Experience();
 		e.setDesignation(designation);
 		e.setType(type);
 		e.setStartDate(startDate);
 		e.setEndDate(endDate);
-		cs.addExperience(e,candidateID);
+		cs.addExperience(e);
 		return Response.status(Status.CREATED).entity("Experience Added").build();
 	}
 	
@@ -62,15 +48,8 @@ public class CandidateWs {
 	@GET
 	@Path("getExperience")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response displayExperience(@QueryParam("id")int id) {
+	public Response displayQuiz(@QueryParam("id")int id) {
 		return Response.status(Status.FOUND).entity(cs.displayExperience(id)).build();
-	}
-	
-	@GET
-	@Path("getCandidateByExperience")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response displayCandidateByExperience(@QueryParam("id")int id) {
-		return Response.status(Status.FOUND).entity(cs.displayCandidatesByExperience(id)).build();
 	}
 	
 	@PUT
@@ -80,7 +59,4 @@ public class CandidateWs {
 		cs.updateExperience(id, designation);
 		return Response.status(Status.OK).entity("Experience updated").build();
 	}
-	
-	
-	
 }

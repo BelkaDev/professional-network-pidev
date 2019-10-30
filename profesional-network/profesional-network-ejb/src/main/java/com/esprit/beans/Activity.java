@@ -1,4 +1,4 @@
-package com.esprit.beans.candidate;
+package com.esprit.beans;
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -21,4 +21,6 @@ public class Activity implements Serializable {
 	private String designation;
 	@Column(name="date")
 	private Date date;
+	@ManyToOne
+	Candidate candidate;
 }

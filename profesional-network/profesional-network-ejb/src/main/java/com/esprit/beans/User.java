@@ -2,41 +2,27 @@ package com.esprit.beans;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 import java.util.Set;
 
 import com.esprit.enums.Gender;
-import javax.persistence.FetchType;
-
-import org.hibernate.validator.constraints.Email;
-
 import javax.persistence.*;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
 public class User implements Serializable {
-
+	
     private static final long serialVersionUID = 1L;	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	private int id;
-    @Email
+	private Integer id;
 	private String email;
 	private String firstName;
 	private String lastName;
 	private String password;
-	
-	@Enumerated(EnumType.STRING)
     private Gender gender;
-
 	private Date birthDate;
-	
 	// address is complex type
 	private Address address;
 	@Column(name="isPremimum")
@@ -48,52 +34,39 @@ public class User implements Serializable {
 	
 	//****************************
 
-
-  @OneToMany(cascade = CascadeType.ALL,mappedBy = "user",fetch = FetchType.EAGER)
-  private Set<Post> Posts;
-  
-
-  @OneToMany(cascade = CascadeType.ALL,mappedBy = "commentingUser",fetch = FetchType.EAGER)
-	private Set<Comment> Comments;
-  
-
-  @OneToMany(cascade =CascadeType.ALL,mappedBy = "reactingUser",fetch = FetchType.EAGER) 
-	private Set<Reaction> Reactions;
-
-
-  @OneToMany(cascade =CascadeType.ALL,mappedBy="sender",fetch = FetchType.EAGER)
-	private Set<Message> Messages;
-
-
-  
+  @OneToMany(mappedBy = "user")
+	private List<Post> Posts;
+  @OneToMany(mappedBy = "commentingUser")
+	private List<Comment> Comments;
+  @OneToMany(mappedBy = "reactingUser")
+	private List<Reaction> Reactions;
+  @OneToMany(mappedBy="sender",fetch = FetchType.LAZY)
+	private List<Message> Messages;
   @OneToMany(cascade = CascadeType.ALL, mappedBy="whoClaim",fetch = FetchType.EAGER)
   private Set<Claim> Whoclaims;
-  
-
   @OneToMany(cascade = CascadeType.ALL, mappedBy="claimsOn",fetch = FetchType.EAGER)
-  @JsonIgnore
   private Set<Claim> claimsOn;
-  
-  
-  	@ManyToOne
-	@JsonIgnore
+  @ManyToOne
 	private Pack pack; 
 
 
 	//****************************
 	
-
-	public User(int idUser) {
-		super();
-		this.id = idUser;
-		this.gender = Gender.Other;
-	}
 	
 
+	// TODO : add constructor, equals, toString
+
+	public User(Integer idUser) {
+		super();
+		this.id = idUser;
+	}
+	
 	public User() {
 		super();
 	}
 
+	
+	
 
 	public boolean isPpremimum() {
 		return isPpremimum;
@@ -126,8 +99,7 @@ public class User implements Serializable {
 	public void setPack(Pack pack) {
 		this.pack = pack;
 	}
-	
-	@JsonIgnore
+
 	public Set<Claim> getWhoclaims() {
 		return Whoclaims;
 	}
@@ -144,21 +116,12 @@ public class User implements Serializable {
 		this.claimsOn = claimsOn;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int idUser) {
+	public void setId(Integer idUser) {
 		this.id = idUser;
-	}
-
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", password=" + password + ", gender=" + gender + ", birthDate=" + birthDate + ", address=" + address
-				+ ", isPpremimum=" + isPpremimum + ", dateDebutP=" + dateDebutP + ", dateFinP=" + dateFinP + ", Posts="
-				+ Posts + ", Comments=" + Comments + ", Reactions=" + Reactions + ", Messages=" + Messages
-				+ ", Whoclaims=" + Whoclaims + ", claimsOn=" + claimsOn + ", pack=" + pack + "]";
 	}
 
 	public String getEmail() {
@@ -194,7 +157,8 @@ public class User implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+    
+	@Enumerated(EnumType.STRING)
 	public Gender getGender() {
 		return gender;
 	}
@@ -223,15 +187,15 @@ public class User implements Serializable {
 	
   // Posts of the user
 	
-	@JsonIgnore
-	public Set<Post> getPosts() {
+	
+	public List<Post> getPosts() {
 		return Posts;
 	}
-	public void setPosts(Set<Post> Posts) {
+	public void setPosts(List<Post> Posts) {
 		this.Posts = Posts;
 	}
 
-	public void addPostsOfThisUser(Set<Post> Posts)
+	public void addPostsOfThisUser(List<Post> Posts)
 	{
 		this.setPosts(Posts);
 		for(Post p : Posts)
@@ -243,14 +207,14 @@ public class User implements Serializable {
 	// Comments of the user (on all posts)
 	
 	
-	public Set<Comment> getComments() {
+	public List<Comment> getComments() {
 		return Comments;
 	}
-	public void setComments(Set<Comment> Comments) {
+	public void setComments(List<Comment> Comments) {
 		this.Comments = Comments;
 	}
 
-	public void addCommentsOfThisUser(Set<Comment> Comments)
+	public void addCommentsOfThisUser(List<Comment> Comments)
 	{
 		this.setComments(Comments);
 		for(Comment c : Comments)
@@ -263,14 +227,14 @@ public class User implements Serializable {
 	
 	
 	
-	public Set<Reaction> getReactions() {
+	public List<Reaction> getReactions() {
 		return Reactions;
 	}
-	public void setReactions(Set<Reaction> Reactions) {
+	public void setReactions(List<Reaction> Reactions) {
 		this.Reactions = Reactions;
 	}
 
-	public void addReactsOfThisUser(Set<Reaction> Reactions)
+	public void addReactsOfThisUser(List<Reaction> Reactions)
 	{
 		this.setReactions(Reactions);
 		for(Reaction r : Reactions)
@@ -282,29 +246,12 @@ public class User implements Serializable {
   // Messages sent by the user
 	
 	
-	public Set<Message> getMessages() {
+	public List<Message> getMessages() {
 		return Messages;
 	}
 
-	public void setMessages(Set<Message> Messages) {
+	public void setMessages(List<Message> Messages) {
 		this.Messages = Messages;
 	}
-	
-    void addMessage(Message msg, boolean set) {
-        if (msg != null) {
-            getMessages().add(msg);
-            if (set) {
-                msg.setSender(this);
-            }
-        }
-    }
-     
 
-    public void removeMessages(Message msg) {
-        this.getMessages().remove(msg);
-        msg.setSender(null);
-    }   
-    
-    
- 
 }

@@ -3,16 +3,14 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.Set;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,30 +18,23 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.OrderColumn;
-
 
 import com.esprit.enums.Posts;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.esprit.enums.Reactions;
+
 
 
 @Entity
-
 public class Post implements Serializable { 
 	
-    
+
 	private int id;
     private String content;
     private Timestamp date;
-    @JsonIgnoreProperties({"whoclaims","messages","comments","reactions"})
     private User user;
     private Posts type;
-    @JsonIgnore
-	public Set<Comment> Comments;
-    @JsonIgnore
-	public Set<Reaction> Reactions;
+	public List<Comment> Comments;
+	public List<Reaction> Reactions;
 	
      
     @Id
@@ -68,66 +59,7 @@ public class Post implements Serializable {
         this.date = date;
     }
 
-    
-    
-    
- // #----------------------Relations----------------------#
-    
-    
-    // User who posted the post
-    
-	
- 	@ManyToOne
- 	@JoinColumn(name = "userId" , referencedColumnName = "id")
- 	public User getUser() {
- 		return user;
- 	}
 
- 	public void setUser(User user) {
- 		this.user = user;
- 	}
-     
- 	
- 	// Comments on the post
- 	
- 	
-	@OneToMany(cascade = CascadeType.ALL,mappedBy = "commentedPost",fetch = FetchType.EAGER)
-	public Set<Comment> getComments() {
-		return Comments;
-	}
-	public void setComments(Set<Comment> Comments) {
-		this.Comments = Comments;
-	}
-
-	public void addCommentsToThisPost(Set<Comment> Comments)
-	{
-		this.setComments(Comments);
-		for(Comment c : Comments)
-		{
-			c.setCommentedPost(this);
-		}
-	}
-	
-	
-	// Reactions on the post
-	
-	@OneToMany(cascade = CascadeType.ALL,mappedBy = "reactedPost",fetch = FetchType.EAGER)
-	public Set<Reaction> getReactions() {
-		return Reactions;
-	}
-	public void setReactions(Set<Reaction> Reactions) {
-		this.Reactions = Reactions;
-	}
-
-	public void addReactsToThisPost(Set<Reaction> Reactions)
-	{
-		this.setReactions(Reactions);
-		for(Reaction r : Reactions)
-		{
-			r.setReactedPost(this);
-		}
-	}
-    
     
     @Column(name = "content", nullable = false, length = 200)
     public String getContent() {
@@ -146,10 +78,7 @@ public class Post implements Serializable {
 	public void setType(Posts type) {
 		this.type = type;
 	}
-	
-	public Post() {
-		super();
-	}
+
 	
     @Override
     public boolean equals(Object o) {
@@ -166,5 +95,63 @@ public class Post implements Serializable {
     public int hashCode() {
         return Objects.hash(id, content, date,type);
     }
+    
+    
+    
+ // #----------------------Relations----------------------#
+    
+    
+    // User who posted the post
+    
+    
+ 	@ManyToOne
+ 	@JoinColumn(name = "userId" , referencedColumnName = "id")
+ 	public User getUser() {
+ 		return user;
+ 	}
 
+ 	public void setUser(User user) {
+ 		this.user = user;
+ 	}
+     
+ 	
+ 	// Comments on the post
+    
+	@OneToMany(mappedBy = "commentedPost")
+	public List<Comment> getComments() {
+		return Comments;
+	}
+	public void setComments(List<Comment> Comments) {
+		this.Comments = Comments;
+	}
+
+	public void addCommentsToThisPost(List<Comment> Comments)
+	{
+		this.setComments(Comments);
+		for(Comment c : Comments)
+		{
+			c.setCommentedPost(this);
+		}
+	}
+	
+	
+	// Reactions on the post
+	
+	@OneToMany(mappedBy = "reactedPost")
+	public List<Reaction> getReactions() {
+		return Reactions;
+	}
+	public void setReactions(List<Reaction> Reactions) {
+		this.Reactions = Reactions;
+	}
+
+	public void addReactsToThisPost(List<Reaction> Reactions)
+	{
+		this.setReactions(Reactions);
+		for(Reaction r : Reactions)
+		{
+			r.setReactedPost(this);
+		}
+	}
+    
 }

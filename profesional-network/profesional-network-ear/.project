@@ -3,7 +3,6 @@
 	<name>profesional-network-ear</name>
 	<comment></comment>
 	<projects>
-		<project>profesional-network-ejb</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

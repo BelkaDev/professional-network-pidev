@@ -1,4 +1,4 @@
-package com.esprit.beans.candidate;
+package com.esprit.beans;
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -29,6 +29,8 @@ public class Certification implements Serializable {
 	private Date expiryDate;
 	@Column(name="credential_id")
 	private Date credentialId;
+	@ManyToOne
+	Candidate candidate;
 	public int getId() {
 		return id;
 	}
@@ -65,6 +67,11 @@ public class Certification implements Serializable {
 	public void setCredentialId(Date credentialId) {
 		this.credentialId = credentialId;
 	}
-
+	public Candidate getCandidate() {
+		return candidate;
+	}
+	public void setCandidate(Candidate candidate) {
+		this.candidate = candidate;
+	}
 	
 }
