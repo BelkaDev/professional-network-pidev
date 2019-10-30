@@ -8,6 +8,10 @@ import com.esprit.beans.User;
 @Local
 public interface IUserServiceLocal {
 	
+	
+	int AddEnterpriseUser(User user, int Id);
+	boolean authenticate(String Id, String password);
+	void updateToken(String username, String token);
 	void addUser(User usr);
 	//void editUser(int id);
 	void deleteUser(int id);
