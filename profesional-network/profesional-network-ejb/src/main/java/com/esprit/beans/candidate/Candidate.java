@@ -34,7 +34,7 @@ public class Candidate implements Serializable {
 	@Column(name = "candidate_rating")
 	private double rating;
 	
-	
+	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name="Candidate_Experience",joinColumns=@JoinColumn(name="Candidate_ID"),
 	inverseJoinColumns=@JoinColumn(name="Experience_ID"))
@@ -45,14 +45,17 @@ public class Candidate implements Serializable {
 	@JoinTable(name="Candidate_Certification",joinColumns=@JoinColumn(name="Candidate_ID"),
 	inverseJoinColumns=@JoinColumn(name="Certification_ID"))
 	private Set<Certification> certifications;
+	
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name="Candidate_Activity",joinColumns=@JoinColumn(name="Candidate_ID"),
 	inverseJoinColumns=@JoinColumn(name="Skill_ID"))
 	private Set<Activity> activities;
+	
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name="Candidate_Skill",joinColumns=@JoinColumn(name="Candidate_ID"),
 	inverseJoinColumns=@JoinColumn(name="Skill_ID"))
 	private Set<Skill> skills;
+	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="Candidate_ID")
 	private Set<Contact> contacts;

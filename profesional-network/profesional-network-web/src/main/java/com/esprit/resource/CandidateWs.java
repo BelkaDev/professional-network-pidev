@@ -24,18 +24,30 @@ public class CandidateWs {
 
 	@EJB
 	CandidateService cs;
+	
+	@POST
+	@Path("addCandidate")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addCandidate(@QueryParam("biography") String biography,
+			@QueryParam("rating") double rating) {
+		Candidate c = new Candidate();
+		c.setBiography(biography);
+		c.setRating(rating);
+		cs.addCandidate(c);
+		return Response.status(Status.CREATED).entity("Candidate Added").build();
+	}
 
 	@POST
 	@Path("addExperience")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addExperience(@QueryParam("designation") String designation,
-			@QueryParam("type") String type,@QueryParam("startDate") Date startDate,@QueryParam("startDate") Date endDate) {
+			@QueryParam("type") String type,@QueryParam("startDate") Date startDate,@QueryParam("startDate") Date endDate,@QueryParam("candidateID") int candidateID) {
 		Experience e = new Experience();
 		e.setDesignation(designation);
 		e.setType(type);
 		e.setStartDate(startDate);
 		e.setEndDate(endDate);
-		cs.addExperience(e);
+		cs.addExperience(e,candidateID);
 		return Response.status(Status.CREATED).entity("Experience Added").build();
 	}
 	
@@ -69,13 +81,6 @@ public class CandidateWs {
 		return Response.status(Status.OK).entity("Experience updated").build();
 	}
 	
-	@POST
-	@Path("addCandidate")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response addCandidate() {
-			cs.addCandidate();
-		return Response.status(Status.CREATED).entity("Experience Added").build();
-	}
 	
 	
 }

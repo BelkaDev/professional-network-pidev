@@ -26,6 +26,4 @@ public class Skill implements Serializable {
 	@Column(name="skill_rating")
 	private Rating rating;
 	
-	@ManyToMany(mappedBy="skills", cascade = CascadeType.ALL)
-	private Set<Candidate> candidates;
 }

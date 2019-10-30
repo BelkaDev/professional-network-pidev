@@ -21,6 +21,4 @@ public class Activity implements Serializable {
 	private String designation;
 	@Column(name="date")
 	private Date date;
-	@ManyToOne
-	Candidate candidate;
 }

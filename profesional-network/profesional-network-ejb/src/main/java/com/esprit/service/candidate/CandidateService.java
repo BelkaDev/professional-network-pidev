@@ -3,7 +3,9 @@ package com.esprit.service.candidate;
 import java.sql.Date;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import java.util.Set;import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -22,8 +24,9 @@ public class CandidateService implements ICandidateServiceLocal,ICandidateServic
 	@PersistenceContext(unitName="pidevtwin-ejb")
 	EntityManager em;
 	@Override
-	public void addExperience(Experience c) {
-		em.persist(c);
+	public void addExperience(Experience e,int CandidateID) {
+		Candidate c=em.find(Candidate.class, CandidateID);
+		c.getExperiences().add(e);
 	}
 	@Override
 	public void deleteExperience(int id) {
@@ -37,9 +40,10 @@ public class CandidateService implements ICandidateServiceLocal,ICandidateServic
 	}
 	
 	@Override
-	public Set<Experience> displayCandidatesByExperience(int id) {
-		Candidate e=em.find(Candidate.class, id);
-		return e.getExperiences();
+	public Set<Candidate> displayCandidatesByExperience(int id) {
+		
+		Experience ex= em.find(Experience.class, id);
+		return ex.getCandidates();
 	}
 	
 	@Override
@@ -49,16 +53,8 @@ public class CandidateService implements ICandidateServiceLocal,ICandidateServic
 		
 	}
 	@Override
-	public void addCandidate() {
-		Candidate c = new Candidate();
-		c.setBiography("cascade");
-		c.setRating(1);
-		Experience e = new Experience();
-		e.setDesignation("experience cas");
-		e.setType("cassss");
-		e.setStartDate(new Date(2010,02,20));
-		e.setEndDate(new Date(2011,02,20));
-		c.getExperiences().add(e);
+	public void addCandidate(Candidate c) {
+		
 		em.persist(c);
 		
 		

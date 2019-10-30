@@ -9,10 +9,10 @@ import com.esprit.beans.candidate.Experience;
 
 @Local
 public interface ICandidateServiceLocal {
-	public void addCandidate();
-	public void addExperience(Experience c);
+	public void addCandidate(Candidate c);
+	public void addExperience(Experience c,int CandidateID);
 	public void deleteExperience(int id);
 	public Experience displayExperience(int id);
-	public Set<Experience> displayCandidatesByExperience(int id);
+	public Set<Candidate> displayCandidatesByExperience(int id);
 	public void updateExperience(int id,String d);
 }

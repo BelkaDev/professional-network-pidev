@@ -34,7 +34,6 @@ public class Experience implements Serializable {
 	private Date startDate;
 	@Column(name="end_date")
 	private Date endDate;
-	@Transient
 	@ManyToMany( cascade=CascadeType.ALL,mappedBy="experiences")
 	private Set<Candidate> candidates = new HashSet<Candidate>();
 	
