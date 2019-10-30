@@ -2,21 +2,21 @@ package com.esprit.beans;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.util.Set;
+import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+
+import com.esprit.enums.PackType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
-@XmlRootElement
 public class Pack implements Serializable {
 
 	/**
@@ -26,138 +26,104 @@ public class Pack implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	
 	private int id;
-	@Column(name = "prix")
-	private double prix;
+	@Column(name = "price")
+	private double price;
 	@Column(name="description")
 	private String description;
-	@Column(name="titre")
-	private String titre;
+	@Column(name="title")
+	private String title;
+	@Enumerated
 	@Column(name="type")
-	private TypePack type;	
-	@Column(name="datedebut")
-	private Date datedebut;
-	@Column(name="datefin")
-	private Date datefin;
+	private PackType type;	
+	@Column(name="startDate")
+	private Date startDate;
+	@Column(name="endDate")
+	private Date endDate;
 	@Column(name="reduction")
 	private double reduction;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="pack")
-	  private Set<User> listUser ;
+	@JsonIgnore
+	@OneToMany(mappedBy="pack")
+	private List<UserPack> users;
 	
 	
-	@XmlElement(name="listUser")
-	public Set<User> getListUser() {
-		return listUser;
-	}
-
-
-
-	public void setListUser(Set<User> listUser) {
-		this.listUser = listUser;
-	}
-
-
-
+	
+	
 	public Pack() {
 		super();
 	}
-	
-	
 
-	public Pack(int id, double prix, String description, String titre, TypePack type, Date datedebut, Date datefin,
+
+	public Pack(int id, double price, String description, String title, PackType type, Date startDate, Date endDate,
 			double reduction) {
 		super();
 		this.id = id;
-		this.prix = prix;
+		this.price = price;
 		this.description = description;
-		this.titre = titre;
+		this.title = title;
 		this.type = type;
-		this.datedebut = datedebut;
-		this.datefin = datefin;
+		this.startDate = startDate;
+		this.endDate = endDate;
 		this.reduction = reduction;
 	}
-
-
-	@XmlAttribute(name="id",required=true)
+	
+	
 	public int getId() {
 		return id;
 	}
-
-
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	@XmlElement(name="prix")
-	public double getPrix() {
-		return prix;
+	public double getPrice() {
+		return price;
 	}
-
-
-	public void setPrix(double prix) {
-		this.prix = prix;
+	public void setPrice(double price) {
+		this.price = price;
 	}
-
-	@XmlElement(name="description")
 	public String getDescription() {
 		return description;
 	}
-
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	@XmlElement(name="titre")
-	public String getTitre() {
-		return titre;
+	public String getTitle() {
+		return title;
 	}
-
-
-	public void setTitre(String titre) {
-		this.titre = titre;
+	public void setTitle(String title) {
+		this.title = title;
 	}
-
-	@XmlElement(name="type")
-	public TypePack getType() {
+	public PackType getType() {
 		return type;
 	}
-
-
-	public void setType(TypePack type) {
+	public void setType(PackType type) {
 		this.type = type;
 	}
-
-	@XmlElement(name="datedebut")
-	public Date getDatedebut() {
-		return datedebut;
+	public Date getStartDate() {
+		return startDate;
 	}
-
-
-	public void setDatedebut(Date datedebut) {
-		this.datedebut = datedebut;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
-
-	@XmlElement(name="datefin")
-	public Date getDatefin() {
-		return datefin;
+	public Date getEndDate() {
+		return endDate;
 	}
-
-
-	public void setDatefin(Date datefin) {
-		this.datefin = datefin;
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
-
-	@XmlElement(name="reduction")
 	public double getReduction() {
 		return reduction;
 	}
-
-
 	public void setReduction(double reduction) {
 		this.reduction = reduction;
 	}
+	public List<UserPack> getUsers() {
+		return users;
+	}
+	public void setUsers(List<UserPack> users) {
+		this.users = users;
+	}
+	
+	
 	
 
 	

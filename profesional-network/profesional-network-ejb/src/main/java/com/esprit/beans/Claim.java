@@ -1,14 +1,17 @@
 package com.esprit.beans;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Claim implements Serializable {
@@ -22,80 +25,78 @@ public class Claim implements Serializable {
 	private int id;
 	@Column(name="description")
 	private String description;
-	@Column(name="etat")
-	private Etat etat;
+	@Enumerated
+	@Column(name="state")
+	private State state;
 	@Column(name="type")
 	private String type;
-	@ManyToOne
+	@JsonIgnore
+	@ManyToOne 
 	private User whoClaim; 
+	@JsonIgnore
 	@ManyToOne
-	private User claimsOn; 
+	private User claimsOn;
+	@Column(name="date")
+	private Date date;
 	
 	public Claim() {
 		super();
 	}
-	
-
-	public Claim(int id, String description, Etat etat, String type, User whoClaim, User claimsOn) {
+	public Claim(int id, String description, State state, String type, User whoClaim, User claimsOn) {
 		super();
 		this.id = id;
 		this.description = description;
-		this.etat = etat;
+		this.state = state;
 		this.type = type;
 		this.whoClaim = whoClaim;
 		this.claimsOn = claimsOn;
 	}
-
-
 	public int getId() {
 		return id;
 	}
-
 	public void setId(int id) {
 		this.id = id;
 	}
-
 	public String getDescription() {
 		return description;
 	}
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public Etat getEtat() {
-		return etat;
+	public State getState() {
+		return state;
 	}
-
-	public void setEtat(Etat etat) {
-		this.etat = etat;
+	public void setState(State state) {
+		this.state = state;
 	}
-
 	public String getType() {
 		return type;
 	}
-
 	public void setType(String type) {
 		this.type = type;
 	}
-
 	public User getWhoClaim() {
 		return whoClaim;
 	}
-
 	public void setWhoClaim(User whoClaim) {
 		this.whoClaim = whoClaim;
 	}
-
 	public User getClaimsOn() {
 		return claimsOn;
 	}
-
-	public void setClaimOn(User claimsOn) {
+	public void setClaimsOn(User claimsOn) {
 		this.claimsOn = claimsOn;
 	}
-
-
+	public Date getDate() {
+		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
+	}
+	
+	
+	
+	
 	
 	
 }

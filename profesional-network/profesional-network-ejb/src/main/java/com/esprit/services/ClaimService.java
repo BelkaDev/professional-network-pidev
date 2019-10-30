@@ -1,5 +1,7 @@
 package com.esprit.services;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -12,7 +14,7 @@ import javax.persistence.TypedQuery;
 import com.esprit.Iservice.IClaimServiceLocal;
 import com.esprit.Iservice.IClaimServiceRemote;
 import com.esprit.beans.Claim;
-import com.esprit.beans.Etat;
+import com.esprit.beans.State;
 import com.esprit.beans.User;
 
 
@@ -24,28 +26,30 @@ public class ClaimService implements IClaimServiceLocal,IClaimServiceRemote {
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void addClaim(int id, String description, Etat etat, String type, int Whoclaim, int claimOn) {
+	public void addClaim(String description, String type, int Whoclaim, int claimOn) {
 		User whoClaim=em.find(User.class, Whoclaim);
 		User claimsOn=em.find(User.class, claimOn);
 		Claim c =new Claim();
-		c.setId(id);
+		Date date=new Date();
+		c.setDate(new java.sql.Date(date.getYear(), date.getMonth(), date.getDay()));
 		c.setDescription(description);
-		c.setEtat(etat);
-		c.setType(type);
-		c.setClaimOn(claimsOn);
+		c.setState(State.untreated);
+		c.setType("intreated");
+		c.setClaimsOn(claimsOn);
 		c.setWhoClaim(whoClaim);
 		em.persist(c);
 		
 	}
 
 	@Override
-	public void treatClaim(int id,Etat etat) {
+	public void treatClaim(int id,State etat) {
 	System.out.println("IN : Update Calim");
 		
 		Claim p = em.find(Claim.class, id);
 		
-	    p.setEtat(Etat.streated);
+	    p.setState(State.treated);
 	    
 					System.out.println("OUUUT : Update Claim");
 					
@@ -53,10 +57,12 @@ public class ClaimService implements IClaimServiceLocal,IClaimServiceRemote {
 	}
 
 	@Override
-	public List<Claim> afficherClaim() {
+	public List<Claim> allClaims() {
+		
 		TypedQuery<Claim> query = em.createQuery(
 			      "select e from Claim e", Claim.class);
 			  List<Claim> results = query.getResultList();
+			  
 		return results;
 	}
 
@@ -76,27 +82,34 @@ public class ClaimService implements IClaimServiceLocal,IClaimServiceRemote {
 	}
 
 	@Override
-	public List<Claim> afficherClaimTreated() {
+	public List<Claim> getClaimTreated() {
 		TypedQuery<Claim> query = em.createQuery(
-			      "select e from Claim e where e.etat= 0", Claim.class);
+			      "select e from Claim e where e.state= 0", Claim.class);
 			  List<Claim> results = query.getResultList();
 		return results;
 	}
 
 	@Override
-	public List<Claim> afficherClaimUntreated() {
+	public List<Claim> getClaimUntreated() {
 		TypedQuery<Claim> query = em.createQuery(
-			      "select e from Claim e where e.etat= 1", Claim.class);
+			      "select e from Claim e where e.state= 1", Claim.class);
 			  List<Claim> results = query.getResultList();
 		return results;
 	}
 
 	@Override
-	public List<Claim> afficherClaimInProgress() {
+	public List<Claim> getClaimInProgress() {
 		TypedQuery<Claim> query = em.createQuery(
-			      "select e from Claim e where e.etat= 2", Claim.class);
+			      "select e from Claim e where e.state= 2", Claim.class);
 			  List<Claim> results = query.getResultList();
 		return results;
+	}
+	
+	@Override
+	public String findUserInClaimById(int id)
+	{
+		User u=em.find(User.class, id);
+		return u.getFirstName()+" "+u.getLastName();
 	}
 	
 	

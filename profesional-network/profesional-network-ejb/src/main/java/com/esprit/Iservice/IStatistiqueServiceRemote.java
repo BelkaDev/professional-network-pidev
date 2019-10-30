@@ -5,11 +5,11 @@ import java.sql.Date;
 import javax.ejb.Remote;
 
 import com.esprit.beans.Entreprise;
-import com.esprit.beans.Statistique;
+import com.esprit.beans.Statistics;
 
 @Remote
 public interface IStatistiqueServiceRemote {
-	public void ajouterStatistique(Statistique s);
+	public void ajouterStatistique(Statistics s);
 	public void statistiqueCompetenece();
 
 	

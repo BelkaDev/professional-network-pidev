@@ -2,6 +2,7 @@ package com.esprit.beans;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.Set;
 
@@ -66,18 +67,13 @@ public class User implements Serializable {
 
 
   
-  @OneToMany(cascade = CascadeType.ALL, mappedBy="whoClaim",fetch = FetchType.EAGER)
-  private Set<Claim> Whoclaims;
-  
-
-  @OneToMany(cascade = CascadeType.ALL, mappedBy="claimsOn",fetch = FetchType.EAGER)
-  @JsonIgnore
-  private Set<Claim> claimsOn;
-  
-  
-  	@ManyToOne
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "whoClaim")
+	private Set<Claim> Whoclaim;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "claimsOn", fetch = FetchType.EAGER)
+	private Set<Claim> claimOn;
 	@JsonIgnore
-	private Pack pack; 
+	@OneToMany(mappedBy = "user")
+	private List<UserPack> packs;
 
 
 	//****************************
@@ -89,6 +85,41 @@ public class User implements Serializable {
 		this.gender = Gender.Other;
 	}
 	
+
+	public Set<Claim> getWhoclaim() {
+		return Whoclaim;
+	}
+
+
+	public void setWhoclaim(Set<Claim> whoclaim) {
+		Whoclaim = whoclaim;
+	}
+
+
+	public Set<Claim> getClaimOn() {
+		return claimOn;
+	}
+
+
+	public void setClaimOn(Set<Claim> claimOn) {
+		this.claimOn = claimOn;
+	}
+
+
+	public List<UserPack> getPacks() {
+		return packs;
+	}
+
+
+	public void setPacks(List<UserPack> packs) {
+		this.packs = packs;
+	}
+
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
 
 	public User() {
 		super();
@@ -119,30 +150,9 @@ public class User implements Serializable {
 		this.dateFinP = dateFinP;
 	}
 
-	public Pack getPack() {
-		return pack;
-	}
-
-	public void setPack(Pack pack) {
-		this.pack = pack;
-	}
 	
-	@JsonIgnore
-	public Set<Claim> getWhoclaims() {
-		return Whoclaims;
-	}
 
-	public void setWhoclaims(Set<Claim> whoclaims) {
-		Whoclaims = whoclaims;
-	}
-
-	public Set<Claim> getClaimsOn() {
-		return claimsOn;
-	}
-
-	public void setClaimsOn(Set<Claim> claimsOn) {
-		this.claimsOn = claimsOn;
-	}
+	
 
 	public int getId() {
 		return id;
@@ -152,14 +162,7 @@ public class User implements Serializable {
 		this.id = idUser;
 	}
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", password=" + password + ", gender=" + gender + ", birthDate=" + birthDate + ", address=" + address
-				+ ", isPpremimum=" + isPpremimum + ", dateDebutP=" + dateDebutP + ", dateFinP=" + dateFinP + ", Posts="
-				+ Posts + ", Comments=" + Comments + ", Reactions=" + Reactions + ", Messages=" + Messages
-				+ ", Whoclaims=" + Whoclaims + ", claimsOn=" + claimsOn + ", pack=" + pack + "]";
-	}
+
 
 	public String getEmail() {
 		return email;

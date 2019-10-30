@@ -1,84 +1,129 @@
 package com.esprit.services;
 
 import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Formatter;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import javax.ejb.Stateful;
+import javax.ejb.LocalBean;
+
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import com.esprit.Iservice.IPackServiceLocal;
 import com.esprit.Iservice.IPackServiceRemote;
+
 import com.esprit.beans.Pack;
 import com.esprit.beans.User;
+import com.esprit.beans.UserPack;
+import com.esprit.enums.PackType;
 
-@Stateful
-public class PackService implements IPackServiceLocal,IPackServiceRemote{
+@Stateless
+@LocalBean
+public class PackService implements IPackServiceLocal, IPackServiceRemote {
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
+
 	@Override
-	public void ajouterPack(Pack p) {
-		Set<User> users=p.getListUser();
-		@SuppressWarnings("deprecation")
-		Date date = new Date(2019,02,20);
-		p.setDatedebut(date);
-		p.setDatefin(date);
-		User u =new User();
-		u.setId(1);
-		users.add(u);
-		p.setListUser(users);
-		p.setReduction(0);
-		
-		em.persist(p);
-		
+	public void addPack(String title, String description, double price, PackType type) {
+		// @SuppressWarnings("deprecation")
+		Pack a = new Pack();
+
+		a.setTitle(title);
+		a.setDescription(description);
+		a.setPrice(price);
+		a.setType(type);
+		em.persist(a);
+
 	}
 
 	@Override
-	public void ajouterReduction(Pack p, double reduction, Date debut, Date fin) {
-		Pack a = em.find(Pack.class, p.getId());
-		a.setDatedebut(debut);
-		a.setDatefin(fin);
-		a.setReduction(reduction);
-		a.setPrix(p.getPrix()*(1-reduction));
+	public void addReduction(int id, double reduction, Date start, Date end) {
+		Pack p = em.find(Pack.class, id);
+		p.setStartDate(start);
+		p.setEndDate(end);
+		p.setReduction(reduction);
+		double price = p.getPrice() * (1 - reduction);
+		p.setPrice(price);
 	}
 
 	@Override
-	public void modifierPack(Pack p) {
-		Pack a = em.find(Pack.class, p.getId());
-		a.setDatedebut(p.getDatedebut());
-		a.setDatefin(p.getDatefin());
-		a.setDescription(p.getDescription());
-		a.setPrix(p.getPrix());
-		a.setReduction(p.getReduction());
-		a.setReduction(p.getReduction());
-		a.setTitre(p.getTitre());
-		a.setType(p.getType());
+	public void updatePack(int id, String title, PackType type, double price, Date startDate, Date endDate,
+			double reduction) {
+		Pack p = em.find(Pack.class, id);
+		p.setTitle(title);
+		p.setType(type);
+		p.setStartDate(startDate);
+		p.setEndDate(endDate);
+		p.setReduction(reduction);
+		p.setPrice(price);
+
 	}
 
 	@Override
-	public void supprimerPack(Pack p) {
-		Pack a=em.find(Pack.class, p.getId());
-		em.remove(a);
+	public void deletePack(int id) {
+		em.remove(em.find(Pack.class, id));
+
+	}
+
+	@Override
+	public List<Pack> allpacks() {
+		TypedQuery<Pack> query = em.createQuery("select e from Pack e", Pack.class);
+		List<Pack> results = query.getResultList();
+		return results;
+	}
+
+	@Override
+	public Pack getPack(int id) {
+		return findPackById(id);
+	}
+	
+	@Override
+	public void payPack(int id, int packId) {
+		User u = em.find(User.class, id);
+		Pack p = em.find(Pack.class, packId);
+		System.out.println("/**********************************"+u.getId()+" "+ p.getId());
+		UserPack up = new UserPack();
+		u.setPpremimum(true);
+		up.setPack(p);
+		up.setUser(u);
+		System.out.println("*************"+up.getPack()+" "+up.getUser());
+		up.setValid(true);
+		up.setStartDate(p.getStartDate());
+		up.setEndDate(p.getEndDate());
+		em.persist(up);
+		u.getPacks().add(up);
+		p.getUsers().add(up);
+
+	}
+	public UserPack getUserPack(int id)
+	{
+		
+		TypedQuery<UserPack> query = em.createQuery("select e from UserPack e where e.", UserPack.class);
+		UserPack results = query.getSingleResult();
+		return results;
 		
 	}
 
-	@Override
-	public List<Pack> afficherPacks() {
-		List<Pack> packs = em.createQuery("from Utilisateur", Pack.class).getResultList(); 
-		return packs;
-		
+	public double daysLeft(Date debut, Date fin) {
+
+		long diff = debut.getTime() - fin.getTime();
+		float res = (diff / (1000 * 60 * 60 * 24));
+
+		return (double) res;
 	}
 
 	@Override
-	public Pack afficherPack(Pack p) {
-	Pack a=em.find(Pack.class,p.getId());
-	return a;
-		
+	public Pack findPackById(int id) {
+		return em.find(Pack.class, id);
+	}
+
+	public List<User> getUsers() {
+
+		TypedQuery<User> query = em.createQuery("select e from User e", User.class);
+		List<User> results = query.getResultList();
+
+		return results;
 	}
 
 }

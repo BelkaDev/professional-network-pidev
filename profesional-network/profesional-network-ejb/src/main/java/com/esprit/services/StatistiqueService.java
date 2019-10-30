@@ -9,7 +9,7 @@ import javax.persistence.PersistenceContext;
 import com.esprit.Iservice.IStatistiqueServiceLocal;
 import com.esprit.Iservice.IStatistiqueServiceRemote;
 import com.esprit.beans.Entreprise;
-import com.esprit.beans.Statistique;
+import com.esprit.beans.Statistics;
 
 @Stateless
 public class StatistiqueService implements IStatistiqueServiceLocal,IStatistiqueServiceRemote {
@@ -18,7 +18,7 @@ public class StatistiqueService implements IStatistiqueServiceLocal,IStatistique
 	EntityManager em;
 	
 	@Override
-	public void ajouterStatistique(Statistique s) {
+	public void ajouterStatistique(Statistics s) {
 		em.persist(s);
 		System.out.println("Out of addStat" + s.getId());
 		

@@ -5,11 +5,11 @@ import java.sql.Date;
 import javax.ejb.Local;
 
 import com.esprit.beans.Entreprise;
-import com.esprit.beans.Statistique;
+import com.esprit.beans.Statistics;
 
 @Local
 public interface IStatistiqueServiceLocal {
-	public void ajouterStatistique(Statistique s);
+	public void ajouterStatistique(Statistics s);
 	public void statistiqueCompetenece();
 	//Entreprise
 	public void nbreEntrepriseAdded(Date debut,Date fin);

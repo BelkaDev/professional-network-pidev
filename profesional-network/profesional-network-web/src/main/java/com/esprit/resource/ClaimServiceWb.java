@@ -2,6 +2,7 @@ package com.esprit.resource;
 
 
 
+
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -18,7 +19,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.esprit.beans.Claim;
-import com.esprit.beans.Etat;
+import com.esprit.beans.State;
 
 import com.esprit.services.ClaimService;
 
@@ -39,9 +40,9 @@ public class ClaimServiceWb {
 	    @Path("addClaim")
 	    @Produces(MediaType.APPLICATION_JSON)
 	    public Response addClaim(
-	            @QueryParam("id")int id,
+	            
 	            @QueryParam("description")String description,
-	            @QueryParam("etat")Etat etat,
+	            
 	            @QueryParam("type")String type,
 	            @QueryParam("whoClaim")int whoClaim,
 	            @QueryParam("claimsOn")int claimsOn
@@ -49,7 +50,7 @@ public class ClaimServiceWb {
 	    
 	    ){
 		 
-		 cs.addClaim(id, description, etat, type, whoClaim, claimsOn);
+		 cs.addClaim( description, type, whoClaim, claimsOn);
 		 return Response.status(Status.CREATED).entity("Add succesful").build();
 	    }
 	 
@@ -60,7 +61,7 @@ public class ClaimServiceWb {
 		@Path("allClaims")
 	    public List<Claim> getClaims()
 	    {
-	        return cs.afficherClaim();
+		 return cs.allClaims();
 	    }
 	 @DELETE
 	 @Path("deleteClaim")
@@ -79,12 +80,12 @@ public class ClaimServiceWb {
      @Produces(MediaType.APPLICATION_JSON)
 	 public Response updatepromotion(
 			 @PathParam(value="id")int id ,
-			 @QueryParam("etat")Etat etat
+			 @QueryParam("etat")State etat
 		
 			 )
 	 {
 		Claim p = cs.findClaimById(id);
-	p.setEtat(etat);
+	p.setState(etat);
 		 cs.treatClaim(id,etat);
 	
 		 return Response.status(200).entity(cs.findClaimById(id)).build();
@@ -95,21 +96,21 @@ public class ClaimServiceWb {
 		@Path("treatedClaims")
 	    public List<Claim> getClaimsTreated()
 	    {
-	        return cs.afficherClaimTreated();
+	        return cs.getClaimTreated();
 	    }
 	 @GET
 		@Produces(MediaType.APPLICATION_JSON)
 		@Path("untreatedClaims")
 	    public List<Claim> getClaimsUntreated()
 	    {
-	        return cs.afficherClaimUntreated();
+	        return cs.getClaimUntreated();
 	    }
 	 @GET
 		@Produces(MediaType.APPLICATION_JSON)
 		@Path("inProgressClaims")
 	    public List<Claim> getClaimsInProgress()
 	    {
-	        return cs.afficherClaimInProgress();
+	        return cs.getClaimInProgress();
 	    }
 		
 		 

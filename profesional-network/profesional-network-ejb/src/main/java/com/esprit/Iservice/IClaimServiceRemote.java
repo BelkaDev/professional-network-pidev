@@ -5,17 +5,18 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import com.esprit.beans.Claim;
-import com.esprit.beans.Etat;
+import com.esprit.beans.State;
+
 
 @Remote
 public interface IClaimServiceRemote {
-	public void addClaim(int id,String description,Etat etat,String type,int Whoclaim,int claimOn);
-	public void treatClaim(int id,Etat etat);
-	public List<Claim> afficherClaim();
+	public void addClaim(String description,String type,int Whoclaim,int claimOn);
+	public void treatClaim(int id,State etat);
+	public List<Claim> allClaims();
 	public void removeClaim(int id);	
 	public Claim findClaimById(int id);
-	public List<Claim> afficherClaimTreated();
-	public List<Claim> afficherClaimUntreated();
-	public List<Claim> afficherClaimInProgress();
-
+	public List<Claim> getClaimTreated();
+	public List<Claim> getClaimUntreated();
+	public List<Claim> getClaimInProgress();
+	public String findUserInClaimById(int id);
 }
