@@ -14,7 +14,7 @@ import com.esprit.beans.Comment;
 import com.esprit.beans.Post;
 import com.esprit.beans.Reaction;
 import com.esprit.beans.User;
-import com.esprit.enums.Posts;
+import com.esprit.enums.POST_TYPE;
 
 @Stateless
 @LocalBean
@@ -24,7 +24,7 @@ public class PostService implements IPostServiceLocal,IPostServiceRemote {
 	EntityManager em;
 
 	@Override
-	public void addPost(String content, Timestamp date ,int idUser, Posts typePost) {
+	public void addPost(String content, Timestamp date ,int idUser, POST_TYPE typePost) {
 
 
 		User poster = em.find(User.class,idUser);
@@ -44,7 +44,7 @@ public class PostService implements IPostServiceLocal,IPostServiceRemote {
 		
 
 	@Override
-	public void updatePost(String content, Timestamp date ,int idUser, Posts typePost) {
+	public void updatePost(String content, Timestamp date ,int idUser, POST_TYPE typePost) {
 
 		User poster = em.find(User.class,idUser);
 		com.esprit.beans.Post post = new Post();

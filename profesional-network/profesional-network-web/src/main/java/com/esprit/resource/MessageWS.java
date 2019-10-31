@@ -20,14 +20,17 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import com.esprit.beans.Message;
+import com.esprit.beans.Notification;
 import com.esprit.services.MessageService;
+import com.esprit.services.NotificationService;
 
 @Path("message")
 public class MessageWS {
 	@EJB
 	MessageService MessageService;
 	
-
+	@EJB
+	NotificationService notifService;
 	private final String out = "success" ;
 
 	@POST

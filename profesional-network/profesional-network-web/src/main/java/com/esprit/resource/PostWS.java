@@ -25,7 +25,7 @@ import com.esprit.beans.Post;
 import com.esprit.beans.Post;
 import com.esprit.beans.Question;
 import com.esprit.beans.User;
-import com.esprit.enums.Posts;
+import com.esprit.enums.POST_TYPE;
 import com.esprit.services.PostService;
 
 
@@ -45,7 +45,7 @@ public class PostWS {
 	) {
 		System.out.print("id user = " + idUser +" content = " + content);
 		Timestamp date = new Timestamp(System.currentTimeMillis());
-		Posts typePost = Posts.Text;
+		POST_TYPE typePost = POST_TYPE.Text;
 		PostService.addPost(content,date ,idUser,typePost);
 		return Response.status(Response.Status.CREATED).entity(out).build();
 		
@@ -67,7 +67,7 @@ public class PostWS {
 	public Response updatePost(@QueryParam("idUser") int idUser,
 			@QueryParam("content") String content
 	) {
-		Posts typePost = Posts.Text;
+		POST_TYPE typePost = POST_TYPE.Text;
 		Timestamp date = new Timestamp(System.currentTimeMillis());		
 		PostService.updatePost(content,date ,idUser,typePost);
 		return Response.status(Status.OK).entity("post updated").build();

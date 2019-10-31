@@ -1,7 +1,7 @@
 package com.esprit.enums;
 
 
-public enum Posts {
+public enum POST_TYPE {
 	Text, Image, Video
 
 }

@@ -20,7 +20,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.esprit.beans.Reaction;
-import com.esprit.enums.Reactions;
+import com.esprit.enums.REACTION_TYPE;
 import com.esprit.services.ReactionService;
 
 
@@ -38,7 +38,7 @@ public class ReactionWS {
 	) {
 
 		Timestamp date = new Timestamp(System.currentTimeMillis());		
-		Reactions typeReaction = Reactions.None;
+		REACTION_TYPE typeReaction = REACTION_TYPE.None;
 		ReactionService.addReaction(date, typeReaction ,idPost,idUser);
 		return Response.status(Response.Status.CREATED).entity(out).build();
 	}
@@ -60,7 +60,7 @@ public class ReactionWS {
 	@QueryParam("idPost") int idPost
 	) {
 		Timestamp date = new Timestamp(System.currentTimeMillis());		
-		Reactions typeReaction = Reactions.None;
+		REACTION_TYPE typeReaction = REACTION_TYPE.None;
 		ReactionService.updateReaction(date, typeReaction ,idPost,idUser);
 		return Response.status(Status.OK).entity("reaction updated").build();
 	}

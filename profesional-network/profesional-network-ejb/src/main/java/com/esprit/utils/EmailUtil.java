@@ -38,9 +38,26 @@ public class EmailUtil implements IMailServiceLocal, IMailServiceRemote {
 	 * @param subject
 	 * @param body
 	 */
-	public void sendEmail(Session session, String toEmail, String subject, String body){
+	public void sendEmail(String toEmail, String subject, String body){
 		try
 	    {
+
+			final String fromEmail = "ProfessionalNetowkPidev@gmail.com"; 
+			final String password = "professionalnetworkpidev"; 
+			Authenticator auth = new Authenticator() {
+				//override the getPasswordAuthentication method
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(fromEmail, password);
+				}
+			};
+			Properties props = new Properties();
+			props.put("mail.smtp.host", "smtp.gmail.com"); //SMTP Host
+			props.put("mail.smtp.port", "587"); //TLS Port
+			props.put("mail.smtp.auth", "true"); //enable authentication
+			props.put("mail.smtp.starttls.enable", "true"); //enable STARTTLS
+
+			Session session = Session.getInstance(props, auth);
+			
 	      MimeMessage msg = new MimeMessage(session);
 	      //set message headers
 	      msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
@@ -65,27 +82,6 @@ public class EmailUtil implements IMailServiceLocal, IMailServiceRemote {
 	    catch (Exception e) {
 	      e.printStackTrace();
 	    }
-	}
-
-	@Override
-	public Properties setProperties() {
-		Properties props = new Properties();
-		props.put("mail.smtp.host", "smtp.gmail.com"); //SMTP Host
-		props.put("mail.smtp.port", "587"); //TLS Port
-		props.put("mail.smtp.auth", "true"); //enable authentication
-		props.put("mail.smtp.starttls.enable", "true"); //enable STARTTLS
-		return props;
-	}
-
-	@Override
-	public Authenticator setAuth(String fromEmail, String password, String toEmail) {
-		Authenticator auth = new Authenticator() {
-			//override the getPasswordAuthentication method
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(fromEmail, password);
-			}
-		};
-		return auth;
 	}
 
 	@Override

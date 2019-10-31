@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.esprit.enums.Gender;
 import javax.persistence.FetchType;
+import javax.validation.constraints.AssertFalse;
 
 import org.hibernate.validator.constraints.Email;
 
@@ -29,10 +30,15 @@ public class User implements Serializable {
 	private int id;
     @Email
 	private String email;
+	@Column(name="firstname")
 	private String firstName;
+	@Column(name="lastname")
 	private String lastName;
+	@Column(name="password")
 	private String password;
-	
+    @AssertFalse
+	@Column(name="recieveMailNotifs")
+	private boolean recieveMailNotifs;
 	@Enumerated(EnumType.STRING)
     private Gender gender;
 
@@ -65,6 +71,9 @@ public class User implements Serializable {
   @OneToMany(cascade =CascadeType.ALL,mappedBy="sender",fetch = FetchType.EAGER)
 	private Set<Message> Messages;
 
+
+  @OneToMany(cascade =CascadeType.ALL,mappedBy="reciever",fetch = FetchType.EAGER)
+	private Set<Notification> Notifications;
 
   
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "whoClaim")
@@ -306,7 +315,17 @@ public class User implements Serializable {
     public void removeMessages(Message msg) {
         this.getMessages().remove(msg);
         msg.setSender(null);
-    }   
+    }
+
+
+	public boolean getRecieveMailNotifs() {
+		return recieveMailNotifs;
+	}
+
+
+	public void setRecieveMailNotifs(boolean recieveMailNotifs) {
+		this.recieveMailNotifs = recieveMailNotifs;
+	}   
     
     
  

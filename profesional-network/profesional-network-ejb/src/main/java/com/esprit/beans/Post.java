@@ -22,8 +22,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
 
-
-import com.esprit.enums.Posts;
+import com.esprit.enums.POST_TYPE;
+import com.esprit.enums.POST_TYPE;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -39,7 +39,7 @@ public class Post implements Serializable {
     private Timestamp date;
     @JsonIgnoreProperties({"whoclaims","messages","comments","reactions"})
     private User user;
-    private Posts type;
+    private POST_TYPE type;
     @JsonIgnore
 	public Set<Comment> Comments;
     @JsonIgnore
@@ -139,11 +139,11 @@ public class Post implements Serializable {
     }
 
 	@Enumerated(EnumType.STRING)
-	public Posts getType() {
+	public POST_TYPE getType() {
 		return type;
 	}
 
-	public void setType(Posts type) {
+	public void setType(POST_TYPE type) {
 		this.type = type;
 	}
 	
