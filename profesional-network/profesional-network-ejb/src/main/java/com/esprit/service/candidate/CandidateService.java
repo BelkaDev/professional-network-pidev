@@ -59,6 +59,13 @@ public class CandidateService implements ICandidateServiceLocal,ICandidateServic
 		
 		
 	}
+	@Override
+	public void addExistingExperience(int candidateID, int experienceID) {
+		Experience e= em.find(Experience.class, experienceID);
+		Candidate c = em.find(Candidate.class, candidateID);
+		c.getExperiences().add(e);
+		
+	}
 	
 	
 	

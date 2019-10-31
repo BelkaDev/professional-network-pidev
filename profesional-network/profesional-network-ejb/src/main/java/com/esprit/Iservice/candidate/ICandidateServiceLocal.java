@@ -15,4 +15,5 @@ public interface ICandidateServiceLocal {
 	public Experience displayExperience(int id);
 	public Set<Candidate> displayCandidatesByExperience(int id);
 	public void updateExperience(int id,String d);
+	public void addExistingExperience(int candidateID,int experienceID);
 }
