@@ -5,6 +5,7 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,7 +26,7 @@ public class Claim implements Serializable {
 	private int id;
 	@Column(name="description")
 	private String description;
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	@Column(name="state")
 	private State state;
 	@Column(name="type")
@@ -33,7 +34,7 @@ public class Claim implements Serializable {
 	@JsonIgnore
 	@ManyToOne 
 	private User whoClaim; 
-	@JsonIgnore
+	@JsonIgnore	
 	@ManyToOne
 	private User claimsOn;
 	@Column(name="date")
@@ -92,6 +93,11 @@ public class Claim implements Serializable {
 	}
 	public void setDate(Date date) {
 		this.date = date;
+	}
+	@Override
+	public String toString() {
+		return "Claim [id=" + id + ", description=" + description + ", state=" + state + ", type=" + type
+				+ "]";
 	}
 	
 	

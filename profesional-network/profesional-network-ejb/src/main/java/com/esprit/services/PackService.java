@@ -40,11 +40,17 @@ public class PackService implements IPackServiceLocal, IPackServiceRemote {
 	@Override
 	public void addReduction(int id, double reduction, Date start, Date end) {
 		Pack p = em.find(Pack.class, id);
-		p.setStartDate(start);
-		p.setEndDate(end);
-		p.setReduction(reduction);
+		Pack p1 = new Pack();
+		p1.setStartDate(start);
+		p1.setEndDate(end);
+		p1.setReduction(reduction);
 		double price = p.getPrice() * (1 - reduction);
-		p.setPrice(price);
+		p1.setPrice(price);
+		p1.setDescription(p.getDescription());
+		p1.setTitle(p.getTitle());
+		p1.setType(p.getType());
+		em.persist(p1);
+		
 	}
 
 	@Override
@@ -89,6 +95,7 @@ public class PackService implements IPackServiceLocal, IPackServiceRemote {
 		up.setUser(u);
 		System.out.println("*************"+up.getPack()+" "+up.getUser());
 		up.setValid(true);
+		
 		up.setStartDate(p.getStartDate());
 		up.setEndDate(p.getEndDate());
 		em.persist(up);

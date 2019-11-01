@@ -7,7 +7,6 @@ import java.util.Set;
 import java.util.Set;
 
 import com.esprit.enums.Gender;
-import javax.persistence.FetchType;
 
 import org.hibernate.validator.constraints.Email;
 
@@ -72,7 +71,7 @@ public class User implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "claimsOn", fetch = FetchType.EAGER)
 	private Set<Claim> claimOn;
 	@JsonIgnore
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
 	private List<UserPack> packs;
 
 

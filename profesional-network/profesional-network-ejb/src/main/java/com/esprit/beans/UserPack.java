@@ -25,11 +25,11 @@ public class UserPack implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private int id;
-	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	@JoinColumn(name="idUser",referencedColumnName="id",insertable=true,updatable=false)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="idUser",referencedColumnName="id",insertable=true,updatable=true)
 	private User user;
 	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	@JoinColumn(name="idPack",referencedColumnName="id",insertable=true,updatable=false)
+	@JoinColumn(name="idPack",referencedColumnName="id",insertable=true,updatable=true)
 	private Pack pack;
 	@Column(name="daysleft")
 	private int daysleft;
@@ -80,8 +80,8 @@ public class UserPack implements Serializable{
 	public int getDaysleft() {
 		return daysleft;
 	}
-	public void setDaysleft(int daysleft) {
-		this.daysleft = daysleft;
+	public void setDaysleft(double d) {
+		this.daysleft = (int) d;
 	}
 	
 	public Date getStartDate() {
