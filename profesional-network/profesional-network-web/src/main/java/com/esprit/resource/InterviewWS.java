@@ -33,5 +33,14 @@ public class InterviewWS {
 		interviewService.CancelInterview(interview_id);
 		return Response.status(Status.FOUND).entity("the interview has beeen canceled").build();
 	}
+	
+	@PUT
+	@Path("setTime")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response setTime(@QueryParam("id")int interview_id,@QueryParam("time")String time) {
+		if(interviewService.setTime(interview_id, time))
+			return Response.status(Status.OK).entity("the time has been set").build();
+		return Response.status(Status.BAD_REQUEST).entity("invalid time has to be between 9 and 18").build();
+	}
 
 }

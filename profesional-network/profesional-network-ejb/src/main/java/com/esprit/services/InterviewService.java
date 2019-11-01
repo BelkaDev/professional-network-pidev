@@ -1,6 +1,7 @@
 package com.esprit.services;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -22,7 +23,7 @@ public class InterviewService implements IInterviewServiceLocal, IInterviewServi
 
 	@Override
 	public boolean setDate(int interview_id, String date) {
-		if (isWeekend(date)||isOlderThanToday(date)) {
+		if (isWeekend(date) || isOlderThanToday(date)) {
 			Interview in = em.find(Interview.class, interview_id);
 			in.setDate(Date.valueOf(date));
 			return true;
@@ -51,6 +52,30 @@ public class InterviewService implements IInterviewServiceLocal, IInterviewServi
 		System.out.println(Date.valueOf(LocalDate.now()));
 		if (Date.valueOf(date).after(Date.valueOf(LocalDate.now()))) {
 			System.out.println("date is older than today");
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public Interview displayInterview(int interview_id) {
+		Interview in = em.find(Interview.class, interview_id);
+		return in;
+	}
+
+	@Override
+	public boolean validTime(String time) {
+		int hours = Integer.parseInt(time.substring(0, 2));
+		if (hours > 9 && hours < 18)
+			return true;
+		return false;
+	}
+
+	@Override
+	public boolean setTime(int interview_id,String time) {
+		if(validTime(time)) {
+			Interview in=em.find(Interview.class, interview_id);
+			in.setTime(Time.valueOf(time));
 			return true;
 		}
 		return false;
