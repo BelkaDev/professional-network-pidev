@@ -30,6 +30,21 @@ public class EnterpriseEvent implements Serializable {
 	Date EEEdate;
 	@Column(name="EE_DESCRIPTION") 
 	String EEdescription;
+	@Column(name="EE_MINPART") 
+	int EEminparticipants;
+	@Column(name="EE_MAXPART") 
+	int EEmaxparticipants;
+	@Column(name="EE_PRICE") 
+	float EEprice;
+	@Column(name="EE_TICKETS") 
+	int EEtickets;
+	@Column(name="EE_VUES") 
+	int EEvues;
+	@Column(name="EE_state") 
+	int EEstate;
+	
+	
+	
 	
 	
 	@ManyToOne
@@ -63,6 +78,57 @@ public class EnterpriseEvent implements Serializable {
 	
 	
 	
+	public EnterpriseEvent(int eEid, String eEtitle, String eEplace, Date eESdate, Date eEEdate, String eEdescription,
+			int eEminparticipants, int eEmaxparticipants, float eEprice, int eEtickets, int eEvues, int eEstate,
+			Enterprise enterprise) {
+		super();
+		EEid = eEid;
+		EEtitle = eEtitle;
+		EEplace = eEplace;
+		EESdate = eESdate;
+		EEEdate = eEEdate;
+		EEdescription = eEdescription;
+		EEminparticipants = eEminparticipants;
+		EEmaxparticipants = eEmaxparticipants;
+		EEprice = eEprice;
+		EEtickets = eEtickets;
+		EEvues = eEvues;
+		EEstate = eEstate;
+		this.enterprise = enterprise;
+	}
+
+	
+	
+	
+
+
+	public EnterpriseEvent(String eEtitle, String eEplace, Date eESdate, Date eEEdate, String eEdescription,
+			int eEminparticipants, int eEmaxparticipants, float eEprice) {
+		super();
+		EEtitle = eEtitle;
+		EEplace = eEplace;
+		EESdate = eESdate;
+		EEEdate = eEEdate;
+		EEdescription = eEdescription;
+		EEminparticipants = eEminparticipants;
+		EEmaxparticipants = eEmaxparticipants;
+		EEprice = eEprice;
+	}
+
+
+
+	public int getEEstate() {
+		return EEstate;
+	}
+
+
+
+	public void setEEstate(int eEstate) {
+		EEstate = eEstate;
+	}
+
+
+
 	public EnterpriseEvent(String eEtitle, String eEplace, Date eESdate, Date eEEdate, String eEdescription) {
 		super();
 		EEtitle = eEtitle;
@@ -117,6 +183,36 @@ public class EnterpriseEvent implements Serializable {
 	}
 	public void setEEdescription(String eEdescription) {
 		EEdescription = eEdescription;
+	}
+	public int getEEminparticipants() {
+		return EEminparticipants;
+	}
+	public void setEEminparticipants(int eEminparticipants) {
+		EEminparticipants = eEminparticipants;
+	}
+	public int getEEmaxparticipants() {
+		return EEmaxparticipants;
+	}
+	public void setEEmaxparticipants(int eEmaxparticipants) {
+		EEmaxparticipants = eEmaxparticipants;
+	}
+	public float getEEprice() {
+		return EEprice;
+	}
+	public void setEEprice(float eEprice) {
+		EEprice = eEprice;
+	}
+	public int getEEtickets() {
+		return EEtickets;
+	}
+	public void setEEtickets(int eEtickets) {
+		EEtickets = eEtickets;
+	}
+	public int getEEvues() {
+		return EEvues;
+	}
+	public void setEEvues(int eEvues) {
+		EEvues = eEvues;
 	}
 	
 	

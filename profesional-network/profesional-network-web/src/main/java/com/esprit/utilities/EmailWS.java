@@ -29,16 +29,10 @@ public class EmailWS {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response sendMail(@PathParam("to")String toEmail) {
 
-		final String fromEmail = "ProfessionalNetowkPidev@gmail.com"; 
-		final String password = "professionalnetworkpidev"; 
-		Properties props = emailUtil.setProperties();
-		Authenticator auth = emailUtil.setAuth(fromEmail, password, toEmail);
-		Session session = Session.getInstance(props, auth);
-		
 		if (!emailUtil.isValidEmailAddress(toEmail))
 		return Response.status(Response.Status.METHOD_NOT_ALLOWED).entity("Email is not valid").build();
 		else
-		emailUtil.sendEmail(session, toEmail,"Notification alert", "<p>You have a new notification</p></br><b>Automatic message sent by Professional Network</b>");
+		emailUtil.sendEmail(toEmail,"Notification alert", "<p>You have a new notification</p></br><b>Automatic message sent by Professional Network</b>");
 		return Response.status(Response.Status.ACCEPTED).entity("Your email was sent to " +toEmail).build();
 	}
 }

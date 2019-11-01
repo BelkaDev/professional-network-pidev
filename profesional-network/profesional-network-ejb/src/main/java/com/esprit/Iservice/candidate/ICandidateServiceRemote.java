@@ -15,4 +15,5 @@ public interface ICandidateServiceRemote {
 	public Experience displayExperience(int id);
 	public void updateExperience(int id,String d);
 	public Set<Candidate> displayCandidatesByExperience(int id);
+	public void addExistingExperience(int candidateID,int experienceID);
 }

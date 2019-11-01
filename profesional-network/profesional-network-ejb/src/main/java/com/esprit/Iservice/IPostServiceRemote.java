@@ -5,15 +5,15 @@ import javax.ejb.Remote;
 
 import com.esprit.beans.Comment;
 import com.esprit.beans.Post;
-import com.esprit.enums.Posts;
+import com.esprit.enums.POST_TYPE;
 
 
 @Remote
 public interface IPostServiceRemote {
 	
 	
-	 void addPost(String content, Timestamp date ,int idUser, Posts typeIn);
-	 void updatePost(String content,Timestamp date,int idUser, Posts type);
+	 void addPost(String content, Timestamp date ,int idUser, POST_TYPE typeIn);
+	 void updatePost(String content,Timestamp date,int idUser, POST_TYPE type);
 	 void deletePost(int id);
 	 Post findPost(int id);
 	 List<Post> findAllPosts();

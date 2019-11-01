@@ -1,9 +1,13 @@
 package com.esprit.webservice;
 
 
+import java.security.Key;
 import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
+import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.EJB;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -16,9 +20,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.esprit.beans.Enterprise;
-import com.esprit.beans.EnterpriseEvent;
-import com.esprit.beans.JobOffer;
+
 import com.esprit.services.EnterpriseService;
+
 
 
 
@@ -74,56 +78,8 @@ public class EnterpriseWS {
 	
 	
 	
-	//**************************************eventws**********************************************
 	
 	
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("addevent")
-	public Response addevent(@QueryParam("EEtitle") String EEtitle,
-			@QueryParam("EEplace") String EEplace,
-			@QueryParam("EESdate") Date EESdate,
-			@QueryParam("EEEdate") Date EEEdate, 
-			@QueryParam("EEdescription") String EEdescription,
-			@QueryParam("enterpriseId") int enterpriseId
-
-	) {
-		
-		EnterpriseEvent ee= new EnterpriseEvent(EEtitle,EEplace,EESdate,EEEdate,EEdescription);
-		enterprisews.AddEnterpriseEvent(ee,enterpriseId);
-		return Response.status(200).entity(status).build();
-	}
-	
-	@PUT
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("updateevent")
-	public Response updateevent(@QueryParam("EEid") int id,@QueryParam("EEtitle") String EEtitle,
-			@QueryParam("EEplace") String EEplace,
-			@QueryParam("EESdate") Date EESdate,
-			@QueryParam("EEEdate") Date EEEdate,
-			@QueryParam("EEdescription") String EEdescription
-	) {
-		
-		enterprisews.ModifyEnterpriseEvent(id, EEtitle, EEplace, EESdate, EEEdate, EEdescription);
-		return Response.status(200).entity(status).build();
-	}
-	
-	
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("deleteevent")
-	public Response deleteevent(@QueryParam("EEid") int id) {
-		enterprisews.DeleteEnterpriseEvent(id);;
-		return Response.status(200).entity(status).build();
-	}
-	
-	
-	@GET 
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("getevent")
-	public List<EnterpriseEvent> getevent() {
-		return enterprisews.getAllEnterpriseEvent();
-	}
 	
 	
 	

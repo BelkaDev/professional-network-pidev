@@ -8,6 +8,10 @@ import java.util.Set;
 
 import com.esprit.enums.Gender;
 
+import javax.persistence.FetchType;
+import javax.validation.constraints.AssertFalse;
+
+
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
@@ -21,22 +25,27 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Inheritance(strategy=InheritanceType.JOINED)
 public class User implements Serializable {
 
-    private static final long serialVersionUID = 1L;	
+    private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private int id;
     @Email
 	private String email;
+	@Column(name="firstname")
 	private String firstName;
+	@Column(name="lastname")
 	private String lastName;
+	@Column(name="password")
 	private String password;
-	
+    @AssertFalse
+	@Column(name="recieveMailNotifs")
+	private boolean recieveMailNotifs;
 	@Enumerated(EnumType.STRING)
     private Gender gender;
 
 	private Date birthDate;
-	
+
 	// address is complex type
 	private Address address;
 	@Column(name="isPremimum")
@@ -45,19 +54,19 @@ public class User implements Serializable {
 	private Date dateDebutP;
 	@Column(name="dateFinP")
 	private Date dateFinP;
-	
+
 	//****************************
 
 
   @OneToMany(cascade = CascadeType.ALL,mappedBy = "user",fetch = FetchType.EAGER)
   private Set<Post> Posts;
-  
+
 
   @OneToMany(cascade = CascadeType.ALL,mappedBy = "commentingUser",fetch = FetchType.EAGER)
 	private Set<Comment> Comments;
-  
 
-  @OneToMany(cascade =CascadeType.ALL,mappedBy = "reactingUser",fetch = FetchType.EAGER) 
+
+  @OneToMany(cascade =CascadeType.ALL,mappedBy = "reactingUser",fetch = FetchType.EAGER)
 	private Set<Reaction> Reactions;
 
 
@@ -65,7 +74,10 @@ public class User implements Serializable {
 	private Set<Message> Messages;
 
 
-  
+  @OneToMany(cascade =CascadeType.ALL,mappedBy="reciever",fetch = FetchType.EAGER)
+	private Set<Notification> Notifications;
+
+
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "whoClaim")
 	private Set<Claim> Whoclaim;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "claimsOn", fetch = FetchType.EAGER)
@@ -76,14 +88,14 @@ public class User implements Serializable {
 
 
 	//****************************
-	
+
 
 	public User(int idUser) {
 		super();
 		this.id = idUser;
 		this.gender = Gender.Other;
 	}
-	
+
 
 	public Set<Claim> getWhoclaim() {
 		return Whoclaim;
@@ -149,9 +161,9 @@ public class User implements Serializable {
 		this.dateFinP = dateFinP;
 	}
 
-	
 
-	
+
+
 
 	public int getId() {
 		return id;
@@ -186,9 +198,9 @@ public class User implements Serializable {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	
 
-  
+
+
 	public String getPassword() {
 		return password;
 	}
@@ -222,9 +234,9 @@ public class User implements Serializable {
 
   // #----------------------Relations----------------------#
 
-	
+
   // Posts of the user
-	
+
 	@JsonIgnore
 	public Set<Post> getPosts() {
 		return Posts;
@@ -240,11 +252,11 @@ public class User implements Serializable {
 		{
 			p.setUser(this);
 		}
-	}	
-	
+	}
+
 	// Comments of the user (on all posts)
-	
-	
+
+
 	public Set<Comment> getComments() {
 		return Comments;
 	}
@@ -260,11 +272,11 @@ public class User implements Serializable {
 			c.setCommentingUser(this);
 		}
 	}
-	
+
   // Reactions of the user (on all posts)
-	
-	
-	
+
+
+
 	public Set<Reaction> getReactions() {
 		return Reactions;
 	}
@@ -279,11 +291,11 @@ public class User implements Serializable {
 		{
 			r.setReactingUser(this);
 		}
-	}	
-	
+	}
+
   // Messages sent by the user
-	
-	
+
+
 	public Set<Message> getMessages() {
 		return Messages;
 	}
@@ -291,7 +303,7 @@ public class User implements Serializable {
 	public void setMessages(Set<Message> Messages) {
 		this.Messages = Messages;
 	}
-	
+
     void addMessage(Message msg, boolean set) {
         if (msg != null) {
             getMessages().add(msg);
@@ -300,13 +312,23 @@ public class User implements Serializable {
             }
         }
     }
-     
+
 
     public void removeMessages(Message msg) {
         this.getMessages().remove(msg);
         msg.setSender(null);
-    }   
-    
-    
- 
+    }
+
+
+	public boolean getRecieveMailNotifs() {
+		return recieveMailNotifs;
+	}
+
+
+	public void setRecieveMailNotifs(boolean recieveMailNotifs) {
+		this.recieveMailNotifs = recieveMailNotifs;
+	}
+
+
+
 }

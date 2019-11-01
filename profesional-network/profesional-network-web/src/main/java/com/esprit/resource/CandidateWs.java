@@ -50,7 +50,13 @@ public class CandidateWs {
 		cs.addExperience(e,candidateID);
 		return Response.status(Status.CREATED).entity("Experience Added").build();
 	}
-	
+	@POST
+	@Path("addExistingExperience")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addExistingExperience(@QueryParam("experienceID") int experienceID,@QueryParam("candidateID") int candidateID) {
+		cs.addExistingExperience(candidateID, experienceID);
+		return Response.status(Status.CREATED).entity("Experience Added").build();
+	}
 	@DELETE
 	@Path("deleteExperience")
 	@Produces(MediaType.APPLICATION_JSON)

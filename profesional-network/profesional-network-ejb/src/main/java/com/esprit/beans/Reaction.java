@@ -17,7 +17,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-import com.esprit.enums.Reactions;
+import com.esprit.enums.REACTION_TYPE;
+import com.esprit.enums.REACTION_TYPE;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -30,7 +31,7 @@ public class Reaction implements Serializable {
     
 	private int id;
     private Timestamp date;
-    private Reactions type;
+    private REACTION_TYPE type;
     @JsonIgnore
     private Post reactedPost;
     @JsonIgnore
@@ -59,11 +60,11 @@ public class Reaction implements Serializable {
     }
 
 	@Enumerated(EnumType.STRING)
-	public Reactions getType() {
+	public REACTION_TYPE getType() {
 		return type;
 	}
 
-	public void setType(Reactions type) {
+	public void setType(REACTION_TYPE type) {
 		this.type = type;
 	}
 

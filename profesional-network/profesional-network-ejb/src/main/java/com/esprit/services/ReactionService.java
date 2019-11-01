@@ -15,7 +15,7 @@ import com.esprit.beans.Message;
 import com.esprit.beans.Post;
 import com.esprit.beans.Quiz;
 import com.esprit.beans.User;
-import com.esprit.enums.Reactions;
+import com.esprit.enums.REACTION_TYPE;
 
 
 @Stateless
@@ -26,7 +26,7 @@ public class ReactionService implements IReactionServiceLocal,IReactionServiceRe
 	EntityManager em;
 
 	@Override
-	public void addReaction(Timestamp date, Reactions type
+	public void addReaction(Timestamp date, REACTION_TYPE type
 			 ,int idPost,int idUser) {
 		
 		
@@ -48,7 +48,7 @@ public class ReactionService implements IReactionServiceLocal,IReactionServiceRe
 		}
 		
 	@Override
-	public void updateReaction(Timestamp date,Reactions type
+	public void updateReaction(Timestamp date,REACTION_TYPE type
 			 ,int idPost,int idUser) {
 
 		User reacter = em.find(User.class,idUser);

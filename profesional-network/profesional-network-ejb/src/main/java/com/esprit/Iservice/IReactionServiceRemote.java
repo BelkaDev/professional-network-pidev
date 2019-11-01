@@ -7,15 +7,15 @@ import javax.ejb.Remote;
 import com.esprit.beans.Post;
 import com.esprit.beans.Reaction;
 import com.esprit.beans.User;
-import com.esprit.enums.Reactions;
+import com.esprit.enums.REACTION_TYPE;
 
 
 @Remote
 public interface IReactionServiceRemote {
 	
-	 void addReaction(Timestamp date, Reactions type
+	 void addReaction(Timestamp date, REACTION_TYPE type
 			 ,int idPost,int idUser);
-	 void updateReaction(Timestamp date, Reactions type
+	 void updateReaction(Timestamp date, REACTION_TYPE type
 			 ,int idPost,int idUser);
 	 void deleteReaction(int it);
 	 Reaction findReaction(int id);

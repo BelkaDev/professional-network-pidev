@@ -1,7 +1,7 @@
 package com.esprit.enums;
 
 
-public enum Reactions {
+public enum REACTION_TYPE {
 	Like, Dislike, Thankful, None
 
 }

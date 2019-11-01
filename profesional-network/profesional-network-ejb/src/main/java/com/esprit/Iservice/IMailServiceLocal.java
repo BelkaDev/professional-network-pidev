@@ -14,9 +14,7 @@ import com.esprit.beans.Reaction;
 @Local
 public interface IMailServiceLocal {
 	
-	 void sendEmail(Session session, String toEmail, 
+	 void sendEmail(String toEmail, 
 			String subject, String body);
-	 Properties setProperties();
-	 Authenticator setAuth(String fromEmail,String password,String toEmail);
 	 boolean isValidEmailAddress(String email);
 }
