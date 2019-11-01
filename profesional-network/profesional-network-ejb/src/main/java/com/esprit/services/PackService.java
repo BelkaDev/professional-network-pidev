@@ -90,7 +90,7 @@ public class PackService implements IPackServiceLocal, IPackServiceRemote {
 		Pack p = em.find(Pack.class, packId);
 		System.out.println("/**********************************"+u.getId()+" "+ p.getId());
 		UserPack up = new UserPack();
-		u.setPpremimum(true);
+	
 		up.setPack(p);
 		up.setUser(u);
 		System.out.println("*************"+up.getPack()+" "+up.getUser());
