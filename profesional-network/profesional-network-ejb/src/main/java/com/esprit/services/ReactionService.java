@@ -3,6 +3,8 @@ package com.esprit.services;
 
 import java.sql.Timestamp;
 import java.util.List;
+
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -11,11 +13,9 @@ import javax.persistence.PersistenceContext;
 import com.esprit.Iservice.IReactionServiceLocal;
 import com.esprit.Iservice.IReactionServiceRemote;
 import com.esprit.beans.Reaction;
-import com.esprit.beans.Comment;
-import com.esprit.beans.Message;
 import com.esprit.beans.Post;
-import com.esprit.beans.Quiz;
 import com.esprit.beans.User;
+import com.esprit.enums.NOTIFICATION_TYPE;
 import com.esprit.enums.REACTION_TYPE;
 
 
@@ -25,6 +25,11 @@ public class ReactionService implements IReactionServiceLocal,IReactionServiceRe
 
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
+
+	@EJB
+	FollowingService followingservice = new FollowingService();
+	@EJB
+	NotificationService notificationservice = new NotificationService();
 
 	@Override
 	public boolean addReaction(int idUser,int idPost,
@@ -44,10 +49,29 @@ public class ReactionService implements IReactionServiceLocal,IReactionServiceRe
 			return false;}
 			else {
 				em.persist(react);
-				return true;
 			}
+		
+		// notifying the post followers about the new Reaction
 
+		List<User> followers = followingservice.PostFollowers(idPost);
+		String notif_message = reacter.getFirstName()+" "+reacter.getLastName()+
+				" reacted on a post you follow.";
+		
+		if (followers!=null)
+		{
+		for (User follower : followers) {
+			if (post.getUser().getId() == follower.getId())
+			{
+				notif_message = reacter.getFirstName()+" "+reacter.getLastName()+
+						" reactmented on your Post.";
+			}
+			NOTIFICATION_TYPE notif_type = NOTIFICATION_TYPE.Reaction;
+			notificationservice.CreateNotification(follower.getId(),notif_message,notif_type ,react.getReactedPost().getId(), reacter.getId());
 		}
+		}
+		
+		return true;
+	}
 		
 	@Override
 	public boolean updateReaction(int idReaction, REACTION_TYPE type)

@@ -23,7 +23,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
 
 import com.esprit.enums.POST_TYPE;
-import com.esprit.enums.POST_TYPE;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -42,12 +41,15 @@ public class Post implements Serializable {
     private User user;
     private POST_TYPE type;
     @JsonIgnore
-	public Set<Comment> Comments;
+	private Set<Comment> Comments;
     @JsonIgnore
-	public Set<Reaction> Reactions;
+	private Set<Reaction> Reactions;
+
+    private FileUpload file;
+   
 	
-     
-    @Id
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
@@ -76,9 +78,21 @@ public class Post implements Serializable {
 		this.author = author;
 	}
     
+	
     
  // #----------------------Relations----------------------#
     
+	
+
+   @OneToOne(cascade=CascadeType.ALL)
+   public FileUpload getFile() {
+		return file;
+	}
+
+	public void setFile(FileUpload file) {
+		this.file = file;
+	}
+
     
     // User who posted the post
     

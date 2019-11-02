@@ -30,7 +30,7 @@ public class FollowingService implements IFollowingServiceLocal,IFollowingServic
 	EntityManager em;
 
 	@Override
-	public void followPost(int idPost, int idUser) {
+	public void followPost(int idUser, int idPost) {
 		Following following = new Following();
 		following.setTarget(NOTIFICATION_TARGET.Post);
 		following.setTargetId(idPost);
@@ -40,10 +40,10 @@ public class FollowingService implements IFollowingServiceLocal,IFollowingServic
 	}
 
 	@Override
-	public void followUser(int idFollowing, int idFollower) {
+	public void followUser(int idFollower, int idFollowed) {
 		Following following = new Following();
 		following.setTarget(NOTIFICATION_TARGET.Profile);
-		following.setTargetId(idFollowing);
+		following.setTargetId(idFollowed);
 		User follower = em.find(User.class,idFollower);
 		following.setFollower(follower);
 		em.persist(following);
@@ -51,7 +51,7 @@ public class FollowingService implements IFollowingServiceLocal,IFollowingServic
 	}
 
 	@Override
-	public void unFollowPost(int idPost, int idUser) {
+	public void unFollowPost(int idUser, int idPost) {
 		int id = em.createQuery("select f from Following f where f.targetId=:IdT AND r.follower.id=:IdU "
 				+ "AND follower.target=:type",Following.class)
 				.setParameter("IdU", idUser).setParameter("IdT", idPost ).setParameter("type",NOTIFICATION_TARGET.Post).getSingleResult().getId();		
@@ -59,10 +59,10 @@ public class FollowingService implements IFollowingServiceLocal,IFollowingServic
 	}
 
 	@Override
-	public void unFollowUser(int idFollowing, int idFollower) {
+	public void unFollowUser(int idFollower, int idFollowed) {
 			int id = em.createQuery("select f from Following f where f.targetId=:IdP AND r.follower.id=:IdU "
 					+ "AND follower.target=:type",Following.class)
-					.setParameter("IdI", idFollower).setParameter("IdT", idFollowing ).setParameter("type",NOTIFICATION_TARGET.Profile).getSingleResult().getId();		
+					.setParameter("IdI", idFollower).setParameter("IdT", idFollowed ).setParameter("type",NOTIFICATION_TARGET.Profile).getSingleResult().getId();		
 			em.remove(em.find(Following.class, id));
 		
 	}

@@ -47,7 +47,7 @@ public class CommentService implements ICommentServiceLocal,ICommentServiceRemot
 		em.persist(com);
 		em.flush();
 		
-		// notifying the post about the new Comment
+		// notifying the post followers about the new Comment
 
 		List<User> followers = followingservice.PostFollowers(idPost);
 		String notif_message = commenter.getFirstName()+" "+commenter.getLastName()+

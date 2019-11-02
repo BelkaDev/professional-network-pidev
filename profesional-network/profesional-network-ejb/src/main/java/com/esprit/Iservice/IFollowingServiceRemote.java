@@ -9,12 +9,12 @@ import com.esprit.enums.NOTIFICATION_TYPE;
 @Remote
 public interface IFollowingServiceRemote {
 	
-	void followPost(int idPost,int idUser);
-	void followUser(int idFollwing,int idFollower);
-	void unFollowPost(int idPost,int idUser);
-	void unFollowUser(int idFollwing,int idFollower);
 	
-	List<User> PostFollowers (int idPost);
-	List<User> UserFollowers (int idUser);
-
+	void followPost(int idUser,int idPost);
+	void followUser(int idFollower,int idFollowed);
+	void unFollowPost(int idUser,int idPost);
+	void unFollowUser(int idFollower,int idFollowed);
+	
+	List<User> PostFollowers(int idPost);
+	List<User> UserFollowers(int idUser);
 }

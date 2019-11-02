@@ -31,13 +31,7 @@ import com.esprit.Iservice.candidate.ICandidateServiceLocal;
 @LocalBean
 public class EmailUtil implements IMailServiceLocal, IMailServiceRemote {
 
-	/**
-	 * Utility method to send simple HTML email
-	 * @param session
-	 * @param toEmail
-	 * @param subject
-	 * @param body
-	 */
+
 	public void sendEmail(String toEmail, String subject, String body){
 		try
 	    {

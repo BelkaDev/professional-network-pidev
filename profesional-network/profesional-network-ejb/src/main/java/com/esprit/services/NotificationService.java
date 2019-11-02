@@ -33,7 +33,7 @@ public class NotificationService implements INotificationServiceLocal,INotificat
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
 	EmailUtil mail = new EmailUtil();
-	UserService userService = new UserService();
+
 	@Override
 	public void CreateNotification(int idReciever,String body,
 			NOTIFICATION_TYPE type,int trigger,int targetId) {
