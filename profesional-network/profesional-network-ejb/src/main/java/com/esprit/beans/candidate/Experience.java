@@ -74,7 +74,14 @@ public class Experience implements Serializable {
 	public void setCandidates(Set<Candidate> candidates) {
 		this.candidates = candidates;
 	}
+	@Override
+	public String toString() {
+		return "Experience [experienceId=" + experienceId + ", designation=" + designation + ", type=" + type
+				+ ", startDate=" + startDate + ", endDate=" + endDate + ", candidates=" + candidates + "]";
+	}
+	
 
+	
 	
 
 

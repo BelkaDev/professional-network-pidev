@@ -40,17 +40,19 @@ public class Candidate implements Serializable {
 	inverseJoinColumns=@JoinColumn(name="Experience_ID"))
 	private Set<Experience> experiences = new HashSet<>();
 	
-	
+	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name="Candidate_Certification",joinColumns=@JoinColumn(name="Candidate_ID"),
 	inverseJoinColumns=@JoinColumn(name="Certification_ID"))
 	private Set<Certification> certifications;
 	
+	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name="Candidate_Activity",joinColumns=@JoinColumn(name="Candidate_ID"),
 	inverseJoinColumns=@JoinColumn(name="Skill_ID"))
 	private Set<Activity> activities;
 	
+	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name="Candidate_Skill",joinColumns=@JoinColumn(name="Candidate_ID"),
 	inverseJoinColumns=@JoinColumn(name="Skill_ID"))
