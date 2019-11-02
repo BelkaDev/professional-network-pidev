@@ -43,7 +43,7 @@ public class User implements Serializable {
 
 	private Date birthDate;
 	@Column(name = "enable")
-	public boolean enable;
+	private boolean enable;
 	@Column(name = "confirm")
 	private String confirm;
 	// address is complex type
@@ -73,6 +73,12 @@ public class User implements Serializable {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "reciever", fetch = FetchType.EAGER)
 	private Set<Notification> Notifications;
+	
+	@OneToMany(cascade =CascadeType.ALL,mappedBy= "follower",fetch = FetchType.EAGER)
+	private Set<Following> Followers;
+	  
+	@OneToMany(cascade =CascadeType.ALL,mappedBy= "blocking",fetch = FetchType.EAGER)
+	private Set<Blacklist> Blacklist;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "whoClaim")
 	private Set<Claim> Whoclaim;
