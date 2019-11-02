@@ -2,11 +2,14 @@ package com.esprit.Iservice;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Remote;
 
 import com.esprit.beans.Answer;
+import com.esprit.beans.JobOffer;
 import com.esprit.beans.candidate.Candidate;
+import com.esprit.beans.candidate.Experience;
 import com.esprit.beans.Quiz;
 import com.esprit.beans.QuizState;
 
@@ -38,6 +41,14 @@ public interface IQuizServiceRemote {
 
 	public List<Quiz> getCandidateQuiz(int candidate_id);
 	
+	public int getYears(Date datedebut,Date dateFin);
 	
+	public Set<Experience> getCandidateExperience(int candidate_id);
+
+	public int getYearsExpericence(int candidate_id);
+	
+	public List<JobOffer> selectOffers(int years);
+	
+	public List<JobOffer> sendOffers(int quiz_id);
 
 }

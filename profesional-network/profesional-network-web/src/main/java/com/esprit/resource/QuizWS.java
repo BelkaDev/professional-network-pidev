@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.esprit.beans.JobOffer;
 import com.esprit.beans.Quiz;
 import com.esprit.services.QuizService;
 
@@ -105,6 +106,15 @@ public class QuizWS {
 	public Response validate(@QueryParam("idOffer") int offer_id) {
 		quizService.ChooseCnadidate(offer_id);
 		return Response.status(Status.OK).entity("the selection process for interviews has been completed").build();
+	}
+	@GET
+	@Path("moreoffers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getOffers(@QueryParam("idQ")int quiz_id) {
+		List<JobOffer> list=quizService.selectOffers(quiz_id);
+		if(list.isEmpty())
+			return Response.status(Status.OK).entity("you have succeeded the quiz ").build();
+		return Response.status(Status.OK).entity(list).build();
 	}
 
 }

@@ -2,6 +2,7 @@ package com.esprit.resource;
 
 import javax.ejb.EJB;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -42,5 +43,7 @@ public class InterviewWS {
 			return Response.status(Status.OK).entity("the time has been set").build();
 		return Response.status(Status.BAD_REQUEST).entity("invalid time has to be between 9 and 18").build();
 	}
+	
+	
 
 }
