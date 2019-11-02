@@ -15,6 +15,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.esprit.Iservice.INotificationServiceLocal;
+import com.esprit.Iservice.INotificationServiceRemote;
+import com.esprit.beans.Comment;
 import com.esprit.beans.Notification;
 import com.esprit.beans.User;
 import com.esprit.enums.NOTIFICATION_TARGET;
@@ -26,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 @Stateless
 @LocalBean
-public class NotificationService implements INotificationServiceLocal {
+public class NotificationService implements INotificationServiceLocal,INotificationServiceRemote {
 
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
@@ -37,7 +39,8 @@ public class NotificationService implements INotificationServiceLocal {
 			NOTIFICATION_TYPE type,int trigger,int targetId) {
 			
 
-		Set<NOTIFICATION_TYPE> POST_TYPE = EnumSet.of(NOTIFICATION_TYPE.Comment, NOTIFICATION_TYPE.Share, NOTIFICATION_TYPE.Reaction);
+		Set<NOTIFICATION_TYPE> POST_TYPE = EnumSet.of(NOTIFICATION_TYPE.Comment, NOTIFICATION_TYPE.Share, NOTIFICATION_TYPE.Reaction
+				,NOTIFICATION_TYPE.Follow);
 		NOTIFICATION_TARGET target =  NOTIFICATION_TARGET.None;
 		
 			if (POST_TYPE.contains(type)) { 
@@ -52,17 +55,27 @@ public class NotificationService implements INotificationServiceLocal {
 			{
 				 target = NOTIFICATION_TARGET.Offer;
 			}
-
-		
+			
 		Notification newNotification = new Notification();
-		newNotification.setTargetId(targetId);
-		User reciever= em.find(User.class,idReciever);
-		newNotification.setMessage(body);
-		newNotification.setReciever(reciever);
-		newNotification.setTarget(target);
+		User reciever= em.find(User.class,idReciever); 
 		Timestamp date = new Timestamp(System.currentTimeMillis());
+		
+		newNotification.setTargetId(targetId);
+		newNotification.setMessage(body);
+		newNotification.setReciever(reciever); 
+		newNotification.setTarget(target); 
 		newNotification.setDate(date);
+		
+		
+		/* check if notification exists */
+		int duplicateId = this.findDuplicate(newNotification);
+		if (duplicateId != -1)
+		{
+			this.updateNotif(duplicateId,body);
+		} else
+		{
 		em.persist(newNotification);
+		}
 		
 		/* mail notification */
 		if (reciever.getRecieveMailNotifs()) {
@@ -76,7 +89,7 @@ public class NotificationService implements INotificationServiceLocal {
 					+ "<b>Automatic Message by Professional Network </b>";
 		
 			String content = String.format(format,newNotification.getMessage(),
-					"test","post","1");
+				new SimpleDateFormat("MMdd").format(date),body,"post","1");
 	
 
 			String subject = "You have a new Notification!";
@@ -86,37 +99,36 @@ public class NotificationService implements INotificationServiceLocal {
 	}
 	
 	public String parseText(NOTIFICATION_TYPE type,String body,int triggerId,int target) {
-		String name = em.find(User.class,triggerId).getFirstName();
+		String name = em.find(User.class,triggerId).getFirstName()+" "+em.find(User.class,triggerId).getLastName();
 		String content="";
-		//String formattedDate = new SimpleDateFormat("MMdd").format(date);
 		 switch (type) {
          case Message:
-                 content += name +" : "+ body;
+                  content += name +" : "+ body;
                  break;
 	    
          case Relation:
-                 content += name +" sent you a friend request.";
+                  content += name +" sent you a friend request.";
                  break;
 
          case Comment:
-             content +=  name + " commented on your post "; 
+             	  content +=  name + " commented on your post "; 
              break;
              
          case Reaction:
-             content =  name + " has reacted to your post ";
-             break;
+                  content =  name + " has reacted to your post ";
+                  break;
 
          case Share:
-             content =  name + " has shared your post" ;
-             break;
+             	  content =  name + " has shared your post" ;
+             	   break;
          case Offer:
         	 
-             content =  "Your offer has been approved.";
-			break;
+        	 	  content =  "Your offer has been approved.";
+        	 	  break;
          default:
 			
-            content = "you have a new notification.";
-			break;
+        	 	  content = "You have a new notification.";
+        	 	  break;
      }
 		 return content;
 	}
@@ -131,7 +143,6 @@ public class NotificationService implements INotificationServiceLocal {
 		} catch (InterruptedException e) {
 		}
 
-		// The list always contains 2 items, that will have incrementing ids
 		return result;
 	}
 
@@ -140,21 +151,37 @@ public class NotificationService implements INotificationServiceLocal {
 	}
 
 	@Override
-	public void deleteNotif(int id) {
-		// TODO Auto-generated method stub
+	public boolean deleteNotif(int id) {
+		Notification notif = em.find(Notification.class, id);
+		if (notif == null)
+		{
+			return false;
+		}
+		em.remove(notif);
+		return true;
 		
 	}
 
 	@Override
-	public void editNotif(Notification notif) {
-		// TODO Auto-generated method stub
+	public boolean updateNotif(int id,String notif_message) {
+		
+		Notification notif = em.find(Notification.class, id);
+		if (notif == null)
+		{
+			return false;
+		}
+		Timestamp date = new Timestamp(System.currentTimeMillis());
+		notif.setDate(date);
+		notif.setMessage(notif_message);
+		return true;
 		
 	}
 
 	@Override
-	public List<Notification> userNotifications(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Notification> userNotifications(int idUser) {
+		List<Notification> notifs = em.createQuery("select n from Notification n where n.reciever.id=:Id",Notification.class)
+				.setParameter("Id", idUser).getResultList();
+		return notifs;
 	}
 
 	@Override
@@ -162,4 +189,29 @@ public class NotificationService implements INotificationServiceLocal {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public int findDuplicate(Notification notif) {
+		List<Notification> duplicate =  em.createQuery("select n from Notification n where n.reciever.id=:reciever AND "
+				+ "n.targetId=:targetId AND n.target=:target",Notification.class)
+				.setParameter("reciever", notif.getReciever().getId()).setParameter("targetId", notif.getTargetId())
+				.setParameter("target", notif.getTarget()).getResultList();
+		if (duplicate.isEmpty())
+		{
+		return (-1);
+		}
+		return duplicate.get(0).getId();
+}
+
+	@Override
+	public boolean setSeen(int id) {
+		Notification notif = em.find(Notification.class,id);
+		if (notif == null)
+		{
+			return false;
+		}
+		notif.setSeen(true);
+		em.merge(notif);
+		return true;
+	}	
 }

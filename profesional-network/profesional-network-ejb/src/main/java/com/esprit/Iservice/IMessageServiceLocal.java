@@ -7,9 +7,11 @@ import com.esprit.beans.Message;
 @Local
 public interface IMessageServiceLocal {
 	
-	void addMessage(Timestamp timestamp, int sender, int idRecipient, String body, int status);
-	void editMessage(Timestamp timestamp, int sender, int idRecipient, String body, int status);
+	void sendMessage(int idSender, int idRecipient, String body);
+	void editMessage(int id,String body);
 	void deleteMessage(int id);
+	void setStatus(int id);
+	boolean checkBlocked(int idSender,int idReciever);
 	public Message findMessage(int id);
 	List<Message> findMsgBySender(int id);
 	List<Message> findMsgByReciever(int id);

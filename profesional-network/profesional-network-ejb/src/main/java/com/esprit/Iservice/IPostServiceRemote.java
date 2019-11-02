@@ -12,10 +12,12 @@ import com.esprit.enums.POST_TYPE;
 public interface IPostServiceRemote {
 	
 	
-	 void addPost(String content, Timestamp date ,int idUser, POST_TYPE typeIn);
-	 void updatePost(String content,Timestamp date,int idUser, POST_TYPE type);
-	 void deletePost(int id);
+	 void addPost(int idUser,String content,POST_TYPE typeIn);
+	 boolean updatePost(int id,String content,POST_TYPE typePost);
+	 boolean deletePost(int id);
+	 boolean sharePost(int idPost,int idUser);
 	 Post findPost(int id);
+	 List<Post> sharingPost(int idPost);
 	 List<Post> findAllPosts();
 	 List<Post> findAllUserPosts(int id);
 	 List<Post> findFriendsPosts(int Userid);

@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import com.esprit.Iservice.IReactionServiceLocal;
 import com.esprit.Iservice.IReactionServiceRemote;
 import com.esprit.beans.Reaction;
+import com.esprit.beans.Comment;
 import com.esprit.beans.Message;
 import com.esprit.beans.Post;
 import com.esprit.beans.Quiz;
@@ -26,13 +27,13 @@ public class ReactionService implements IReactionServiceLocal,IReactionServiceRe
 	EntityManager em;
 
 	@Override
-	public void addReaction(Timestamp date, REACTION_TYPE type
-			 ,int idPost,int idUser) {
-		
+	public boolean addReaction(int idUser,int idPost,
+			REACTION_TYPE type){
 		
 		User reacter = em.find(User.class,idUser);
 		Post post = em.find(Post.class,idPost);
 		Reaction react = new Reaction();
+		Timestamp date = new Timestamp(System.currentTimeMillis());
 		react.setDate(date);
 		react.setType(type);
 		react.setReactingUser(reacter);
@@ -40,38 +41,35 @@ public class ReactionService implements IReactionServiceLocal,IReactionServiceRe
 			
 		
 		if ((react.getReactedPost() == null && react.getReactingUser() == null)){
-			System.out.println("can't add the reaction");}
+			return false;}
 			else {
 				em.persist(react);
+				return true;
 			}
 
 		}
 		
 	@Override
-	public void updateReaction(Timestamp date,REACTION_TYPE type
-			 ,int idPost,int idUser) {
-
-		User reacter = em.find(User.class,idUser);
-		Post post = em.find(Post.class,idPost);
-		Reaction react = new Reaction();
+	public boolean updateReaction(int idReaction, REACTION_TYPE type)
+	{
+		Reaction react = em.find(Reaction.class,idReaction);
+		if (react == null ) {
+			return false;
+		}
+		Timestamp date = new Timestamp(System.currentTimeMillis());
 		react.setDate(date);
 		react.setType(type);
-		react.setReactingUser(reacter);
-		react.setReactedPost(post);
-			
-		
-		if ((react.getReactedPost() == null && react.getReactingUser() == null)){
-			System.out.println("error");}
-			else {
-				em.merge(react);
-			}
-
+		return true;
 	}
 
 	@Override
-	public void deleteReaction(int id) {
-		em.remove(em.find(Reaction.class, id));
-
+	public boolean deleteReaction(int id) {
+		Reaction react = em.find(Reaction.class,id);
+		if (react == null ) {
+			return false;
+		}
+		em.remove(react);
+		return true;
 	}
 
 	@Override
@@ -97,10 +95,10 @@ public class ReactionService implements IReactionServiceLocal,IReactionServiceRe
 
 	
 	@Override
-	public Reaction findUserReactionOnPost(int idUser, int idPost) {
+	public boolean userAlreadyReacted(int idUser, int idPost) {
 		Reaction react = em.createQuery("select r from Reaction r where r.reacter.id=:IdU AND r.post.id=:IdP",Reaction.class)
 				.setParameter("IdU", idUser).setParameter("IdP", idPost ).getSingleResult();
-		return react;
+		return (react!=null);
 	}
 
 	@Override

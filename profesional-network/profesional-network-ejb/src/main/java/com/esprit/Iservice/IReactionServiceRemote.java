@@ -13,15 +13,15 @@ import com.esprit.enums.REACTION_TYPE;
 @Remote
 public interface IReactionServiceRemote {
 	
-	 void addReaction(Timestamp date, REACTION_TYPE type
-			 ,int idPost,int idUser);
-	 void updateReaction(Timestamp date, REACTION_TYPE type
-			 ,int idPost,int idUser);
-	 void deleteReaction(int it);
+	
+	 boolean addReaction(int idUser,int idPost, REACTION_TYPE type);
+	 boolean updateReaction(int idReaction, REACTION_TYPE type);
+	 boolean deleteReaction(int it);
 	 Reaction findReaction(int id);
 	 List<Reaction> findPostReactions(int id);
 	 List<Reaction> findUserReactions(int id);
 	 List<Reaction> findReactionsByDate(Timestamp date);
-	 Reaction findUserReactionOnPost(int idUser,int idPost);
+	 
+	 boolean userAlreadyReacted(int idUser,int idPost);
 	
 }
