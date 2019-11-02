@@ -7,11 +7,9 @@ import com.esprit.beans.Comment;
 @Remote
 public interface ICommentServiceRemote {
 	
-	 void addComment(String content,Timestamp date
-				,int idPost, int idUser);
-	 void updateComment(String content,Timestamp date
-				,int idPost, int idUser);
-	 void deleteComment(int id);
+	 boolean addComment(int idUser,int idPost, String content);
+	 boolean updateComment(int id, String content);
+	 boolean deleteComment(int id);
 	 Comment findComment(int id);
 	 List<Comment> findPostComments(int id);
 	 List<Comment> findUserComments(int id);

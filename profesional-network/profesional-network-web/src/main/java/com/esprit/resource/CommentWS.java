@@ -37,10 +37,11 @@ public class CommentWS {
 			@QueryParam("idPost") int idPost,
 			@QueryParam("content") String content
 	) {
-
-		Timestamp date = new Timestamp(System.currentTimeMillis());		
-		CommentService.addComment(content,date,idPost,idUser);
+		
+		if(CommentService.addComment(idUser,idPost,content)) {
 		return Response.status(Response.Status.CREATED).entity(out).build();
+	}
+		return Response.status(Response.Status.NOT_FOUND).entity("post or user not found.").build();
 	}
 	
 
@@ -56,12 +57,10 @@ public class CommentWS {
 	@PUT
 	@Path("/update")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response editComment(@QueryParam("idUser") int idUser,
-			@QueryParam("idPost") int idPost,
+	public Response editComment(@QueryParam("idCOm") int idCom,
 			@QueryParam("content") String content
-	) {
-		Timestamp date = new Timestamp(System.currentTimeMillis());		
-		CommentService.updateComment(content,date,idPost,idUser);
+	) {		
+		CommentService.updateComment(idCom,content);
 		return Response.status(Status.OK).entity("comment updated").build();
 	}
 
@@ -102,6 +101,4 @@ public class CommentWS {
 
 	}
 	
-
-
 }

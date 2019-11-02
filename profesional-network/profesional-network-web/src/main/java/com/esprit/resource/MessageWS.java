@@ -1,10 +1,8 @@
 package com.esprit.resource;
 
 
-import java.sql.Timestamp;
 
 import java.util.List;
-
 import javax.ejb.EJB;
 
 import javax.ws.rs.Consumes;
@@ -38,12 +36,9 @@ public class MessageWS {
 	@Path("/add")
 	public Response addMessage(@QueryParam("sender") int idSender,
 			@QueryParam("recipient") int idRecipient,
-			@QueryParam("body") String body,
-			@QueryParam("status") int status
-	) {
-
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());		
-		MessageService.addMessage(timestamp,idSender, idRecipient, body, status);
+			@QueryParam("body") String body
+	) {	
+		MessageService.sendMessage(idSender, idRecipient, body);
 		return Response.status(Response.Status.CREATED).entity(out).build();
 	}
 	
@@ -60,13 +55,10 @@ public class MessageWS {
 	@PUT
 	@Path("/edit")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response editMessage(@QueryParam("sender") int idSender,
-			@QueryParam("recipient") int idRecipient,
-			@QueryParam("body") String body,
-			@QueryParam("status") int status
-	) {
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());		
-		MessageService.editMessage(timestamp,idSender, idRecipient, body, status);
+	public Response editMessage(@QueryParam("id") int idMessage,
+			@QueryParam("body") String body
+	) {		
+		MessageService.editMessage(idMessage, body);
 		return Response.status(Status.OK).entity("message updated").build();
 	}
 
@@ -123,16 +115,5 @@ public class MessageWS {
 
 	}
 	
-	/* Trash / Uncomplete
-	
-	@GET
-	@Path("/finddate/{id}/{iddest}")
-	@Produces("application/json")
-	public Response findbydate(@PathParam("id") Integer iduser, @PathParam("iddest") Integer iddest) {
-
-		String m = MessageService.findmesgbydate(iduser, iddest);
-		return Response.status(Status.OK).entity(m).build();
-
-	}*/
 
 }

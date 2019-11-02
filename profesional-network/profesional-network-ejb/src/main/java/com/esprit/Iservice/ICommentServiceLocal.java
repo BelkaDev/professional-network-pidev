@@ -9,11 +9,10 @@ import com.esprit.beans.Reaction;
 @Local
 public interface ICommentServiceLocal {
 	
-	 void addComment(String content,Timestamp date
-				,int idPost, int idUser);
-	 void updateComment(String content,Timestamp date
-				,int idPost, int idUser);
-	 void deleteComment(int id);
+		
+	 boolean addComment(int idUser,int idPost, String content);
+	 boolean updateComment(int id, String content);
+	 boolean deleteComment(int id);
 	 Comment findComment(int id);
 	 List<Comment> findPostComments(int id);
 	 List<Comment> findUserComments(int id);

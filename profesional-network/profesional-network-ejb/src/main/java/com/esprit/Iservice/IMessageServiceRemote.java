@@ -8,9 +8,10 @@ import com.esprit.beans.Message;
 @Remote
 public interface IMessageServiceRemote {
 	
-	void addMessage(Timestamp timestamp, int sender, int idRecipient, String body, int status);
-	void editMessage(Timestamp timestamp, int sender, int idRecipient, String body, int status);
+	void sendMessage(int sender, int idRecipient, String body);
+	void editMessage(int id, String body);
 	void deleteMessage(int id);
+	void setStatus(int id);
 	public Message findMessage(int id);
 	List<Message> findMsgBySender(int id);
 	List<Message> findMsgByReciever(int id);

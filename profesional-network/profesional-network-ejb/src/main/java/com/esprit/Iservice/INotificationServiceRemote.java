@@ -1,21 +1,17 @@
 package com.esprit.Iservice;
 import java.util.List;
-import javax.ejb.Local;
+import javax.ejb.Remote;
 
-import com.esprit.beans.Message;
 import com.esprit.beans.Notification;
-import com.esprit.beans.User;
 import com.esprit.enums.NOTIFICATION_TYPE;
 
-@Local
-public interface INotificationServiceLocal {
+@Remote
+public interface INotificationServiceRemote {
 	
 	void CreateNotification(int idReciever, String body, 
 			NOTIFICATION_TYPE type, int trigger, int target);
 	boolean deleteNotif(int id);
 	boolean updateNotif(int idNotif,String notif_message);
-	boolean setSeen(int id);
-	int findDuplicate(Notification notif);
 
 	Notification get(int id);	
 	List<Notification> listNotifications();

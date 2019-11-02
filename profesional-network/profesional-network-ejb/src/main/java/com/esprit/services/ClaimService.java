@@ -49,7 +49,7 @@ public class ClaimService implements IClaimServiceLocal,IClaimServiceRemote {
 		
 		Claim p = em.find(Claim.class, id);
 		
-	    p.setState(State.treated);
+	    p.setState(etat);
 	    
 					System.out.println("OUUUT : Update Claim");
 					

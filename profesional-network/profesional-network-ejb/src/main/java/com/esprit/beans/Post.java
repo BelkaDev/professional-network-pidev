@@ -35,6 +35,7 @@ public class Post implements Serializable {
 	
     
 	private int id;
+	private int author;
     private String content;
     private Timestamp date;
     @JsonIgnoreProperties({"whoclaims","messages","comments","reactions"})
@@ -56,8 +57,6 @@ public class Post implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
-
-
     
     @Column(name = "date", nullable = false)
     public Timestamp getDate() {
@@ -68,7 +67,14 @@ public class Post implements Serializable {
         this.date = date;
     }
 
-    
+    @Column(name = "author", nullable = false)
+	public int getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(int author) {
+		this.author = author;
+	}
     
     
  // #----------------------Relations----------------------#
@@ -91,7 +97,7 @@ public class Post implements Serializable {
  	// Comments on the post
  	
  	
-	@OneToMany(cascade = CascadeType.ALL,mappedBy = "commentedPost",fetch = FetchType.EAGER)
+	@OneToMany(orphanRemoval = true,mappedBy = "commentedPost",fetch = FetchType.EAGER)
 	public Set<Comment> getComments() {
 		return Comments;
 	}
@@ -111,7 +117,7 @@ public class Post implements Serializable {
 	
 	// Reactions on the post
 	
-	@OneToMany(cascade = CascadeType.ALL,mappedBy = "reactedPost",fetch = FetchType.EAGER)
+	@OneToMany(orphanRemoval = true,mappedBy = "reactedPost",fetch = FetchType.EAGER)
 	public Set<Reaction> getReactions() {
 		return Reactions;
 	}
@@ -166,5 +172,6 @@ public class Post implements Serializable {
     public int hashCode() {
         return Objects.hash(id, content, date,type);
     }
+
 
 }

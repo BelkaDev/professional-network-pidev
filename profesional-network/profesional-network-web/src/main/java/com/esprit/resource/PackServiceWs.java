@@ -31,7 +31,10 @@ public class PackServiceWs {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("allPacks")
 	public List<Pack> getPacks() {
-		return ps.allpacks();
+		List<Pack> list=ps.allpacks();
+		
+		
+		return list;
 	}
 
 	@GET
@@ -90,8 +93,10 @@ public class PackServiceWs {
 	@POST
 	@Path("addPack")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addPack(@QueryParam("titre") String titre, @QueryParam("description") String description,
-			@QueryParam("prix") double prix, @QueryParam("type") PackType type
+	public Response addPack(@QueryParam("titre") String titre,
+			@QueryParam("description") String description,
+			@QueryParam("prix") double prix,
+			@QueryParam("type") PackType type
 
 	) {
 
@@ -110,7 +115,7 @@ public class PackServiceWs {
 	) {
 		ps.addReduction(id, reduction, dateDebut, dateFin);
 
-		return Response.status(200).entity(ps.findPackById(id)).build();
+		return Response.status(200).entity("reduction added sucefully").build();
 	}
 
 	@DELETE

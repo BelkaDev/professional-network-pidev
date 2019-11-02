@@ -3,6 +3,7 @@ package com.esprit.resource;
 
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -59,9 +60,20 @@ public class ClaimServiceWb {
 	 @GET
 		@Produces(MediaType.APPLICATION_JSON)
 		@Path("allClaims")
-	    public List<Claim> getClaims()
+	    public List<String> getClaims()
 	    {
-		 return cs.allClaims();
+		 List<String> all=new ArrayList<String>();
+		 List<Claim> c=cs.allClaims();
+		 for(Claim a : c)
+		 {
+			 
+			 all.add(a.toString()+" who claim :"+a.getWhoClaim().getFirstName()+" , claim on :"+a.getClaimsOn().getFirstName());
+		 }
+		 
+		 return all;
+		 
+		 
+		 
 	    }
 	 @DELETE
 	 @Path("deleteClaim")
@@ -85,7 +97,7 @@ public class ClaimServiceWb {
 			 )
 	 {
 		Claim p = cs.findClaimById(id);
-	p.setState(etat);
+	
 		 cs.treatClaim(id,etat);
 	
 		 return Response.status(200).entity(cs.findClaimById(id)).build();

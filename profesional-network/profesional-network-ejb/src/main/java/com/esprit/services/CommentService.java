@@ -3,6 +3,8 @@ package com.esprit.services;
 
 import java.sql.Timestamp;
 import java.util.List;
+
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -11,12 +13,9 @@ import javax.persistence.PersistenceContext;
 import com.esprit.Iservice.ICommentServiceLocal;
 import com.esprit.Iservice.ICommentServiceRemote;
 import com.esprit.beans.Comment;
-import com.esprit.beans.Message;
 import com.esprit.beans.Post;
-import com.esprit.beans.Quiz;
-import com.esprit.beans.Comment;
-import com.esprit.beans.Comment;
 import com.esprit.beans.User;
+import com.esprit.enums.NOTIFICATION_TYPE;
 
 
 @Stateless
@@ -25,55 +24,73 @@ public class CommentService implements ICommentServiceLocal,ICommentServiceRemot
 
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
+	
+	@EJB
+	FollowingService followingservice = new FollowingService();
+	@EJB
+	NotificationService notificationservice = new NotificationService();
 
 	@Override
-	public void addComment(String content,Timestamp date
-						,int idPost, int idUser) {
-		
+	public boolean addComment(int idUser,int idPost,String content) {
 
 		User commenter = em.find(User.class,idUser);
 		Post post = em.find(Post.class,idPost);
+		if (commenter == null || post == null) {
+			return false;
+		}
 		Comment com = new Comment();
+		Timestamp date = new Timestamp(System.currentTimeMillis());
 		com.setDate(date);
 		com.setContent(content);
 		com.setCommentedPost(post);
 		com.setCommentingUser(commenter);
-			
+		em.persist(com);
+		em.flush();
 		
-		if ((com.getCommentedPost() == null )){
-			System.out.println("The post doesn't exist.");}
-			else {
-				em.persist(com);
-			}
+		// notifying the post about the new Comment
 
+		List<User> followers = followingservice.PostFollowers(idPost);
+		String notif_message = commenter.getFirstName()+" "+commenter.getLastName()+
+				" commented on a post you follow.";
+		if (followers!=null)
+		{
+		for (User follower : followers) {
+			if (post.getUser().getId() == follower.getId())
+			{
+				notif_message = commenter.getFirstName()+" "+commenter.getLastName()+
+						" commented on your Post.";
+			}
+			NOTIFICATION_TYPE type = NOTIFICATION_TYPE.Comment;
+			notificationservice.CreateNotification(follower.getId(),notif_message,type ,com.getCommentedPost().getId(), commenter.getId());
+		}
 		}
 		
+		return true;
+		}
+
 
 	@Override
-	public void updateComment(String content,Timestamp date
-			,int idPost, int idUser) {
+	public boolean updateComment(int id,String content) {
 		
-
-		User commenter = em.find(User.class,idUser);
-		Post post = em.find(Post.class,idPost);
-		Comment com = new Comment();
+		Comment com = em.find(Comment.class,id);
+		if (com == null ) {
+			return false;
+		}
+		Timestamp date = new Timestamp(System.currentTimeMillis());
 		com.setDate(date);
 		com.setContent(content);
-		com.setCommentedPost(post);
-		com.setCommentingUser(commenter);
-			
-		
-		if ((com.getCommentedPost() == null )){
-			System.out.println("The post doesn't exist.");}
-			else {
-				em.merge(com);
-			}
-
+		return true;
 	}
 
 	@Override
-	public void deleteComment(int id) {
-		em.remove(em.find(Comment.class, id));
+	public boolean deleteComment(int id) {
+		Comment com = em.find(Comment.class, id);
+		if (com == null)
+		{
+			return false;
+		}
+		em.remove(com);
+		return true;
 
 	}
 
@@ -85,7 +102,7 @@ public class CommentService implements ICommentServiceLocal,ICommentServiceRemot
 
 	@Override
 	public List<Comment> findPostComments(int id) {
-		List<Comment> reacts = em.createQuery("select c from Comment c where c.post.id=:Id",Comment.class)
+		List<Comment> reacts = em.createQuery("select c from Comment c where c.commentedPost.id=:Id",Comment.class)
 				.setParameter("Id", id).getResultList();
 		return reacts;
 	}
@@ -93,7 +110,7 @@ public class CommentService implements ICommentServiceLocal,ICommentServiceRemot
 
 	@Override
 	public List<Comment> findUserComments(int id) {
-		List<Comment> reacts = em.createQuery("select c from Comment c where c.commenter.id=:Id",Comment.class)
+		List<Comment> reacts = em.createQuery("select c from Comment c where c.commentingUser.id=:Id",Comment.class)
 				.setParameter("Id", id).getResultList();
 		return reacts;
 	}

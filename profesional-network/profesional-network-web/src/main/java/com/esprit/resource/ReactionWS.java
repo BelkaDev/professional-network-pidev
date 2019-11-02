@@ -1,7 +1,6 @@
 package com.esprit.resource;
 
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -20,6 +19,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.esprit.beans.Reaction;
+
 import com.esprit.enums.REACTION_TYPE;
 import com.esprit.services.ReactionService;
 
@@ -32,37 +32,44 @@ public class ReactionWS {
 
 	@POST
 		@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/add")	
+	@Path("add")	
 	public Response addReaction(@QueryParam("idUser") int idUser,
-			@QueryParam("idPost") int idPost
+			@QueryParam("idPost") int idPost,
+			@QueryParam("type") REACTION_TYPE reactionType
 	) {
-
-		Timestamp date = new Timestamp(System.currentTimeMillis());		
-		REACTION_TYPE typeReaction = REACTION_TYPE.None;
-		ReactionService.addReaction(date, typeReaction ,idPost,idUser);
+	
+		if(ReactionService.addReaction(idUser,idPost, reactionType))
+		{
 		return Response.status(Response.Status.CREATED).entity(out).build();
+		}
+		return Response.status(Status.NOT_FOUND).entity("post or user don't exist").build();
 	}
 	
 
 	@DELETE
-	@Path("/delete")
+	@Path("delete")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response removeReaction(@QueryParam("id") int id) {
-		ReactionService.deleteReaction(id);
+		if(ReactionService.deleteReaction(id))
+		{
 		return Response.status(Status.OK).entity("the reaction has been deleted").build();
+		}
+		return Response.status(Status.NOT_FOUND).entity("reaction doesn't exist").build();
+		
 	}
 	
 
 	@PUT
-	@Path("/update")
+	@Path("update")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response editReaction(@QueryParam("idUser") int idUser,
-	@QueryParam("idPost") int idPost
-	) {
-		Timestamp date = new Timestamp(System.currentTimeMillis());		
-		REACTION_TYPE typeReaction = REACTION_TYPE.None;
-		ReactionService.updateReaction(date, typeReaction ,idPost,idUser);
+	public Response editReaction(@QueryParam("id") int idReaction,
+	@QueryParam("type") REACTION_TYPE reactionType
+	) {	
+		if (ReactionService.updateReaction(idReaction,reactionType))
+		{
 		return Response.status(Status.OK).entity("reaction updated").build();
+		}
+		return Response.status(Status.NOT_FOUND).entity("reaction doesn't exist").build();
 	}
 
 	@GET
@@ -75,7 +82,7 @@ public class ReactionWS {
 
 	
 	@GET
-	@Path("/user={user}")
+	@Path("user={user}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response findReactionsByUser(@PathParam("user") int id) {
 
@@ -89,7 +96,7 @@ public class ReactionWS {
 	}
 
 	@GET
-	@Path("/post={post}")
+	@Path("post={post}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response findReactionsOnPost(@PathParam("post") int id) {
 
@@ -101,9 +108,5 @@ public class ReactionWS {
 			return Response.status(Status.OK).entity(reactions).build();
 
 	}
-	
-
-
-
 	
 }

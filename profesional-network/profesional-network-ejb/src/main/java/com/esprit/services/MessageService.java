@@ -23,14 +23,15 @@ public class MessageService implements IMessageServiceLocal,IMessageServiceRemot
 	EntityManager em;
 
 	@Override
-	public void addMessage(Timestamp date, int idSender, int idRecipient, String body, int status) {
+	public void sendMessage(int idSender, int idRecipient, String body) {
 
 		User sender = em.find(User.class,idSender);
 		Message msg = new Message();
+		Timestamp date = new Timestamp(System.currentTimeMillis());
 		msg.setDate(date);
 		msg.setBody(body);
 		msg.setSender(sender);
-		msg.setStatus(status);
+		msg.setStatus(0);
 		msg.setRecipient(idRecipient);
 			
 		
@@ -50,22 +51,11 @@ public class MessageService implements IMessageServiceLocal,IMessageServiceRemot
 	}
 
 	@Override
-	public void editMessage(Timestamp date, int idSender, int idRecipient, String body, int status) {
-		User sender = em.find(User.class,idSender);
-		Message msg = new Message();
-		msg.setDate(date);
-		msg.setBody(body);
-		msg.setSender(sender);
-		msg.setStatus(status);
-		msg.setRecipient(idRecipient);
-			
-		
-		if ((msg.getRecipient() == 0 )){
-			System.out.println("The destinator doesn't exist.");}
-			else {
+	public void editMessage(int id,String body) {
+		Message msg = em.find(Message.class,id);
+		msg.setBody(body + " (edited)");		
 				em.merge(msg);
-			}
-
+	
 	}
 
 	@Override
@@ -126,6 +116,18 @@ public class MessageService implements IMessageServiceLocal,IMessageServiceRemot
 		System.out.println(content);
 		return content;
 		
+	}
+
+	@Override
+	public void setStatus(int id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean checkBlocked(int idSender, int idReciever) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 

@@ -19,8 +19,8 @@ public class SendingMail {
      public static String destination ;
      public static String subject ;
  public SendingMail(String contenu,String destination , String subject) {
-     mailUsername = "koukiziedd711@gmail.com";
-     mailPassword = "";
+     mailUsername = "mouhib.benrhouma@esprit.tn";
+     mailPassword = "Mou200697";
      this.contenu=contenu ;
      this.destination=destination ;
      this.subject=subject ;
