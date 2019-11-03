@@ -42,8 +42,7 @@ public class Candidate implements Serializable {
 	private String biography;
 	@Column(name = "candidate_rating")
 	private double rating;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "candidate", fetch = FetchType.EAGER)
-	private Set<Interests> Interests;
+	
 
 	
 	@JsonIgnore
@@ -83,6 +82,8 @@ public class Candidate implements Serializable {
 	
 	@OneToMany(mappedBy="candidate")
 	private Set<Quiz> quizs;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "candidate", fetch = FetchType.EAGER)
+	private Set<Interests> Interests;
 	
 
 	public Set<Interests> getInterests() {
