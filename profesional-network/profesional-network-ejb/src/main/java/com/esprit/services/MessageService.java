@@ -120,7 +120,7 @@ public class MessageService implements IMessageServiceLocal,IMessageServiceRemot
 
 	@Override
 	public void setStatus(int id) {
-		// TODO Auto-generated method stub
+		// if notification or msgs are seen => set true
 		
 	}
 

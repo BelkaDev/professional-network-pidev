@@ -46,10 +46,10 @@ public class NotificationWS {
     @Path("add")
     public void CreateNotification(@QueryParam("reciever")int idReciever
     		,@QueryParam("body")String body
-    		,@QueryParam("by")int trigger,@QueryParam("target")int target) {
-		NOTIFICATION_TYPE type = NOTIFICATION_TYPE.Comment;
+    		,@QueryParam("by")int trigger,@QueryParam("target")int target
+    		,@QueryParam("by")NOTIFICATION_TYPE type) {
     	String message = notificationService.parseText(type,body,trigger,target);
-    	notificationService.CreateNotification(idReciever, message, type,trigger,target);		
+    	notificationService.CreateNotification(idReciever, message, type,target);		
     }
     
 	@GET

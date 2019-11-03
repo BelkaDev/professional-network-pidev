@@ -1,10 +1,14 @@
 package com.esprit.services;
 
 
+import java.io.File;
+import java.net.URLConnection;
+import java.nio.file.Files;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -13,10 +17,13 @@ import javax.persistence.PersistenceContext;
 
 import com.esprit.Iservice.IPostServiceLocal;
 import com.esprit.Iservice.IPostServiceRemote;
+import com.esprit.beans.FileUpload;
 import com.esprit.beans.Post;
 import com.esprit.beans.User;
+import com.esprit.enums.FILE_TYPE;
 import com.esprit.enums.NOTIFICATION_TYPE;
 import com.esprit.enums.POST_TYPE;
+import com.esprit.utils.MimeTypeToEnums;
 
 @Stateless
 @LocalBean
@@ -30,49 +37,88 @@ public class PostService implements IPostServiceLocal,IPostServiceRemote {
 	FollowingService followingservice = new FollowingService();
 	@EJB
 	NotificationService notificationservice = new NotificationService();
+	@EJB
+	FileService fileService;
+	@EJB
+	MimeTypeToEnums mimetypetoenums ;
 
 	@Override
-	public void addPost(int idUser,String content, POST_TYPE typePost) {
+	public void addPost(int idUser,String content, FileUpload file) {
 
 
 		User poster = em.find(User.class,idUser);
 		Post post = new Post();
-		
 		Timestamp date = new Timestamp(System.currentTimeMillis());
+
+
+		String mimeType="text";
+		if(file != null)
+		{
+			
+		String fileName = file.getPath();
+		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+		File newfile = new File(fileName);
+		mimeType = mimeTypesMap.getContentType(newfile).split("/")[0];
+		//String mimeType = URLConnection.guessContentTypeFromName(file.getPath()).split("/")[0];
+		file.setType(mimetypetoenums.toFileType(mimeType));
+		}
+		
 		post.setDate(date);
 		post.setContent(content);
 		post.setUser(poster);
 		post.setAuthor(poster.getId());
-		post.setType(typePost);	
+		post.setFile(file);
+		post.setType(mimetypetoenums.toPostType(mimeType));	
 		if ((post.getUser() == null )){
-			System.out.println("The user doesn't exist.");}
+			System.out.println("The user doesn't exist.");
+			return ;
+			}
 		else {
 				em.persist(post);
 				em.flush();
 			 }
-		// notifying followers about the new Post
 		int idPost = post.getId();
+		
+		//Automatically add poster to following the post
+		followingservice.followPost(idUser, idPost);
+		
+		// notifying followers about the new Post
+
 		List<User> followers = followingservice.UserFollowers(idUser);
 		String notif_message = poster.getFirstName()+" "+poster.getLastName()+
 				" shared a new Post.";
 
 		for (User usr : followers) {
 		NOTIFICATION_TYPE type = NOTIFICATION_TYPE.Follow;
-		notificationservice.CreateNotification(usr.getId(),notif_message,type ,idPost, poster.getId());
+		notificationservice.CreateNotification(usr.getId(),notif_message,type ,idPost);
 		}
 		
 		}
 
 	@Override
-	public boolean updatePost(int id,String content,POST_TYPE typePost) {
+	public boolean updatePost(int id,String content, FileUpload file) {
 
+
+		Timestamp date = new Timestamp(System.currentTimeMillis());
 		Post post = em.find(Post.class,id);
 		if (post == null ) {
 			return false;
 		}
-		Timestamp date = new Timestamp(System.currentTimeMillis());
+
+		String mimeType="text";
+		if(file != null)
+		{
+			
+		String fileName = file.getPath();
+		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+		File newfile = new File(fileName);
+		mimeType = mimeTypesMap.getContentType(newfile).split("/")[0];
+		//String mimeType = URLConnection.guessContentTypeFromName(file.getPath()).split("/")[0];
+		file.setType(mimetypetoenums.toFileType(mimeType));
+		}
+		
 		post.setContent(content +" [edited on "+" "+new SimpleDateFormat("dd/MM/YY - HH:mm").format(date)+"]");
-		post.setType(typePost);
+		post.setType(mimetypetoenums.toPostType(mimeType));	
 		em.merge(post);
 		return true;
 	}
@@ -111,9 +157,29 @@ public class PostService implements IPostServiceLocal,IPostServiceRemote {
 		Timestamp date = new Timestamp(System.currentTimeMillis());
 		post.setContent(sharedPost.getContent()+" [shared on "+new SimpleDateFormat("dd/MM/YY - HH:mm").format(date)+"]");
 		post.setType(sharedPost.getType());
-
 		post.setDate(date);
 		em.persist(post);
+		
+		// notify author of post
+		String notif_message =user.getFirstName()+" "+user.getLastName()+" has shared your post.";
+		NOTIFICATION_TYPE type = NOTIFICATION_TYPE.Share;
+		notificationservice.CreateNotification(sharedPost.getAuthor(),notif_message,type ,idPost);
+		
+		//Automatically add poster to following list
+		followingservice.followPost(idUser, idPost);
+		
+		// notifying followers about the new Post
+
+		List<User> followers = followingservice.UserFollowers(idUser);
+		notif_message = user.getFirstName()+" "+user.getLastName()+
+				" shared a new Post.";
+
+		for (User usr : followers) {
+		type = NOTIFICATION_TYPE.Follow;
+		notificationservice.CreateNotification(usr.getId(),notif_message,type ,idPost);
+		}
+		
+		
 		return true;
 	}
 

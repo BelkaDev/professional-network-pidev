@@ -1,6 +1,7 @@
 package com.esprit.beans.candidate;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -24,6 +25,33 @@ public class Skill implements Serializable {
 	@Column(name="designation")
 	private String designation;
 	@Column(name="skill_rating")
-	private Rating rating;
+	private double rating;
+	@ManyToMany( cascade=CascadeType.ALL,mappedBy="skills")
+	private Set<Candidate> candidates = new HashSet<Candidate>();
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getDesignation() {
+		return designation;
+	}
+	public void setDesignation(String designation) {
+		this.designation = designation;
+	}
+	public double getRating() {
+		return rating;
+	}
+	public void setRating(double rating) {
+		this.rating = rating;
+	}
+	public Set<Candidate> getCandidates() {
+		return candidates;
+	}
+	public void setCandidates(Set<Candidate> candidates) {
+		this.candidates = candidates;
+	}
+	
 	
 }

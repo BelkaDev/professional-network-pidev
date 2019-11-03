@@ -32,10 +32,10 @@ public class NotificationService implements INotificationServiceLocal,INotificat
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
 	EmailUtil mail = new EmailUtil();
-	UserService userService = new UserService();
+
 	@Override
 	public void CreateNotification(int idReciever,String body,
-			NOTIFICATION_TYPE type,int trigger,int targetId) {
+			NOTIFICATION_TYPE type,int targetId) {
 			
 
 		Set<NOTIFICATION_TYPE> POST_TYPE = EnumSet.of(NOTIFICATION_TYPE.Comment, NOTIFICATION_TYPE.Share, NOTIFICATION_TYPE.Reaction

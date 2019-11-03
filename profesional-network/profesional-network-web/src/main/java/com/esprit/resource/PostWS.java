@@ -1,7 +1,12 @@
 package com.esprit.resource;
 
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
@@ -13,31 +18,76 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.io.IOUtils;
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+
+import com.esprit.beans.FileUpload;
 import com.esprit.beans.Post;
-import com.esprit.enums.POST_TYPE;
 import com.esprit.services.PostService;
 
 
 @Path("post")
 public class PostWS {
+	
 	@EJB
 	PostService PostService;
-	
 
+	private static final String UPLOAD_FOLDER = System.getProperty("user.dir")+"/files/";
+	@Context
+	private UriInfo context;
 	private final String out = "success" ;
-
+	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("add")
 	public Response addPost(@QueryParam("idUser") int idUser,
-			@QueryParam("content") String content,
-			@QueryParam("type") POST_TYPE typePost
+			@QueryParam("content") String content
 	) {
-		PostService.addPost(idUser,content,typePost);
+		
+		PostService.addPost(idUser,content,null);
+	    return Response.status(200).entity("shared post with no files").build();
+		
+	}
+	
+	
+	@POST
+	@Consumes("*/*")
+	@Path("addWithFile")
+	public Response addPost(@QueryParam("idUser") int idUser,
+			@QueryParam("content") String content,
+			MultipartFormDataInput input
+	) {
+		   if (input == null || input.getParts() == null || input.getParts().isEmpty()) {
+		        throw new IllegalArgumentException("Multipart request is empty");
+		   }
+		
+		CreateFolderIfNotExist(UPLOAD_FOLDER);
+		String fileName = uploadFile(input.getFormDataMap());
+	    FileUpload file = new FileUpload();
+	    file.setPath(fileName);
+		PostService.addPost(idUser,content,file);
+	    return Response.status(200).entity("uploaded file to "+ fileName).build();
+		
+	}
+	
+
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("share")
+	public Response sharePost(@QueryParam("idUser") int idUser,
+			@QueryParam("idPost") int idPost) {
+		if (!PostService.sharePost(idPost,idUser))
+		{
+		return Response.status(Status.NOT_FOUND).entity("post doesn't exist").build();
+		}
 		return Response.status(Response.Status.CREATED).entity(out).build();
 		
 	}
@@ -60,15 +110,30 @@ public class PostWS {
 	@PUT
 	@Path("update")
 	@Produces(MediaType.APPLICATION_JSON)
+	public Response updatePost(@QueryParam("id") int idPost,
+			@QueryParam("content") String content
+	) {
+
+		if(PostService.updatePost(idPost,content,null))
+		{
+		return Response.status(Status.OK).entity("post updated").build();
+		}
+		return Response.status(Status.NOT_FOUND).entity("Post doesn't exist").build();
+	}
+	
+	@PUT
+	@Path("updateWithFile")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response updatePost(@QueryParam("idPost") int idPost,
 			@QueryParam("content") String content,
-			@QueryParam("type") POST_TYPE typePost
+			MultipartFormDataInput input
 	) {
-		if (!PostService.checkPostType(typePost))
-		{
-		return Response.status(Status.NOT_ACCEPTABLE).entity("invalid type").build();
-		}
-		if(PostService.updatePost(idPost,content,typePost))
+		
+		CreateFolderIfNotExist(UPLOAD_FOLDER);
+		String fileName = uploadFile(input.getFormDataMap());
+	    FileUpload file = new FileUpload();
+	    file.setPath(fileName);
+		if(PostService.updatePost(idPost,content,file))
 		{
 		return Response.status(Status.OK).entity("post updated").build();
 		}
@@ -89,18 +154,6 @@ public class PostWS {
 	}
 	
 
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("share")
-	public Response sharePost(@QueryParam("idPost") int idPost,
-			@QueryParam("idUser") int idUser) {
-		if (!PostService.sharePost(idPost,idUser))
-		{
-		return Response.status(Status.NOT_FOUND).entity("post doesn't exist").build();
-		}
-		return Response.status(Response.Status.CREATED).entity(out).build();
-		
-	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -140,6 +193,58 @@ public class PostWS {
 		else
 			return Response.ok(Posts).build();
 
+	}
+	
+	private void CreateFolderIfNotExist(String directory) {
+	    File dir = new File(directory);
+	    if (!dir.exists()) dir.mkdirs();
+	}
+	
+	private String uploadFile( Map<String, List<InputPart>> uploadForm)
+	{
+    String fileName = "";
+	List<InputPart> inputParts = uploadForm.get("file");
+	for (InputPart inputPart : inputParts) {
+	 try {
+			MultivaluedMap<String, String> header = inputPart.getHeaders();
+			fileName = getFileName(header);
+			InputStream inputStream = inputPart.getBody(InputStream.class,null);
+			byte [] bytes = IOUtils.toByteArray(inputStream);
+			fileName = UPLOAD_FOLDER + fileName;
+			writeFile(bytes,fileName);
+			System.out.println("Done");
+
+		  } catch (IOException e) {
+			e.printStackTrace();
+		  }
+	}
+			return fileName;
+	}
+	
+	private String getFileName(MultivaluedMap<String, String> header) {
+
+		String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
+		
+		for (String filename : contentDisposition) {
+			if ((filename.trim().startsWith("filename"))) {
+				String[] name = filename.split("=");
+				String finalFileName = name[1].trim().replaceAll("\"", "");
+				return finalFileName;
+			}
+		}
+		return "unknown";
+	}
+
+	//save to somewhere
+	private void writeFile(byte[] content, String filename) throws IOException {
+		File file = new File(filename);
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		FileOutputStream fop = new FileOutputStream(file);
+		fop.write(content);
+		fop.flush();
+		fop.close();
 	}
 	
 }

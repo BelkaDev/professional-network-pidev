@@ -2,12 +2,16 @@ package com.esprit.beans.candidate;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -28,7 +32,9 @@ public class Certification implements Serializable {
 	@Column(name="expiry_date")
 	private Date expiryDate;
 	@Column(name="credential_id")
-	private Date credentialId;
+	private String credentialId;
+	@ManyToMany( cascade=CascadeType.ALL,mappedBy="certifications")
+	private Set<Candidate> candidates = new HashSet<Candidate>();
 	public int getId() {
 		return id;
 	}
@@ -59,11 +65,17 @@ public class Certification implements Serializable {
 	public void setExpiryDate(Date expiryDate) {
 		this.expiryDate = expiryDate;
 	}
-	public Date getCredentialId() {
+	public String getCredentialId() {
 		return credentialId;
 	}
-	public void setCredentialId(Date credentialId) {
+	public void setCredentialId(String credentialId) {
 		this.credentialId = credentialId;
+	}
+	public Set<Candidate> getCandidates() {
+		return candidates;
+	}
+	public void setCandidates(Set<Candidate> candidates) {
+		this.candidates = candidates;
 	}
 
 	

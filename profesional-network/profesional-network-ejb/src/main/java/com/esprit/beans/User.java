@@ -58,6 +58,8 @@ public class User implements Serializable {
     private Role role;
 	
 	// ****************************
+	@ManyToOne(cascade = CascadeType.ALL)
+	Enterprise enterprise;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Post> Posts;
@@ -199,6 +201,16 @@ public class User implements Serializable {
 
 
 	
+
+	public Enterprise getEnterprise() {
+		return enterprise;
+	}
+
+
+	public void setEnterprise(Enterprise enterprise) {
+		this.enterprise = enterprise;
+	}
+
 
 	public int getId() {
 		return id;

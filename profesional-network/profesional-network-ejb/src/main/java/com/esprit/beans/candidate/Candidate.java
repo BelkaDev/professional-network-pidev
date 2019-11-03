@@ -2,11 +2,13 @@ package com.esprit.beans.candidate;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +21,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.esprit.beans.Quiz;
+import com.esprit.enums.Tags;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -34,23 +37,26 @@ public class Candidate implements Serializable {
 	@Column(name = "candidate_rating")
 	private double rating;
 	
+	
 	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name="Candidate_Experience",joinColumns=@JoinColumn(name="Candidate_ID"),
 	inverseJoinColumns=@JoinColumn(name="Experience_ID"))
 	private Set<Experience> experiences = new HashSet<>();
 	
-	
+	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name="Candidate_Certification",joinColumns=@JoinColumn(name="Candidate_ID"),
 	inverseJoinColumns=@JoinColumn(name="Certification_ID"))
 	private Set<Certification> certifications;
 	
+	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name="Candidate_Activity",joinColumns=@JoinColumn(name="Candidate_ID"),
 	inverseJoinColumns=@JoinColumn(name="Skill_ID"))
 	private Set<Activity> activities;
 	
+	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name="Candidate_Skill",joinColumns=@JoinColumn(name="Candidate_ID"),
 	inverseJoinColumns=@JoinColumn(name="Skill_ID"))

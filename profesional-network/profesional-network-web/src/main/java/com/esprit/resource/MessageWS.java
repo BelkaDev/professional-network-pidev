@@ -33,7 +33,7 @@ public class MessageWS {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/add")
+	@Path("add")
 	public Response addMessage(@QueryParam("sender") int idSender,
 			@QueryParam("recipient") int idRecipient,
 			@QueryParam("body") String body
@@ -44,7 +44,7 @@ public class MessageWS {
 	
 
 	@DELETE
-	@Path("/delete")
+	@Path("delete")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response removeMessage(@QueryParam("id") int id) {
 		MessageService.deleteMessage(id);
@@ -53,7 +53,7 @@ public class MessageWS {
 	
 
 	@PUT
-	@Path("/edit")
+	@Path("update")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response editMessage(@QueryParam("id") int idMessage,
 			@QueryParam("body") String body

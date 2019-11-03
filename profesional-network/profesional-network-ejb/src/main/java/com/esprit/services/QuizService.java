@@ -20,6 +20,7 @@ import com.esprit.beans.Question;
 import com.esprit.beans.Quiz;
 import com.esprit.beans.QuizState;
 import com.esprit.beans.candidate.Candidate;
+import com.esprit.beans.candidate.Experience;
 
 @Stateless
 @LocalBean
@@ -67,7 +68,7 @@ public class QuizService implements IQuizServiceLocal, IQuizServiceRemote {
 	public boolean setInterview(int quiz_id) {
 		Quiz q = em.find(Quiz.class, quiz_id);
 		if (q.getInterview() == null) {
-			if (q.getState()==QuizState.Validated) {
+			if (q.getState() == QuizState.Validated) {
 				Interview in = new Interview();
 				in.setScore(q.getScore());
 				q.setInterview(in);
@@ -155,6 +156,46 @@ public class QuizService implements IQuizServiceLocal, IQuizServiceRemote {
 		Query q = em.createQuery("SELECT quiz FROM Quiz quiz where quiz.candidate = :candidate");
 		q.setParameter("candidate", c);
 		return (List<Quiz>) q.getResultList();
+	}
+
+	@Override
+	public int getYears(Date datedebut, Date dateFin) {
+		int start = datedebut.toLocalDate().getYear();
+		int end = dateFin.toLocalDate().getYear();
+		System.out.println(end-start);
+		return end - start;
+	}
+
+	@Override
+	public Set<Experience> getCandidateExperience(int candidate_id) {
+
+		Candidate c = em.find(Candidate.class, candidate_id);
+		return c.getExperiences();
+	}
+
+	@Override
+	public int getYearsExpericence(int candidate_id) {
+		int s = 0;
+		Set<Experience> list = getCandidateExperience(candidate_id);
+		for (Experience e : list) {
+			s = getYears(e.getStartDate(), e.getEndDate());
+		}
+		System.out.println(s);
+		return s;
+	}
+
+	@Override
+	public List<JobOffer> selectOffers(int candidate_id) {
+		int years=getYearsExpericence(candidate_id);
+		Query q = em.createQuery("select j from JobOffer j where j.JOexperience <= :years").setParameter("years", years);
+		System.out.println(years);
+		return (List<JobOffer>) q.getResultList();
+	}
+	public List<JobOffer> sendOffers(int quiz_id) {
+		Quiz q=em.find(Quiz.class, quiz_id);
+		if(q.getState()==QuizState.Failed)
+			return selectOffers(q.getCandidate().getCandidateId());
+		return null;
 	}
 
 }

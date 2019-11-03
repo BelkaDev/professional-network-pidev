@@ -15,8 +15,7 @@ public interface EnterpriseSeviceRemote {
 	public int AddEnterprise(Enterprise enterprise);
 	public void DeleteEnterprise(int id);
 	public int ModifyEnterprise(int id, String name, String domain,String location,int empnumber, String descrip);
-	
-	
+	public Enterprise getenterpriseById(int Eid);
 	
 	
 	

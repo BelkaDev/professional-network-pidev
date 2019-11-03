@@ -1,7 +1,6 @@
 package com.esprit.resource;
 
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -18,7 +17,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import com.esprit.beans.Comment;
-import com.esprit.beans.Comment;
 import com.esprit.services.CommentService;
 
 
@@ -32,7 +30,7 @@ public class CommentWS {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/add")	
+	@Path("add")	
 	public Response addComment(@QueryParam("idUser") int idUser,
 			@QueryParam("idPost") int idPost,
 			@QueryParam("content") String content
@@ -46,7 +44,7 @@ public class CommentWS {
 	
 
 	@DELETE
-	@Path("/delete")
+	@Path("delete")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response removeComment(@QueryParam("id") int id) {
 		CommentService.deleteComment(id);
@@ -55,9 +53,9 @@ public class CommentWS {
 	
 
 	@PUT
-	@Path("/update")
+	@Path("update")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response editComment(@QueryParam("idCOm") int idCom,
+	public Response editComment(@QueryParam("id") int idCom,
 			@QueryParam("content") String content
 	) {		
 		CommentService.updateComment(idCom,content);

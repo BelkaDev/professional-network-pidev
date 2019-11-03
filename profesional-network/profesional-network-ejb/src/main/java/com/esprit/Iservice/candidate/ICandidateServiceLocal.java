@@ -10,10 +10,10 @@ import com.esprit.beans.candidate.Experience;
 @Local
 public interface ICandidateServiceLocal {
 	public void addCandidate(Candidate c);
-	public void addExperience(Experience c,int CandidateID);
-	public void deleteExperience(int id);
-	public Experience displayExperience(int id);
-	public Set<Candidate> displayCandidatesByExperience(int id);
-	public void updateExperience(int id,String d);
-	public void addExistingExperience(int candidateID,int experienceID);
+	public void addProfileObject(Object c,int CandidateID);
+	public void addExistingProfileObject(int candidateID, int objectID,Object o);
+	public void deleteProfileObject(int id,Object o,int candidateID);
+	public void updateProfileObject(int id,Object o);
+	public Object displayProfileObject(int objectID,Object o);
+	public Set<Candidate> displayCandidatesByProfileObject(int objectId,Object o);
 }

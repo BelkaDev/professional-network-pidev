@@ -1,6 +1,4 @@
 package com.esprit.webservice;
-
-
 import java.security.Key;
 import java.sql.Date;
 import java.time.LocalDateTime;
@@ -20,8 +18,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.esprit.beans.Enterprise;
+import com.esprit.beans.User;
 
 import com.esprit.services.EnterpriseService;
+import com.esprit.utils.UserSession;
+
 
 
 
@@ -47,6 +48,7 @@ public class EnterpriseWS {
 	) {
 		Enterprise e =new Enterprise(Ename, Edomain, Elocation, Employeesnumber,Edescription);
 		enterprisews.AddEnterprise(e);
+		
 		return Response.status(200).entity(status).build();
 	}
 	
@@ -61,6 +63,7 @@ public class EnterpriseWS {
 			@QueryParam("Edescription") String Edescription
 	) {
 		
+
 		enterprisews.ModifyEnterprise(id, Ename, Edomain, Elocation, Employeesnumber,Edescription);
 		return Response.status(200).entity(status).build();
 	}
