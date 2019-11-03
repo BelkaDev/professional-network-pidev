@@ -2,11 +2,13 @@ package com.esprit.beans.candidate;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,7 +20,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.esprit.beans.Interests;
 import com.esprit.beans.Quiz;
+
+import com.esprit.enums.Tags;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -37,6 +42,9 @@ public class Candidate implements Serializable {
 	private String biography;
 	@Column(name = "candidate_rating")
 	private double rating;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "candidate", fetch = FetchType.EAGER)
+	private Set<Interests> Interests;
+
 	
 	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
@@ -75,6 +83,17 @@ public class Candidate implements Serializable {
 	
 	@OneToMany(mappedBy="candidate")
 	private Set<Quiz> quizs;
+	
+
+	public Set<Interests> getInterests() {
+		return Interests;
+	}
+
+
+	public void setInterests(Set<Interests> interests) {
+		Interests = interests;
+	}
+	
 
 	public int getCandidateId() {
 		return candidateId;
@@ -143,16 +162,6 @@ public class Candidate implements Serializable {
 	
 	
 
-	
-	
-	
-	
-	
-
-	
-	
-	
-	
 	
 
 }

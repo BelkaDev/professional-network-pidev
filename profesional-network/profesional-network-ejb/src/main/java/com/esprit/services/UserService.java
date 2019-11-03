@@ -13,7 +13,7 @@ import javax.persistence.TypedQuery;
 
 import com.esprit.Iservice.IUserServiceLocal;
 import com.esprit.Iservice.IUserServiceRemote;
-
+import com.esprit.beans.Enterprise;
 import com.esprit.beans.User;
 import com.esprit.enums.Role;
 import com.esprit.utils.BCrypt;
@@ -26,10 +26,22 @@ import com.esprit.utils.codeGen;
 public class UserService implements IUserServiceLocal, IUserServiceRemote {
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
-	
-	UserSession usersession;
 
-	
+
+	@Override
+	public void addEnterpriseUser(User user, int EnterpriseId) {
+		Enterprise enterpriseManagedEntity = em.find(Enterprise.class, EnterpriseId);
+		user.setEnterprise(enterpriseManagedEntity);
+		String salt=BCrypt.gensalt();
+		String paass=BCrypt.hashpw(user.getPassword(), salt);
+		user.setPassword(paass);
+		System.out.print(paass);
+		user.setEnable(false);
+		user.setConfirm(codeGen.getInstance().randomString(5));
+		em.persist(user);
+		
+			
+	}
 
 	@Override
 	public void addUser(User user) {
@@ -42,8 +54,10 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 		user.setConfirm(codeGen.getInstance().randomString(5));
 		em.persist(user);
 		
-		
+			
 	}
+	
+	
 	@Override
 	public boolean UsernameMailUnique(String username,String email)
 	{
@@ -69,7 +83,7 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 		
 		if(BCrypt.checkpw(password, user.getPassword()) && user.isEnable()==true)
 		{
-			usersession.getInstance(user);
+			UserSession.getInstance(user);
 			return true;
 		}
 
