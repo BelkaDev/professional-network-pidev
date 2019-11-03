@@ -20,8 +20,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.esprit.beans.Enterprise;
+<<<<<<< HEAD:professional-network-pidev/profesional-network/profesional-network-web/src/main/java/com/esprit/webservice/EnterpriseWS.java
+import com.esprit.beans.User;
+=======
 
+>>>>>>> 7ad7a43e382664e2df6cad4821e459f540aa5abb:profesional-network/profesional-network-web/src/main/java/com/esprit/webservice/EnterpriseWS.java
 import com.esprit.services.EnterpriseService;
+import com.esprit.utils.UserSession;
+
 
 
 
@@ -47,6 +53,7 @@ public class EnterpriseWS {
 	) {
 		Enterprise e =new Enterprise(Ename, Edomain, Elocation, Employeesnumber,Edescription);
 		enterprisews.AddEnterprise(e);
+		
 		return Response.status(200).entity(status).build();
 	}
 	
@@ -61,6 +68,7 @@ public class EnterpriseWS {
 			@QueryParam("Edescription") String Edescription
 	) {
 		
+
 		enterprisews.ModifyEnterprise(id, Ename, Edomain, Elocation, Employeesnumber,Edescription);
 		return Response.status(200).entity(status).build();
 	}
