@@ -15,22 +15,35 @@ import javax.persistence.Table;
 public class Contact implements Serializable {
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
-	@Column(name="Contact_ID")
+	@Column(name="ID")
+	private int ID;
+	
+	@Column(name="contact_id")
 	private int contactId;
-	@Column(name="last_viewed")
-	private Date lastViewed;
+	@Column(name="status")
+	private String status;
+	public int getID() {
+		return ID;
+	}
+	public void setID(int iD) {
+		ID = iD;
+	}
 	public int getContactId() {
 		return contactId;
 	}
 	public void setContactId(int contactId) {
 		this.contactId = contactId;
 	}
-	public Date getLastViewed() {
-		return lastViewed;
+	public String getStatus() {
+		return status;
 	}
-	public void setLastViewed(Date lastViewed) {
-		this.lastViewed = lastViewed;
+	public void setStatus(String status) {
+		this.status = status;
 	}
+	
+
+	
+
 	
 	
 }

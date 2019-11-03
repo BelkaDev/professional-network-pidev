@@ -20,6 +20,7 @@ import com.esprit.beans.candidate.Candidate;
 import com.esprit.beans.candidate.Certification;
 import com.esprit.beans.candidate.Experience;
 import com.esprit.beans.candidate.Skill;
+import com.esprit.beans.candidate.Views;
 
 @Stateless
 @LocalBean
@@ -157,6 +158,35 @@ public class CandidateService implements ICandidateServiceLocal, ICandidateServi
 		}
 		Activity a = em.find(Activity.class, objectID);
 		return a.getCandidates().stream().collect(Collectors.toSet());
+	}
+
+	@Override
+	public List<Candidate> displayCandidates() {
+		return em.createQuery("select c from Candidate c",Candidate.class).getResultList();
+	}
+
+
+
+	@Override
+	public Set<Views> displayViews(int candidateId) {
+			Candidate c = em.find(Candidate.class, candidateId);
+			return c.getViews();
+	}
+
+	@Override
+	public void deleteView(int viewId) {
+		Views v = em.find(Views.class, viewId);
+		em.remove(v);
+	}
+
+	@Override
+	public void addView(int viewerId, int viewedId) {
+		Candidate c = em.find(Candidate.class, viewedId);
+		Views v = new Views();
+		v.setViewerId(viewerId);
+		Date d = new Date(System.currentTimeMillis());
+		v.setDate(d);
+		c.getViews().add(v);
 	}
 
 }
