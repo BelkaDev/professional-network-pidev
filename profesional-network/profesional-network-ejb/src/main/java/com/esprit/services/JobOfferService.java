@@ -1,12 +1,15 @@
 package com.esprit.services;
 
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.enterprise.inject.Instance;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -16,12 +19,14 @@ import javax.security.auth.x500.X500Principal;
 import com.esprit.Iservice.JobOfferServiceRemote;
 import com.esprit.beans.Enterprise;
 import com.esprit.beans.EnterpriseEvent;
+import com.esprit.beans.Interests;
 import com.esprit.beans.JobOffer;
 import com.esprit.beans.User;
 import com.esprit.beans.candidate.Candidate;
 import com.esprit.beans.candidate.Certification;
 import com.esprit.beans.candidate.Experience;
 import com.esprit.enums.Role;
+import com.esprit.enums.Tags;
 import com.esprit.utils.SendingMail;
 import com.esprit.utils.UserSession;
 
@@ -29,44 +34,39 @@ import com.esprit.utils.UserSession;
 @LocalBean
 public class JobOfferService implements JobOfferServiceRemote {
 
+
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
+	private Set<Interests> interests;
 
 	@Override
 	public int AddJobOffer(JobOffer joboffer) {
+		User user= em.find(User.class, UserSession.getInstance().getId());
 
-		User user = em.find(User.class, UserSession.getInstance().getId());
+		if (UserSession.getInstance().getRole() == Role.Project_Leader) {
 
-		if (user.getRole() == Role.Project_Leader) {
-
+			
 			Enterprise enterpriseManagedEntity = em.find(Enterprise.class, user.getEnterprise().getEid());
 			joboffer.setEnterprise(enterpriseManagedEntity);
 			joboffer.setIsValid(0);
 			joboffer.setVuesNumber(0);
+			Interests i1 = new Interests();
+			i1.setTag(Tags.CSS);
+			i1.setId(1);
+			joboffer.getInterests().add(i1);
+
+			joboffer.setInterests(interests);
 			Calendar currenttime = Calendar.getInstance();
 			Date JOdate = new Date((currenttime.getTime()).getTime());
 			joboffer.setJOdate(JOdate);
 			em.persist(joboffer);
 
-			TypedQuery<User> query = em.createQuery("select u from User u where u.enterprise=:entid ", User.class)
-					.setParameter("entid", enterpriseManagedEntity);
-
-			List<User> listuser = query.getResultList();
-			for (User u : listuser) {
-				if (u.getRole() == Role.Human_Resouces) {
-					String hr = u.getEmail();
-
-					String contenu = ("Prject Leader  " + user.getUsername() + "  added a new job offer  "
-							+ joboffer.getJOtitle());
-					SendingMail sm = new SendingMail(contenu, hr, "new joboffer");
-					SendingMail.envoyer();
-				}
-			}
-
+			 // condition if same tags => notif
 			return joboffer.getJOid();
 		}
 
-		else if (user.getRole() == Role.Human_Resouces | user.getRole() == Role.Enterprise_Admin) {
+		else if (UserSession.getInstance().getRole() == Role.Human_Resouces | UserSession.getInstance().getRole() == Role.Enterprise_Admin) {
+			
 			Enterprise enterpriseManagedEntity = em.find(Enterprise.class, user.getEnterprise().getEid());
 			joboffer.setEnterprise(enterpriseManagedEntity);
 			joboffer.setIsValid(0);

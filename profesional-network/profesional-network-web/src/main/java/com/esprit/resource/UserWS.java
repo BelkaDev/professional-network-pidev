@@ -70,16 +70,44 @@ public class UserWS {
 		d.setStreetAddress(streetAddress);
 		
 		User user = new User(email, firstName, lastName, password, gender, birthDate, d, username, role); 
-		if(userservice.UsernameMailUnique(user.getUsername(), user.getEmail()))
-		{userservice.addUser(user);
+		userservice.addUser(user);
 	 		 
  		
 	 	return Response.status(Status.CREATED).entity("ADDED").build();
-	 	}
-		return Response.status(Status.NOT_ACCEPTABLE).entity("username or email exist").build();
 			 
     }
-
+	
+	@POST
+    @Path("addentuser")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addEnterpriseUser(
+            @QueryParam("username")String username, 
+            @QueryParam("email")String email,
+            @QueryParam("password")String password,
+            @QueryParam("firstName")String firstName,
+            @QueryParam("lastName")String lastName,
+            @QueryParam("role")Role role, 
+            @QueryParam("birthDate")Date birthDate,
+            @QueryParam("gender") Gender gender,
+            @QueryParam("streetAddress")String streetAddress,
+            @QueryParam("city")String city,
+            @QueryParam("postalCode")int postalCode,
+            @QueryParam("enterpriseId")int enterpriseId
+        
+            )
+    {
+        Address d=new Address();
+        d.setCity(city);
+        d.setPostalCode(postalCode);
+        d.setStreetAddress(streetAddress);
+        
+        User user = new User(email, firstName, lastName, password, gender, birthDate, d, username, role); 
+        userservice.addEnterpriseUser(user, enterpriseId);
+             
+        
+        return Response.status(Status.CREATED).entity("ADDED").build();
+             
+    }
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

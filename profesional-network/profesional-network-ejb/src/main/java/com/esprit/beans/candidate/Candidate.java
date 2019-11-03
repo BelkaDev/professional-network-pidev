@@ -20,7 +20,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.esprit.beans.Interests;
 import com.esprit.beans.Quiz;
+
 import com.esprit.enums.Tags;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -36,7 +38,9 @@ public class Candidate implements Serializable {
 	private String biography;
 	@Column(name = "candidate_rating")
 	private double rating;
-	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "candidate", fetch = FetchType.EAGER)
+	private Set<Interests> Interests;
+
 	
 	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
@@ -69,6 +73,17 @@ public class Candidate implements Serializable {
 	
 	@OneToMany(mappedBy="candidate")
 	private Set<Quiz> quizs;
+	
+
+	public Set<Interests> getInterests() {
+		return Interests;
+	}
+
+
+	public void setInterests(Set<Interests> interests) {
+		Interests = interests;
+	}
+	
 
 	public int getCandidateId() {
 		return candidateId;
@@ -127,16 +142,6 @@ public class Candidate implements Serializable {
 		this.quizs = quizs;
 	}
 
-	
-	
-	
-	
-	
-
-	
-	
-	
-	
 	
 
 }

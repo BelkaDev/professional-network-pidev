@@ -2,14 +2,20 @@ package com.esprit.beans;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.esprit.enums.Tags;
@@ -38,28 +44,19 @@ public class JobOffer implements Serializable{
 	int isValid;
 	@Column(name="JO_VUES")
 	int VuesNumber;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "jobOffer", fetch = FetchType.EAGER)
+	private Set<Interests> Interests;
 	
 	
 	
 	@ManyToOne
 	Enterprise enterprise;
-	
-	
-	
-	
-	
-	
-	
+
 	public JobOffer() {
 		super();
 	}
 
-   
-
 	
-
-
-
 	public JobOffer(String jOtitle, String jOarea, String jOdescription, int jOexperience) {
 		super();
 		
@@ -217,6 +214,17 @@ public class JobOffer implements Serializable{
 
 	public void setVuesNumber(int vuesNumber) {
 		VuesNumber = vuesNumber;
+	}
+
+	
+
+	public Set<Interests> getInterests() {
+		return Interests;
+	}
+
+
+	public void setInterests(Set<Interests> interests) {
+		Interests = interests;
 	}
 	
 	
