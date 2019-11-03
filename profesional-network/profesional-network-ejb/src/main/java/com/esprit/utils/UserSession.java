@@ -9,6 +9,8 @@ package com.esprit.utils;
 
 import java.sql.Date;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.esprit.beans.Address;
 import com.esprit.beans.User;
@@ -17,6 +19,8 @@ import com.esprit.enums.Role;
 
 public final class UserSession {
 
+	@PersistenceContext(unitName = "pidevtwin-ejb")
+	EntityManager em;
 	private static UserSession instance;
 
 	private int id;
@@ -86,6 +90,7 @@ public final class UserSession {
 		}
 		return instance;
 	}
+	
 
 	public static UserSession getInstance() {
 		if (instance == null) {

@@ -2,14 +2,21 @@ package com.esprit.beans;
 
 import java.io.Serializable;
 import java.sql.Date;
+
+
+import java.util.List;
+
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -20,63 +27,54 @@ import com.esprit.enums.Tags;
 @Table(name = "JOBOFFER")
 public class JobOffer implements Serializable{
 	private static final long serialVersionUID = 1L;
-	
-	
-	@Id 
-	@GeneratedValue( strategy = GenerationType.IDENTITY ) 
-	@Column(name="JO_ID") 
+
+
+	@Id
+	@GeneratedValue( strategy = GenerationType.IDENTITY )
+	@Column(name="JO_ID")
 	int JOid;
-	@Column(name="JO_TITLE") 
+	@Column(name="JO_TITLE")
 	String JOtitle;
-	@Column(name="JO_AREA") 
+	@Column(name="JO_AREA")
 	String JOarea;
-	@Column(name="JO_DATE") 
+	@Column(name="JO_DATE")
 	Date JOdate;
-	@Column(name="JO_DESCRIPTION") 
+	@Column(name="JO_DESCRIPTION")
 	String JOdescription;
-	@Column(name="JO_EXPERIENCE") 
+	@Column(name="JO_EXPERIENCE")
 	int JOexperience;
 	@Column(name="JO_ISVALID")
 	int isValid;
 	@Column(name="JO_VUES")
 	int VuesNumber;
-	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "jobOffer", fetch = FetchType.EAGER)
+	private Set<Interests> Interests;
+
 	@OneToMany(mappedBy="jobOffer")
 	private Set<Quiz> quizs;
-	
+
 	@ManyToOne
 	Enterprise enterprise;
-	
-	
-	
-	
-	
-	
-	
+
 	public JobOffer() {
 		super();
 	}
 
-   
-
-	
-
-
 
 	public JobOffer(String jOtitle, String jOarea, String jOdescription, int jOexperience) {
 		super();
-		
+
 		JOtitle = jOtitle;
 		JOarea = jOarea;
-		
+
 		JOdescription = jOdescription;
 		JOexperience = jOexperience;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	public JobOffer(int jOid, String jOtitle, String jOarea, String jOdescription) {
 		super();
 		JOid = jOid;
@@ -99,8 +97,8 @@ public class JobOffer implements Serializable{
 
 
 
-	
-	
+
+
 	public JobOffer(int jOid, String jOtitle, String jOarea, Date jOdate, String jOdescription, int jOexperience,
 			int isValid, Enterprise enterprise) {
 		super();
@@ -228,6 +226,7 @@ public class JobOffer implements Serializable{
 
 
 
+
 	public Set<Quiz> getQuizs() {
 		return quizs;
 	}
@@ -240,9 +239,15 @@ public class JobOffer implements Serializable{
 
 	public void setQuizs(Set<Quiz> quizs) {
 		this.quizs = quizs;
-	}
-	
-	
-	
-	
+
 }
+
+	public Set<Interests> getInterests() {
+		return Interests;
+	}
+
+
+	public void setInterests(Set<Interests> interests) {
+		Interests = interests;
+}
+	}

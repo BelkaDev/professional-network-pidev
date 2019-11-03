@@ -18,5 +18,6 @@ public interface IUserServiceRemote {
 	public void ResetingPassword(String userName);
 	public void UpdatePassword(String userName, String NewPassword);
 	public boolean UsernameMailUnique(String username,String email);
+	void addEnterpriseUser(User user, int EnterpriseId);
 	
 }

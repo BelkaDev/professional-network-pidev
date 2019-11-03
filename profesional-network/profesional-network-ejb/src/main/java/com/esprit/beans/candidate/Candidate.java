@@ -20,7 +20,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.esprit.beans.Interests;
 import com.esprit.beans.Quiz;
+
 import com.esprit.enums.Tags;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -32,11 +34,16 @@ public class Candidate implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private int candidateId;
+	@Column(name = "firstname")
+	private String firstName;
+	@Column(name = "lastname")
+	private String lastName;
 	@Column(name = "biography")
 	private String biography;
 	@Column(name = "candidate_rating")
 	private double rating;
 	
+
 	
 	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
@@ -66,9 +73,28 @@ public class Candidate implements Serializable {
 	@JoinColumn(name="Candidate_ID")
 	private Set<Contact> contacts;
 	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="Candidate_ID")
+	private Set<Views> views;
+	
+
+	
 	
 	@OneToMany(mappedBy="candidate")
 	private Set<Quiz> quizs;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "candidate", fetch = FetchType.EAGER)
+	private Set<Interests> Interests;
+	
+
+	public Set<Interests> getInterests() {
+		return Interests;
+	}
+
+
+	public void setInterests(Set<Interests> interests) {
+		Interests = interests;
+	}
+	
 
 	public int getCandidateId() {
 		return candidateId;
@@ -120,23 +146,23 @@ public class Candidate implements Serializable {
 	public void setContacts(Set<Contact> contacts) {
 		this.contacts = contacts;
 	}
+	
+	
+	public Set<Views> getViews() {
+		return views;
+	}
+	public void setViews(Set<Views> views) {
+		this.views = views;
+	}
 	public Set<Quiz> getQuizs() {
 		return quizs;
 	}
 	public void setQuizs(Set<Quiz> quizs) {
 		this.quizs = quizs;
 	}
-
-	
-	
-	
 	
 	
 
-	
-	
-	
-	
 	
 
 }
