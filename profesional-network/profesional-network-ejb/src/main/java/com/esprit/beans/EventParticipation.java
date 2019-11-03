@@ -23,7 +23,8 @@ public class EventParticipation  implements Serializable{
 	@GeneratedValue( strategy = GenerationType.IDENTITY ) 
 	@Column(name="EP_ID") 
 	int EPid;
-	
+	@Column(name="EP_RIdactionCode")
+	String RidactionCode;
 	
 	@ManyToOne
 	EnterpriseEvent enterpriseEvent;
@@ -76,6 +77,18 @@ public class EventParticipation  implements Serializable{
 
 	public void setCandidate(Candidate candidate) {
 		this.candidate = candidate;
+	}
+
+
+
+	public String getRidactionCode() {
+		return RidactionCode;
+	}
+
+
+
+	public void setRidactionCode(String ridactionCode) {
+		RidactionCode = ridactionCode;
 	}
 	
 	

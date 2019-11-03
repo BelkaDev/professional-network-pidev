@@ -5,11 +5,14 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.esprit.enums.Tags;
 
 @Entity
 @Table(name = "JOBOFFER")
@@ -35,6 +38,7 @@ public class JobOffer implements Serializable{
 	int isValid;
 	@Column(name="JO_VUES")
 	int VuesNumber;
+	
 	
 	
 	@ManyToOne

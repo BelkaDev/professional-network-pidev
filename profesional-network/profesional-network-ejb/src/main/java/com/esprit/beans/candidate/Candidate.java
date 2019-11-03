@@ -2,11 +2,13 @@ package com.esprit.beans.candidate;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +21,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.esprit.beans.Quiz;
+import com.esprit.enums.Tags;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -33,6 +36,7 @@ public class Candidate implements Serializable {
 	private String biography;
 	@Column(name = "candidate_rating")
 	private double rating;
+	
 	
 	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
