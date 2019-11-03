@@ -107,7 +107,7 @@ public class PaymentService implements IPayementServiceLocal,IPayementServiceRem
 		if(p.isCanceled())
 		{
 			p.setValidation(false);
-			ns.CreateNotification(p.getUserPack().getUser().getId(), "your notification has been canceled", NOTIFICATION_TYPE.Payment,UserSession.getInstance().getId() ,p.getId() );
+			ns.CreateNotification(p.getUserPack().getUser().getId(), "your notification has been canceled", NOTIFICATION_TYPE.Payment,p.getId() );
 			
 		}
 		
@@ -120,7 +120,7 @@ public class PaymentService implements IPayementServiceLocal,IPayementServiceRem
 		if(!p.isCanceled())
 		{
 			p.setValidation(true);
-			ns.CreateNotification(p.getUserPack().getUser().getId(), "your notification has been validated", NOTIFICATION_TYPE.Payment,UserSession.getInstance().getId() ,p.getId() );
+			ns.CreateNotification(p.getUserPack().getUser().getId(), "your notification has been validated", NOTIFICATION_TYPE.Payment,p.getId() );
 			
 		}
 	}
