@@ -29,6 +29,10 @@ public class Candidate implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private int candidateId;
+	@Column(name = "firstname")
+	private String firstName;
+	@Column(name = "lastname")
+	private String lastName;
 	@Column(name = "biography")
 	private String biography;
 	@Column(name = "candidate_rating")
@@ -61,6 +65,12 @@ public class Candidate implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="Candidate_ID")
 	private Set<Contact> contacts;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="Candidate_ID")
+	private Set<Views> views;
+	
+
 	
 	
 	@OneToMany(mappedBy="candidate")
@@ -116,12 +126,22 @@ public class Candidate implements Serializable {
 	public void setContacts(Set<Contact> contacts) {
 		this.contacts = contacts;
 	}
+	
+	
+	public Set<Views> getViews() {
+		return views;
+	}
+	public void setViews(Set<Views> views) {
+		this.views = views;
+	}
 	public Set<Quiz> getQuizs() {
 		return quizs;
 	}
 	public void setQuizs(Set<Quiz> quizs) {
 		this.quizs = quizs;
 	}
+	
+	
 
 	
 	

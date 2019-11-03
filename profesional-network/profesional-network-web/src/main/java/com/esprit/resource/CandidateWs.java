@@ -39,6 +39,13 @@ public class CandidateWs {
 		cs.addCandidate(c);
 		return Response.status(Status.CREATED).entity("Candidate Added").build();
 	}
+	
+	@GET
+	@Path("getCandidates")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response displayCandidates() {
+		return Response.status(Status.FOUND).entity(cs.displayCandidates()).build();
+	}
 
 	@POST
 	@Path("addExperience")
@@ -257,6 +264,30 @@ public class CandidateWs {
 		return Response.status(Status.OK).entity("Certification updated").build();
 	}
 	
+	
+	@POST
+	@Path("addView")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addView(@QueryParam("viewerID") int viewerId,
+			@QueryParam("viewedID") int viewedId) {
+			cs.addView(viewerId, viewedId);
+		return Response.status(Status.CREATED).entity("Visited Profile").build();
+	}
+	
+	@GET
+	@Path("getViews")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response displayViews(@QueryParam("candidateId")int candidateId) {
+		return Response.status(Status.FOUND).entity(cs.displayViews(candidateId)).build();
+	}
+	
+	@DELETE
+	@Path("deleteView")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteView(@QueryParam("viewID") int viewId) {
+		cs.deleteView(viewId);
+		return Response.status(Status.OK).entity("the View has been deleted").build();
+	}
 	
 	
 }
