@@ -70,14 +70,14 @@ public class UserWS {
 		d.setStreetAddress(streetAddress);
 		
 		User user = new User(email, firstName, lastName, password, gender, birthDate, d, username, role); 
-		if(userservice.UsernameMailUnique(user.getUsername(), user.getEmail()))
-		{userservice.addUser(user);
+		if(userservice.UsernameMailUnique(user.getUsername(), user.getEmail())) {
+		userservice.addUser(user);
 	 		 
  		
 	 	return Response.status(Status.CREATED).entity("ADDED").build();
 	 	}
 		return Response.status(Status.NOT_ACCEPTABLE).entity("username or email exist").build();
-			 
+		 
     }
 
 	

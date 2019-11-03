@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class UserPack implements Serializable{
@@ -39,6 +40,8 @@ public class UserPack implements Serializable{
 	private Date startDate;
 	@Column(name="endDate")
 	private Date endDate;
+	@OneToOne
+	private Payement payment;
 	
 	public boolean isValid() {
 		return isValid;
@@ -51,39 +54,39 @@ public class UserPack implements Serializable{
 	public UserPack() {
 		
 	}
-	
-	public UserPack( User user, Pack pack, int daysleft,boolean isValid) {
-		super();
-		this.isValid=isValid;
-		this.user = user;
-		this.pack = pack;
-		this.daysleft = daysleft;
-	}
+
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	public User getUser() {
 		return user;
 	}
+
 	public void setUser(User user) {
 		this.user = user;
 	}
+
 	public Pack getPack() {
 		return pack;
 	}
+
 	public void setPack(Pack pack) {
 		this.pack = pack;
 	}
+
 	public int getDaysleft() {
 		return daysleft;
 	}
-	public void setDaysleft(double d) {
-		this.daysleft = (int) d;
+
+	public void setDaysleft(int daysleft) {
+		this.daysleft = daysleft;
 	}
-	
+
 	public Date getStartDate() {
 		return startDate;
 	}
@@ -100,10 +103,27 @@ public class UserPack implements Serializable{
 		this.endDate = endDate;
 	}
 
-	@Override
-	public String toString() {
-		return "UserPack [id=" + id + ", user=" + user + ", pack=" + pack + ", daysleft=" + daysleft +" , isValid="+isValid+ "]";
+	public Payement getPayment() {
+		return payment;
 	}
+
+	public void setPayment(Payement payment) {
+		this.payment = payment;
+	}
+
+	public UserPack(int id, User user, Pack pack, int daysleft, boolean isValid, Date startDate, Date endDate,
+			Payement payment) {
+		super();
+		this.id = id;
+		this.user = user;
+		this.pack = pack;
+		this.daysleft = daysleft;
+		this.isValid = isValid;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.payment = payment;
+	}
+	
 	
 	
 	
