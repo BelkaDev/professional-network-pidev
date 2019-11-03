@@ -16,7 +16,6 @@ import javax.persistence.PersistenceContext;
 
 import com.esprit.Iservice.INotificationServiceLocal;
 import com.esprit.Iservice.INotificationServiceRemote;
-import com.esprit.beans.Comment;
 import com.esprit.beans.Notification;
 import com.esprit.beans.User;
 import com.esprit.enums.NOTIFICATION_TARGET;
@@ -36,7 +35,7 @@ public class NotificationService implements INotificationServiceLocal,INotificat
 
 	@Override
 	public void CreateNotification(int idReciever,String body,
-			NOTIFICATION_TYPE type,int trigger,int targetId) {
+			NOTIFICATION_TYPE type,int targetId) {
 			
 
 		Set<NOTIFICATION_TYPE> POST_TYPE = EnumSet.of(NOTIFICATION_TYPE.Comment, NOTIFICATION_TYPE.Share, NOTIFICATION_TYPE.Reaction

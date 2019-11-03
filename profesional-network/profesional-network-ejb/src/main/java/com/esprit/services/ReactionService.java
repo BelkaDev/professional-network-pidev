@@ -66,7 +66,7 @@ public class ReactionService implements IReactionServiceLocal,IReactionServiceRe
 						" reactmented on your Post.";
 			}
 			NOTIFICATION_TYPE notif_type = NOTIFICATION_TYPE.Reaction;
-			notificationservice.CreateNotification(follower.getId(),notif_message,notif_type ,react.getReactedPost().getId(), reacter.getId());
+			notificationservice.CreateNotification(follower.getId(),notif_message,notif_type ,react.getReactedPost().getId());
 		}
 		}
 		

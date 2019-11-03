@@ -79,7 +79,7 @@ public class PostService implements IPostServiceLocal,IPostServiceRemote {
 			 }
 		int idPost = post.getId();
 		
-		//Automatically add poster to following list
+		//Automatically add poster to following the post
 		followingservice.followPost(idUser, idPost);
 		
 		// notifying followers about the new Post
@@ -90,7 +90,7 @@ public class PostService implements IPostServiceLocal,IPostServiceRemote {
 
 		for (User usr : followers) {
 		NOTIFICATION_TYPE type = NOTIFICATION_TYPE.Follow;
-		notificationservice.CreateNotification(usr.getId(),notif_message,type ,idPost, poster.getId());
+		notificationservice.CreateNotification(usr.getId(),notif_message,type ,idPost);
 		}
 		
 		}
@@ -157,9 +157,29 @@ public class PostService implements IPostServiceLocal,IPostServiceRemote {
 		Timestamp date = new Timestamp(System.currentTimeMillis());
 		post.setContent(sharedPost.getContent()+" [shared on "+new SimpleDateFormat("dd/MM/YY - HH:mm").format(date)+"]");
 		post.setType(sharedPost.getType());
-
 		post.setDate(date);
 		em.persist(post);
+		
+		// notify author of post
+		String notif_message =user.getFirstName()+" "+user.getLastName()+" has shared your post.";
+		NOTIFICATION_TYPE type = NOTIFICATION_TYPE.Share;
+		notificationservice.CreateNotification(sharedPost.getAuthor(),notif_message,type ,idPost);
+		
+		//Automatically add poster to following list
+		followingservice.followPost(idUser, idPost);
+		
+		// notifying followers about the new Post
+
+		List<User> followers = followingservice.UserFollowers(idUser);
+		notif_message = user.getFirstName()+" "+user.getLastName()+
+				" shared a new Post.";
+
+		for (User usr : followers) {
+		type = NOTIFICATION_TYPE.Follow;
+		notificationservice.CreateNotification(usr.getId(),notif_message,type ,idPost);
+		}
+		
+		
 		return true;
 	}
 

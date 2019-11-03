@@ -9,7 +9,7 @@ import com.esprit.enums.NOTIFICATION_TYPE;
 public interface INotificationServiceRemote {
 	
 	void CreateNotification(int idReciever, String body, 
-			NOTIFICATION_TYPE type, int trigger, int target);
+			NOTIFICATION_TYPE type,int target);
 	boolean deleteNotif(int id);
 	boolean updateNotif(int idNotif,String notif_message);
 

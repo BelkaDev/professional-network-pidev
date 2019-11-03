@@ -31,11 +31,7 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 import com.esprit.beans.FileUpload;
 import com.esprit.beans.Post;
-import com.esprit.enums.FILE_TYPE;
-import com.esprit.enums.POST_TYPE;
-import com.esprit.services.FileService;
 import com.esprit.services.PostService;
-import com.esprit.utils.MimeTypeToEnums;
 
 
 @Path("post")
@@ -64,7 +60,7 @@ public class PostWS {
 	
 	@POST
 	@Consumes("*/*")
-	@Path("add")
+	@Path("addWithFile")
 	public Response addPost(@QueryParam("idUser") int idUser,
 			@QueryParam("content") String content,
 			MultipartFormDataInput input
@@ -79,6 +75,20 @@ public class PostWS {
 	    file.setPath(fileName);
 		PostService.addPost(idUser,content,file);
 	    return Response.status(200).entity("uploaded file to "+ fileName).build();
+		
+	}
+	
+
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("share")
+	public Response sharePost(@QueryParam("idUser") int idUser,
+			@QueryParam("idPost") int idPost) {
+		if (!PostService.sharePost(idPost,idUser))
+		{
+		return Response.status(Status.NOT_FOUND).entity("post doesn't exist").build();
+		}
+		return Response.status(Response.Status.CREATED).entity(out).build();
 		
 	}
 	
@@ -100,7 +110,7 @@ public class PostWS {
 	@PUT
 	@Path("update")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response updatePost(@QueryParam("idPost") int idPost,
+	public Response updatePost(@QueryParam("id") int idPost,
 			@QueryParam("content") String content
 	) {
 
@@ -112,7 +122,7 @@ public class PostWS {
 	}
 	
 	@PUT
-	@Path("update")
+	@Path("updateWithFile")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response updatePost(@QueryParam("idPost") int idPost,
 			@QueryParam("content") String content,
@@ -144,18 +154,6 @@ public class PostWS {
 	}
 	
 
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("share")
-	public Response sharePost(@QueryParam("idPost") int idPost,
-			@QueryParam("idUser") int idUser) {
-		if (!PostService.sharePost(idPost,idUser))
-		{
-		return Response.status(Status.NOT_FOUND).entity("post doesn't exist").build();
-		}
-		return Response.status(Response.Status.CREATED).entity(out).build();
-		
-	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

@@ -47,6 +47,9 @@ public class CommentService implements ICommentServiceLocal,ICommentServiceRemot
 		em.persist(com);
 		em.flush();
 		
+		//Automatically add commenter to following the post
+		followingservice.followPost(idUser, idPost);
+		
 		// notifying the post followers about the new Comment
 
 		List<User> followers = followingservice.PostFollowers(idPost);
@@ -61,7 +64,7 @@ public class CommentService implements ICommentServiceLocal,ICommentServiceRemot
 						" commented on your Post.";
 			}
 			NOTIFICATION_TYPE type = NOTIFICATION_TYPE.Comment;
-			notificationservice.CreateNotification(follower.getId(),notif_message,type ,com.getCommentedPost().getId(), commenter.getId());
+			notificationservice.CreateNotification(follower.getId(),notif_message,type ,com.getCommentedPost().getId());
 		}
 		}
 		

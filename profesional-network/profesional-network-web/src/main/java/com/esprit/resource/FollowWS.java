@@ -17,7 +17,6 @@ import javax.ws.rs.core.Response.Status;
 
 import com.esprit.beans.User;
 import com.esprit.services.FollowingService;
-import com.esprit.services.NotificationService;
 
 @Path("follow")
 public class FollowWS {
@@ -52,7 +51,7 @@ public class FollowWS {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("postFollower")
+	@Path("postFollowers")
 	public Response findPostFollowers(@QueryParam("id") int idPost) {
 		List<User> followers = followService.PostFollowers(idPost);
 
@@ -66,7 +65,7 @@ public class FollowWS {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("userFollower")
+	@Path("userFollowers")
 	public Response findUserFollowers(@QueryParam("id") int idFollowed) {
 		List<User> followers = followService.UserFollowers(idFollowed);
 
