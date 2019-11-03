@@ -11,6 +11,8 @@ import javax.persistence.Id;
 
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Payement implements Serializable{
 	/**
@@ -31,7 +33,7 @@ public class Payement implements Serializable{
 	private boolean validation;
 	@Column(name="canceled")
 	private boolean canceled;
-	
+	@JsonIgnore
 	@OneToOne(mappedBy="payment")
 	private UserPack userPack; 
 	
