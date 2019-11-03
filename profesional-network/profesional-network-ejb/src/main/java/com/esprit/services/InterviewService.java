@@ -20,10 +20,13 @@ import com.esprit.beans.Interview;
 public class InterviewService implements IInterviewServiceLocal, IInterviewServiceRemote {
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
+	public static QuizService qs=new QuizService();
 
 	@Override
-	public boolean setDate(int interview_id, String date) {
-		if (isWeekend(date) || isOlderThanToday(date)) {
+	public boolean setDate(int interview_id, String date,int candidate_id,int joboffer_id) {
+		System.out.println("************HEY"+candidate_id);
+		if (isWeekend(date) || isOlderThanToday(date)||qs.checkCandidateDate(candidate_id, Date.valueOf(date))
+				|| qs.checkHRDate(joboffer_id, Date.valueOf(date))) {
 			Interview in = em.find(Interview.class, interview_id);
 			in.setDate(Date.valueOf(date));
 			return true;

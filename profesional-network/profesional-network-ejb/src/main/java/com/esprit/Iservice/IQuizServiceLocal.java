@@ -30,7 +30,7 @@ public interface IQuizServiceLocal {
 
 	public boolean correctAnswer(int answer_id);
 
-	public List<Quiz> getCandidateForOffer(int offer_id);
+	public Set<Quiz> getCandidateForOffer(int offer_id);
 
 	public void ChooseCnadidate(int offer_id);
 
@@ -38,7 +38,7 @@ public interface IQuizServiceLocal {
 
 	public boolean checkCandidateDate(int candidate_id, Date d);
 
-	public List<Quiz> getCandidateQuiz(int candidate_id);
+	public Set<Quiz> getCandidateQuiz(int candidate_id);
 
 	public int getYears(Date datedebut, Date dateFin);
 
@@ -49,5 +49,11 @@ public interface IQuizServiceLocal {
 	public List<JobOffer> selectOffers(int years);
 
 	public List<JobOffer> sendOffers(int quiz_id);
+	
+	public boolean isThisDateValid(String dateToValidate, String dateFromat);
+	
+	public String generateDate();
+	
+	public boolean checkHRDate(int jobOffer_id, Date d);
 
 }

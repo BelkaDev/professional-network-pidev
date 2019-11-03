@@ -21,11 +21,11 @@ public class InterviewWS {
 	@PUT
 	@Path("setDate")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response setDate(@QueryParam("id")int interview_id,@QueryParam("date")String date) {
+	public Response setDate(@QueryParam("id")int interview_id,@QueryParam("date")String date,@QueryParam("idC")int candidate_id,@QueryParam("idJO")int jobOffer_id) {
 		System.out.println(date);
-		if(interviewService.setDate(interview_id, date))
+		if(interviewService.setDate(interview_id, date,candidate_id,jobOffer_id))
 			return Response.status(Status.OK).entity("the date has been set").build();
-		return Response.status(Status.OK).entity("invalid date").build();
+		return Response.status(Status.BAD_REQUEST).entity("invalid date").build();
 	}
 	@DELETE
 	@Path("deleteInterview")

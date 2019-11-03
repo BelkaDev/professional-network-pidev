@@ -31,24 +31,30 @@ public interface IQuizServiceRemote {
 
 	public boolean correctAnswer(int answer_id);
 
-	public List<Quiz> getCandidateForOffer(int offer_id);
-	
+	public Set<Quiz> getCandidateForOffer(int offer_id);
+
 	public void ChooseCnadidate(int offer_id);
-	
-	public boolean CorrectQuiz(int quiz_id,List<Integer> answersList);
-	
+
+	public boolean CorrectQuiz(int quiz_id, List<Integer> answersList);
+
 	public boolean checkCandidateDate(int candidate_id, Date d);
 
-	public List<Quiz> getCandidateQuiz(int candidate_id);
-	
-	public int getYears(Date datedebut,Date dateFin);
-	
+	public boolean checkHRDate(int jobOffer_id, Date d);
+
+	public Set<Quiz> getCandidateQuiz(int candidate_id);
+
+	public int getYears(Date datedebut, Date dateFin);
+
 	public Set<Experience> getCandidateExperience(int candidate_id);
 
 	public int getYearsExpericence(int candidate_id);
-	
+
 	public List<JobOffer> selectOffers(int years);
-	
+
 	public List<JobOffer> sendOffers(int quiz_id);
+
+	public boolean isThisDateValid(String dateToValidate, String dateFromat);
+
+	public String generateDate();
 
 }
