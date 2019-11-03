@@ -27,8 +27,6 @@ public class Interview implements Serializable {
 	private double score;
 	@Enumerated(EnumType.STRING)
 	private InterviewState state;
-	@OneToOne(mappedBy = "interview")
-	private Quiz quiz;
 
 	public int getId() {
 		return id;
@@ -70,17 +68,9 @@ public class Interview implements Serializable {
 		this.state = state;
 	}
 
-	public Quiz getQuiz() {
-		return quiz;
-	}
-
-	public void setQuiz(Quiz quiz) {
-		this.quiz = quiz;
-	}
-
 	public Interview() {
-		this.state=InterviewState.Undefined;
-		this.score=0;
+		this.state = InterviewState.Undefined;
+		this.score = 0;
 	}
 
 	public Interview(int id, Date date, Time time, double score) {

@@ -41,16 +41,11 @@ public class ClaimServiceWb {
 	    @Path("addClaim")
 	    @Produces(MediaType.APPLICATION_JSON)
 	    public Response addClaim(
-	            
-	            @QueryParam("description")String description,
-	            
+	    		@QueryParam("description")String description,
 	            @QueryParam("type")String type,
 	            @QueryParam("whoClaim")int whoClaim,
 	            @QueryParam("claimsOn")int claimsOn
-	       
-	    
 	    ){
-		 
 		 cs.addClaim( description, type, whoClaim, claimsOn);
 		 return Response.status(Status.CREATED).entity("Add succesful").build();
 	    }
@@ -67,7 +62,7 @@ public class ClaimServiceWb {
 		 for(Claim a : c)
 		 {
 			 
-			 all.add(a.toString()+" who claim :"+a.getWhoClaim().getFirstName()+" , claim on :"+a.getClaimsOn().getFirstName());
+			 all.add(a.toString());
 		 }
 		 
 		 return all;

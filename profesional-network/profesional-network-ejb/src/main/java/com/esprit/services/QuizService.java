@@ -1,9 +1,13 @@
 package com.esprit.services;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -27,6 +31,8 @@ import com.esprit.beans.candidate.Experience;
 public class QuizService implements IQuizServiceLocal, IQuizServiceRemote {
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
+
+	public static InterviewService ins = new InterviewService();
 
 	@Override
 	public void addQuiz(int candidate_id, int jobOffer_id) {
@@ -67,9 +73,21 @@ public class QuizService implements IQuizServiceLocal, IQuizServiceRemote {
 	@Override
 	public boolean setInterview(int quiz_id) {
 		Quiz q = em.find(Quiz.class, quiz_id);
+		System.out.println("TEST TEST 111111111111111111111111111");
+		System.out.println(q.getCandidate().getCandidateId());
+		System.out.println(q.getJobOffer().getJOid());
 		if (q.getInterview() == null) {
 			if (q.getState() == QuizState.Validated) {
 				Interview in = new Interview();
+				String da = generateDate();
+				while (!(isThisDateValid(da, "yyyy-mm-dd")) || !(ins.isWeekend(da)) || !(ins.isOlderThanToday(da))
+				
+				  || !checkCandidateDate(q.getCandidate().getCandidateId(), Date.valueOf(da)) ||
+				  !checkHRDate(q.getJobOffer().getJOid(), Date.valueOf(da))
+				 ) {
+					da = generateDate();
+				}
+				in.setDate(Date.valueOf(da));
 				in.setScore(q.getScore());
 				q.setInterview(in);
 				em.persist(in);
@@ -110,16 +128,14 @@ public class QuizService implements IQuizServiceLocal, IQuizServiceRemote {
 	}
 
 	@Override
-	public List<Quiz> getCandidateForOffer(int offer_id) {
+	public Set<Quiz> getCandidateForOffer(int offer_id) {
 		JobOffer o = em.find(JobOffer.class, offer_id);
-		Query q = em.createQuery("SELECT quiz FROM Quiz quiz where quiz.jobOffer = :jobOffer ORDER BY quiz.score DESC");
-		q.setParameter("jobOffer", o);
-		return (List<Quiz>) q.getResultList();
+		return o.getQuizs();
 	}
 
 	@Override
 	public void ChooseCnadidate(int offer_id) {
-		List<Quiz> list = getCandidateForOffer(offer_id);
+		Set<Quiz> list = getCandidateForOffer(offer_id);
 		for (Quiz q : list) {
 			setState(q.getId());
 		}
@@ -142,27 +158,31 @@ public class QuizService implements IQuizServiceLocal, IQuizServiceRemote {
 
 	@Override
 	public boolean checkCandidateDate(int candidate_id, Date d) {
-		List<Quiz> list = getCandidateQuiz(candidate_id);
+		Set<Quiz> list = getCandidateQuiz(candidate_id);
+		if (list.isEmpty())
+			return true;
 		for (Quiz q : list) {
-			if (q.getInterview().getDate().equals(d))
-				return true;
+			if (q.getInterview() != null) {
+				if (q.getInterview().getDate().equals(d))
+					return false;
+			}
 		}
-		return false;
+		return true;
 	}
 
 	@Override
-	public List<Quiz> getCandidateQuiz(int candidate_id) {
+	public Set<Quiz> getCandidateQuiz(int candidate_id) {
+		System.out.println("heyeheyehyehyehyehyehyehyehyeheyheyheyheyh" + candidate_id);
 		Candidate c = em.find(Candidate.class, candidate_id);
-		Query q = em.createQuery("SELECT quiz FROM Quiz quiz where quiz.candidate = :candidate");
-		q.setParameter("candidate", c);
-		return (List<Quiz>) q.getResultList();
+		System.out.println("TESTSTSTSTST" + c.getBiography());
+		return c.getQuizs();
 	}
 
 	@Override
 	public int getYears(Date datedebut, Date dateFin) {
 		int start = datedebut.toLocalDate().getYear();
 		int end = dateFin.toLocalDate().getYear();
-		System.out.println(end-start);
+		System.out.println(end - start);
 		return end - start;
 	}
 
@@ -186,16 +206,77 @@ public class QuizService implements IQuizServiceLocal, IQuizServiceRemote {
 
 	@Override
 	public List<JobOffer> selectOffers(int candidate_id) {
-		int years=getYearsExpericence(candidate_id);
-		Query q = em.createQuery("select j from JobOffer j where j.JOexperience <= :years").setParameter("years", years);
+		int years = getYearsExpericence(candidate_id);
+		Query q = em.createQuery("select j from JobOffer j where j.JOexperience <= :years").setParameter("years",
+				years);
 		System.out.println(years);
 		return (List<JobOffer>) q.getResultList();
 	}
+
 	public List<JobOffer> sendOffers(int quiz_id) {
-		Quiz q=em.find(Quiz.class, quiz_id);
-		if(q.getState()==QuizState.Failed)
+		Quiz q = em.find(Quiz.class, quiz_id);
+		if (q.getState() == QuizState.Failed)
 			return selectOffers(q.getCandidate().getCandidateId());
 		return null;
+	}
+
+	@Override
+	public boolean isThisDateValid(String dateToValidate, String dateFromat) {
+		if (dateToValidate == null) {
+			return false;
+		}
+
+		SimpleDateFormat sdf = new SimpleDateFormat(dateFromat);
+		sdf.setLenient(false);
+
+		try {
+
+			// if not valid, it will throw ParseException
+			java.util.Date date = sdf.parse(dateToValidate);
+			System.out.println(date);
+
+		} catch (ParseException e) {
+
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public String generateDate() {
+		int year = ThreadLocalRandom.current().nextInt(Year.now().getValue(), Year.now().getValue() + 2);
+		int month = ThreadLocalRandom.current().nextInt(1, 13);
+		int day = ThreadLocalRandom.current().nextInt(1, 32);
+		if (month < 10 && day < 10) {
+			String da = String.valueOf(year) + "-0" + String.valueOf(month) + "-0" + String.valueOf(day);
+			return da;
+		}
+		if (month < 10) {
+			String da = String.valueOf(year) + "-0" + String.valueOf(month) + "-" + String.valueOf(day);
+			return da;
+		}
+		if (day < 10) {
+			String da = String.valueOf(year) + "-0" + String.valueOf(month) + "-0" + String.valueOf(day);
+			return da;
+		}
+		String da = String.valueOf(year) + "-" + String.valueOf(month) + "-" + String.valueOf(day);
+		return da;
+	}
+
+	@Override
+	public boolean checkHRDate(int jobOffer_id, Date d) {
+		Set<Quiz> list = getCandidateForOffer(jobOffer_id);
+		if (list.isEmpty())
+			return true;
+		for (Quiz q : list) {
+			if (q.getInterview() != null) {
+				if (q.getInterview().getDate().equals(d))
+					return false;
+			}
+		}
+		return true;
 	}
 
 }

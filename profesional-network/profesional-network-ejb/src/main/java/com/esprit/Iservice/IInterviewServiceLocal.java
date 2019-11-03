@@ -10,7 +10,7 @@ public interface IInterviewServiceLocal {
 
 	public boolean isOlderThanToday(String date);
 
-	public boolean setDate(int interview_id, String date);
+	public boolean setDate(int interview_id, String date,int candidate_id,int joboffer_id);
 
 	public void CancelInterview(int interview_id);
 

@@ -2,7 +2,10 @@ package com.esprit.beans;
 
 import java.io.Serializable;
 import java.sql.Date;
+<<<<<<< HEAD
 import java.util.List;
+=======
+>>>>>>> 7a8bdf103001a35b5e8e1dc952ff1723121a1243
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -47,7 +50,8 @@ public class JobOffer implements Serializable{
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "jobOffer", fetch = FetchType.EAGER)
 	private Set<Interests> Interests;
 	
-	
+	@OneToMany(mappedBy="jobOffer")
+	private Set<Quiz> quizs;
 	
 	@ManyToOne
 	Enterprise enterprise;
@@ -225,6 +229,24 @@ public class JobOffer implements Serializable{
 
 	public void setInterests(Set<Interests> interests) {
 		Interests = interests;
+
+
+
+
+
+
+	public Set<Quiz> getQuizs() {
+		return quizs;
+	}
+
+
+
+
+
+
+
+	public void setQuizs(Set<Quiz> quizs) {
+		this.quizs = quizs;
 	}
 	
 	

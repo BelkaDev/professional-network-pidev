@@ -16,6 +16,7 @@ import com.esprit.Iservice.IClaimServiceRemote;
 import com.esprit.beans.Claim;
 import com.esprit.beans.State;
 import com.esprit.beans.User;
+import com.esprit.utils.UserSession;
 
 
 
@@ -29,7 +30,8 @@ public class ClaimService implements IClaimServiceLocal,IClaimServiceRemote {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void addClaim(String description, String type, int Whoclaim, int claimOn) {
-		User whoClaim=em.find(User.class, Whoclaim);
+		UserSession user=UserSession.getInstance();
+		User whoClaim=em.find(User.class, user.getId());
 		User claimsOn=em.find(User.class, claimOn);
 		Claim c =new Claim();
 		Date date=new Date();
