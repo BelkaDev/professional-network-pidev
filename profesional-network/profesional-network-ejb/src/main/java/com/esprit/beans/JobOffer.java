@@ -2,6 +2,7 @@ package com.esprit.beans;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.esprit.enums.Tags;
@@ -39,7 +41,8 @@ public class JobOffer implements Serializable{
 	@Column(name="JO_VUES")
 	int VuesNumber;
 	
-	
+	@OneToMany(mappedBy="jobOffer")
+	private Set<Quiz> quizs;
 	
 	@ManyToOne
 	Enterprise enterprise;
@@ -217,6 +220,26 @@ public class JobOffer implements Serializable{
 
 	public void setVuesNumber(int vuesNumber) {
 		VuesNumber = vuesNumber;
+	}
+
+
+
+
+
+
+
+	public Set<Quiz> getQuizs() {
+		return quizs;
+	}
+
+
+
+
+
+
+
+	public void setQuizs(Set<Quiz> quizs) {
+		this.quizs = quizs;
 	}
 	
 	
