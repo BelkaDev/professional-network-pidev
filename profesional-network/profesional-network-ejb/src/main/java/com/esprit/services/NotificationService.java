@@ -16,7 +16,6 @@ import javax.persistence.PersistenceContext;
 
 import com.esprit.Iservice.INotificationServiceLocal;
 import com.esprit.Iservice.INotificationServiceRemote;
-import com.esprit.beans.Comment;
 import com.esprit.beans.Notification;
 import com.esprit.beans.User;
 import com.esprit.enums.NOTIFICATION_TARGET;
