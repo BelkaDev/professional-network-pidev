@@ -1,33 +1,28 @@
 package com.esprit.services;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.enterprise.inject.Instance;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.security.auth.x500.X500Principal;
 
 import com.esprit.Iservice.JobOfferServiceRemote;
 import com.esprit.beans.Enterprise;
-import com.esprit.beans.EnterpriseEvent;
 import com.esprit.beans.Interests;
 import com.esprit.beans.JobOffer;
 import com.esprit.beans.User;
-import com.esprit.beans.candidate.Candidate;
-import com.esprit.beans.candidate.Certification;
-import com.esprit.beans.candidate.Experience;
+import com.esprit.enums.NOTIFICATION_TYPE;
 import com.esprit.enums.Role;
 import com.esprit.enums.Tags;
-import com.esprit.utils.SendingMail;
 import com.esprit.utils.UserSession;
 
 @Stateless
@@ -37,8 +32,13 @@ public class JobOfferService implements JobOfferServiceRemote {
 
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
-	private Set<Interests> interests;
-
+	
+	
+	@EJB
+	UserService userservice = new UserService();
+	@EJB
+	NotificationService notificationservice = new NotificationService();
+	
 	@Override
 	public int AddJobOffer(JobOffer joboffer) {
 		User user= em.find(User.class, UserSession.getInstance().getId());
@@ -50,12 +50,7 @@ public class JobOfferService implements JobOfferServiceRemote {
 			joboffer.setEnterprise(enterpriseManagedEntity);
 			joboffer.setIsValid(0);
 			joboffer.setVuesNumber(0);
-			Interests i1 = new Interests();
-			i1.setTag(Tags.CSS);
-			i1.setId(1);
-			joboffer.getInterests().add(i1);
-
-			joboffer.setInterests(interests);
+			joboffer.setInterests("Jee,dotnet");
 			Calendar currenttime = Calendar.getInstance();
 			Date JOdate = new Date((currenttime.getTime()).getTime());
 			joboffer.setJOdate(JOdate);
@@ -139,33 +134,33 @@ public class JobOfferService implements JobOfferServiceRemote {
 		query.setMaxResults(1);
 		query.setParameter("id", id);
 		int validate = query.executeUpdate();
+		List<String> jobtags = fetchOfferTags(id);
 		
-		TypedQuery<String> querydescription = em.createQuery("SELECT j.JOdescription FROM JobOffer j where j.JOid=:id", String.class);
-		querydescription.setParameter("id", id);
-		String s = querydescription.getSingleResult();
-		System.out.println("ccccccccccccccccccccccccccccccccccccc"+s);
-
-		TypedQuery<Candidate> queryc = em.createQuery("SELECT c FROM Candidate c WHERE c.biography LIKE :b", Candidate.class);
-		queryc.setParameter("b", "%" + s + "%");
-		List<Candidate> listc = queryc.getResultList();
-			for (Candidate c : listc) {
-				
-				System.out.println("ccccccccccccccccccccccccccccccccccccc"+c.getBiography());
-
-					// Notif
-						String contenu = ("a joboffer that may interrest you");
-						SendingMail sm = new SendingMail(contenu, "koukiziedd711@gmail.com", "new joboffer");
-						SendingMail.envoyer();
-						
-					
-			}
-
+		List <User> allUsers = userservice.allUsers();
+		for (User usr : allUsers) {
+		List<String> userinterests = userservice.fetchUserInterests(usr.getId());
+		userinterests.retainAll(jobtags); 
+		if (userinterests.size()!=0)
+		{
+		String tags = String.join(", ", userinterests);
+		NOTIFICATION_TYPE type = NOTIFICATION_TYPE.Offer;
+		String notif_message = "A new offer with these tags might interest you : "+tags;
+		notificationservice.CreateNotification(usr.getId(),notif_message,type ,id);
+		}
+		}
 		return validate;
 	
 	}
 	
 	
-	
+	@Override
+	public List<String> fetchOfferTags(int idOffer) {
+		JobOffer offer= em.find(JobOffer.class,idOffer);
+		String interests = offer.getInterests();
+		List<String> interestsList = new ArrayList<String>
+		(Arrays.asList(interests.split(",")));
+		return interestsList;		
+	}
 	
 	
 	@Override

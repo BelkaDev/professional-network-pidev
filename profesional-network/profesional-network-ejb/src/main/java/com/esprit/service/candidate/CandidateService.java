@@ -31,7 +31,6 @@ public class CandidateService implements ICandidateServiceLocal, ICandidateServi
 
 	@Override
 	public void addCandidate(Candidate c) {
-
 		em.persist(c);
 	}
 

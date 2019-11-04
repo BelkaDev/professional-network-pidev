@@ -21,6 +21,8 @@ public interface IUserServiceLocal {
 	public void UpdatePassword(String userName, String NewPassword);
 	public boolean UsernameMailUnique(String username,String email);
 	void addEnterpriseUser(User user, int EnterpriseId);
+	List<String> fetchUserInterests(int idUser);
+	List<User> allUsers();
 	
 	
 }

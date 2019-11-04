@@ -18,5 +18,6 @@ public interface JobOfferServiceRemote {
 	public JobOffer getJobofferById(int JOid);
 	public int ValidateJoboffer(int id);
 	public void Notifcandidat();
+	List<String> fetchOfferTags(int idOffer);
 }
 

@@ -10,7 +10,6 @@ import com.esprit.enums.Gender;
 import com.esprit.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.FetchType;
 import javax.validation.constraints.AssertFalse;
 
 import org.hibernate.validator.constraints.Email;
@@ -56,7 +55,9 @@ public class User implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@Column(name="role")
     private Role role;
-	
+	@Column(name="interests")
+    private String interests;	
+
 	// ****************************
 	@ManyToOne(cascade = CascadeType.ALL)
 	Enterprise enterprise;
@@ -267,6 +268,15 @@ public class User implements Serializable {
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
+
+	public String getInterests() {
+		return interests;
+	}
+
+	public void setInterests(String interests) {
+		this.interests = interests;
+	}
+	
 
 	@Embedded
 	public Address getAddress() {

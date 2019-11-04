@@ -29,23 +29,24 @@ public class JobOffer implements Serializable{
 	@Id
 	@GeneratedValue( strategy = GenerationType.IDENTITY )
 	@Column(name="JO_ID")
-	int JOid;
+	private int JOid;
 	@Column(name="JO_TITLE")
-	String JOtitle;
+	private String JOtitle;
 	@Column(name="JO_AREA")
-	String JOarea;
+	private String JOarea;
 	@Column(name="JO_DATE")
-	Date JOdate;
+	private Date JOdate;
 	@Column(name="JO_DESCRIPTION")
-	String JOdescription;
+	private String JOdescription;
 	@Column(name="JO_EXPERIENCE")
-	int JOexperience;
+	private int JOexperience;
 	@Column(name="JO_ISVALID")
-	int isValid;
+	private int isValid;
 	@Column(name="JO_VUES")
-	int VuesNumber;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "jobOffer", fetch = FetchType.EAGER)
-	private Set<Interests> Interests;
+	private int VuesNumber;
+	@Column(name="interests")
+	private String interests;
+	
 
 	@OneToMany(mappedBy="jobOffer")
 	private Set<Quiz> quizs;
@@ -219,13 +220,13 @@ public class JobOffer implements Serializable{
 
 	
 
-	public Set<Interests> getInterests() {
-		return Interests;
+	public String getInterests() {
+		return interests;
 	}
 
 
-	public void setInterests(Set<Interests> interests) {
-		Interests = interests;
+	public void setInterests(String interests) {
+		this.interests = interests;
 
 	}
 

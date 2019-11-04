@@ -1,6 +1,8 @@
 package com.esprit.services;
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -13,6 +15,7 @@ import javax.persistence.TypedQuery;
 import com.esprit.Iservice.IUserServiceLocal;
 import com.esprit.Iservice.IUserServiceRemote;
 import com.esprit.beans.Enterprise;
+import com.esprit.beans.Post;
 import com.esprit.beans.User;
 import com.esprit.enums.Role;
 import com.esprit.utils.BCrypt;
@@ -166,5 +169,22 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 		u.setPassword(paass);
 		em.merge(u);
 	}
+	
 
+	@Override
+	public List<User> allUsers() {
+		return em
+				.createQuery("select user from User user", User.class)
+				.getResultList();
+	}
+
+	@Override
+	public List<String> fetchUserInterests(int idUser) {
+		User user= em.find(User.class,idUser);
+		String interests = user.getInterests();
+		List<String> interestsList = new ArrayList<String>
+		(Arrays.asList(interests.split(",")));
+		System.out.print(interestsList);
+		return interestsList;
+	}
 }

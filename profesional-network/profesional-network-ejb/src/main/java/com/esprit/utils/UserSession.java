@@ -51,6 +51,8 @@ public final class UserSession {
 	private String token;
 
 	private Role role;
+	
+	private String interests;
 
 	public UserSession(String username, String password, int id) {
 		super();
@@ -221,6 +223,14 @@ public final class UserSession {
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+
+	public String getInterests() {
+		return interests;
+	}
+
+	public void setInterests(String interests) {
+		this.interests = interests;
 	}
 	
 
