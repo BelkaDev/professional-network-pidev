@@ -1,6 +1,4 @@
 package com.esprit.resource;
-
-
 import java.util.List;
 
 import javax.ejb.EJB;

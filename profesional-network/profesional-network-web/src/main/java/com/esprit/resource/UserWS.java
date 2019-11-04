@@ -9,7 +9,7 @@ import java.time.ZoneId;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.EJB;
-
+import javax.persistence.Query;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -186,7 +186,6 @@ public class UserWS {
 
 	) {
 		userservice.logout();
-
 		return Response.status(Status.ACCEPTED).entity("ACCEPTED").build();
 	}
 	private String issueToken(String username) {
@@ -212,5 +211,26 @@ public class UserWS {
 		return (Date) Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
 	}
 
+		@PUT
+		@Path("enableMails")
+		@Produces(MediaType.APPLICATION_JSON)
+
+		public Response EnableMails(
+
+		) {
+			userservice.enableMailNotifications();
+			return Response.status(Status.ACCEPTED).entity("ACCEPTED").build();
+		}
+		@PUT
+		@Path("disableMails")
+		@Produces(MediaType.APPLICATION_JSON)
+
+		public Response DisableMails(
+
+		) {
+			
+			userservice.enableMailNotifications();
+			return Response.status(Status.ACCEPTED).entity("ACCEPTED").build();
+		}
 
 }

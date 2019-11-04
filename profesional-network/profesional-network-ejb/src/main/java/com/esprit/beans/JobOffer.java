@@ -2,23 +2,17 @@ package com.esprit.beans;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.esprit.enums.Tags;
 
 @Entity
 @Table(name = "JOBOFFER")
@@ -44,7 +38,7 @@ public class JobOffer implements Serializable{
 	private int isValid;
 	@Column(name="JO_VUES")
 	private int VuesNumber;
-	@Column(name="interests")
+	@Column(name="tags")
 	private String interests;
 	
 

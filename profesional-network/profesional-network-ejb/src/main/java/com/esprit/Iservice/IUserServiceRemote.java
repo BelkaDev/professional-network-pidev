@@ -13,6 +13,8 @@ public interface IUserServiceRemote {
 	public void updateToken(String username,String token);
 	public void confirmCode(String code, int idUser);
 	public void logout() ;
+	public void disableMailNotifications();
+	public void enableMailNotifications();
 	public List<User> getAdmin();
 	public User getUserById();
 	public void ResetingPassword(String userName);

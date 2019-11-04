@@ -32,6 +32,7 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import com.esprit.beans.FileUpload;
 import com.esprit.beans.Post;
 import com.esprit.services.PostService;
+import com.esprit.utils.UserSession;
 
 
 @Path("post")
@@ -48,10 +49,9 @@ public class PostWS {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("add")
-	public Response addPost(@QueryParam("idUser") int idUser,
-			@QueryParam("content") String content
+	public Response addPost(@QueryParam("content") String content
 	) {
-		
+		int idUser = UserSession.getInstance().getId();
 		PostService.addPost(idUser,content,null);
 	    return Response.status(200).entity("shared post with no files").build();
 		

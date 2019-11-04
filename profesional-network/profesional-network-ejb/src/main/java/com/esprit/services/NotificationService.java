@@ -47,7 +47,7 @@ public class NotificationService implements INotificationServiceLocal,INotificat
 			}  else if (type.equals(NOTIFICATION_TYPE.Message))
 			{
 				 target = NOTIFICATION_TARGET.Discussion;
-			}  else if (type.equals(NOTIFICATION_TYPE.Relation))
+			}  else if (type.equals(NOTIFICATION_TYPE.Contact))
 			{
 				 target =  NOTIFICATION_TARGET.Profile;
 			} else if  (type.equals(NOTIFICATION_TYPE.Offer))
@@ -84,14 +84,22 @@ public class NotificationService implements INotificationServiceLocal,INotificat
 					+ "<p> %s </p> </br>"
 					+ "<p> on %s . </p> </br>"
 					+ "<p> click <a href='http://localhost:9080/profesional-network-web/rest/%s/show?id=%s'>here</a> to see it. </p> </br>"
-					+ "<p> You can disable these notifications. </p> </br>"
+					+ "<p> You can <a href='http://localhost:9080/profesional-network-web/rest/user/disableMails'>disable</a> these notifications. </p> </br>"
 					+ "<b>Automatic Message by Professional Network </b>";
 		
-			String content = String.format(format,newNotification.getMessage(),
-				new SimpleDateFormat("MMdd").format(date),body,"post","1");
-	
-
 			String subject = "You have a new Notification!";
+			if (type == NOTIFICATION_TYPE.Offer)
+			{
+			subject = "There is a new job opportunity for you";
+			}else if (type == NOTIFICATION_TYPE.Contact)
+			{
+			subject = "You have a new friend request.";
+			}
+
+			String content = String.format(format,subject,
+				new SimpleDateFormat("dd/MM/YY - HH:mm").format(date),type,targetId);
+	
+			
 			mail.sendEmail(reciever.getEmail(), subject, content);	
 		}
 		
@@ -105,7 +113,7 @@ public class NotificationService implements INotificationServiceLocal,INotificat
                   content += name +" : "+ body;
                  break;
 	    
-         case Relation:
+         case Contact:
                   content += name +" sent you a friend request.";
                  break;
 
@@ -159,6 +167,16 @@ public class NotificationService implements INotificationServiceLocal,INotificat
 		em.remove(notif);
 		return true;
 		
+	}
+	
+	@Override
+	public void cancelNotif(Notification notif) {
+		List<Notification> search =  em.createQuery("select n from Notification n where n.reciever.id=:reciever AND "
+				+ "n.targetId=:targetId AND n.target=:target",Notification.class)
+				.setParameter("reciever", notif.getReciever().getId()).setParameter("targetId", notif.getTargetId())
+				.setParameter("target", notif.getTarget()).getResultList();
+		em.remove(search.get(0));
+
 	}
 
 	@Override

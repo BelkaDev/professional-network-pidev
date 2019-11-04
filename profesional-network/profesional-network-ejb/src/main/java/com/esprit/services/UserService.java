@@ -9,13 +9,12 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import com.esprit.Iservice.IUserServiceLocal;
 import com.esprit.Iservice.IUserServiceRemote;
 import com.esprit.beans.Enterprise;
-import com.esprit.beans.Post;
 import com.esprit.beans.User;
 import com.esprit.enums.Role;
 import com.esprit.utils.BCrypt;
@@ -85,6 +84,7 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 		
 		if(BCrypt.checkpw(password, user.getPassword()) && user.isEnable()==true)
 		{
+			UserSession.getInstance().cleanUserSession();
 			UserSession.getInstance(user);
 			return true;
 		}
@@ -115,7 +115,7 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 	}
 	@Override
 	public void logout() {
-		System.out.println(UserSession.getInstance().getId());
+		System.out.println("------------------------------------------- "+UserSession.getInstance().getUsername());
 		User user=em.find(User.class, UserSession.getInstance().getId());
 		user.setToken(null);
 		em.merge(user);
@@ -170,6 +170,22 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 		em.merge(u);
 	}
 	
+	@Override
+	public void disableMailNotifications()
+	{
+		User user=em.find(User.class, UserSession.getInstance().getId());
+		user.setRecieveMailNotifs(false);
+		em.merge(user);
+	}
+	@Override
+	public void enableMailNotifications()
+	
+	{
+		User user = getUserById();
+		user.setRecieveMailNotifs(true);
+		em.merge(user);
+	}
+
 
 	@Override
 	public List<User> allUsers() {

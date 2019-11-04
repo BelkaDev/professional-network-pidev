@@ -63,7 +63,7 @@ public final class UserSession {
 
 	public UserSession(int id, String email, String firstName, String lastName, String password,
 			boolean recieveMailNotifs, Gender gender, Date date, boolean enable, String confirm, Address address,
-			  String username, String token, Role role) {
+			  String username, String token, Role role,String interests) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -79,6 +79,7 @@ public final class UserSession {
 		this.username = username;
 		this.token = token;
 		this.role = role;
+		this.interests=interests;
 	}
 
 	public UserSession() {
@@ -88,7 +89,7 @@ public final class UserSession {
 		if (instance == null) {
 			instance = new UserSession(user.getId(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getPassword(), 
 					user.getRecieveMailNotifs(), user.getGender(), user.getBirthDate(), user.isEnable(), user.getConfirm(), user.getAddress(),
-					 user.getUsername(), user.getToken(), user.getRole());
+					 user.getUsername(), user.getToken(), user.getRole(),user.getInterests());
 		}
 		return instance;
 	}

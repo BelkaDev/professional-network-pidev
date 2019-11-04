@@ -15,6 +15,8 @@ public interface IUserServiceLocal {
 	public void updateToken(String username,String token);
 	public void confirmCode(String code, int idUser);
 	public void logout() ;
+	public void disableMailNotifications();
+	public void enableMailNotifications();
 	public List<User> getAdmin();
 	public User getUserById();
 	public void ResetingPassword(String userName);
@@ -23,6 +25,7 @@ public interface IUserServiceLocal {
 	void addEnterpriseUser(User user, int EnterpriseId);
 	List<String> fetchUserInterests(int idUser);
 	List<User> allUsers();
+
 	
 	
 }

@@ -16,7 +16,8 @@ public interface INotificationServiceLocal {
 	boolean updateNotif(int idNotif,String notif_message);
 	boolean setSeen(int id);
 	int findDuplicate(Notification notif);
-
+	void cancelNotif(Notification notif);
+	
 	Notification get(int id);	
 	List<Notification> listNotifications();
 	List<Notification> userNotifications(int id);

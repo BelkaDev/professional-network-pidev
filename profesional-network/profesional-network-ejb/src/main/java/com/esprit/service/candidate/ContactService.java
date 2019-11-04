@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -14,17 +15,24 @@ import javax.persistence.PersistenceContext;
 import com.esprit.Iservice.candidate.IContactServiceLocal;
 
 import com.esprit.Iservice.candidate.IContactServiceRemote;
+import com.esprit.beans.Notification;
 import com.esprit.beans.candidate.Activity;
 import com.esprit.beans.candidate.Candidate;
 import com.esprit.beans.candidate.Certification;
 import com.esprit.beans.candidate.Contact;
 import com.esprit.beans.candidate.Experience;
 import com.esprit.beans.candidate.Skill;
+import com.esprit.enums.NOTIFICATION_TARGET;
+import com.esprit.enums.NOTIFICATION_TYPE;
+import com.esprit.services.NotificationService;
 
 @Stateless
 @LocalBean
 public class ContactService implements IContactServiceLocal, IContactServiceRemote {
 
+	@EJB
+	NotificationService notificationservice = new NotificationService();
+	
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
 	@Override
@@ -34,10 +42,24 @@ public class ContactService implements IContactServiceLocal, IContactServiceRemo
 		con.setContactId(senderId);
 		con.setStatus("pending");
 		c.getContacts().add(con);
+		
+		// notify reciever for the request
+		String notif_message = "candidate.getFirstName()+  +candidate.getLastName() wants to get in contact with you.";
+		NOTIFICATION_TYPE type = NOTIFICATION_TYPE.Contact;
+		notificationservice.CreateNotification(receiverId,notif_message,type,senderId);
 	}
 	@Override
 	public void cancelRequest(int requestId) {
-		em.remove(em.find(Contact.class, requestId));
+		Contact c = em.find(Contact.class, requestId);
+		em.remove(c);
+		
+		//remove notification from reciever
+		Notification notif = new Notification();
+		notif.setTarget(NOTIFICATION_TARGET.Profile);
+		//notif.setReciever(c.getReciever);
+		//notif.setTargetId(c.getSender.getId());
+		//notificationservice.cancelNotif(notif);
+		
 	}
 	@Override
 	public Set<Contact> getRequests(int receiverId) {
@@ -46,7 +68,14 @@ public class ContactService implements IContactServiceLocal, IContactServiceRemo
 	}
 	@Override
 	public void acceptRequest(int requestId) {
-		em.find(Contact.class, requestId).setStatus("accepted");
+		Contact c = em.find(Contact.class, requestId);
+		c.setStatus("accepted");
+		//merge na9sa ?
+		
+		//notify sender for being accepted
+		//String notif_message = "candidate.getFirstName()+  +candidate.getLastName() accepted your contact request.";
+		NOTIFICATION_TYPE type = NOTIFICATION_TYPE.Accepted;
+		//notificationservice.CreateNotification(c.getSender(),type,notif_message,c.getReciever());
 	}
 	@Override
 	public Set<Candidate> getFriendsList(int candidateId) {

@@ -3,5 +3,5 @@ package com.esprit.enums;
 
 public enum NOTIFICATION_TYPE {
 
-	Message, Relation, Comment, Reaction, Share, Offer, Suggestion, Follow,Payment;
+	Message, Comment, Reaction, Share, Offer, Suggestion, Follow,Payment, Contact, Accepted;
 }

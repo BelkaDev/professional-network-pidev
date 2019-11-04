@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -17,12 +16,10 @@ import javax.persistence.TypedQuery;
 
 import com.esprit.Iservice.JobOfferServiceRemote;
 import com.esprit.beans.Enterprise;
-import com.esprit.beans.Interests;
 import com.esprit.beans.JobOffer;
 import com.esprit.beans.User;
 import com.esprit.enums.NOTIFICATION_TYPE;
 import com.esprit.enums.Role;
-import com.esprit.enums.Tags;
 import com.esprit.utils.UserSession;
 
 @Stateless
@@ -42,21 +39,16 @@ public class JobOfferService implements JobOfferServiceRemote {
 	@Override
 	public int AddJobOffer(JobOffer joboffer) {
 		User user= em.find(User.class, UserSession.getInstance().getId());
-
 		if (UserSession.getInstance().getRole() == Role.Project_Leader) {
 
-			
 			Enterprise enterpriseManagedEntity = em.find(Enterprise.class, user.getEnterprise().getEid());
 			joboffer.setEnterprise(enterpriseManagedEntity);
 			joboffer.setIsValid(0);
 			joboffer.setVuesNumber(0);
-			joboffer.setInterests("Jee,dotnet");
 			Calendar currenttime = Calendar.getInstance();
 			Date JOdate = new Date((currenttime.getTime()).getTime());
 			joboffer.setJOdate(JOdate);
 			em.persist(joboffer);
-
-			 // condition if same tags => notif
 			return joboffer.getJOid();
 		}
 
@@ -139,12 +131,12 @@ public class JobOfferService implements JobOfferServiceRemote {
 		List <User> allUsers = userservice.allUsers();
 		for (User usr : allUsers) {
 		List<String> userinterests = userservice.fetchUserInterests(usr.getId());
-		userinterests.retainAll(jobtags); 
-		if (userinterests.size()!=0)
+		userinterests.retainAll(jobtags); // get common tags
+		if (userinterests.size()!=0) // if there are common tags send notif
 		{
 		String tags = String.join(", ", userinterests);
 		NOTIFICATION_TYPE type = NOTIFICATION_TYPE.Offer;
-		String notif_message = "A new offer with these tags might interest you : "+tags;
+		String notif_message = "A new job offer with these tags might interest you : "+tags;
 		notificationservice.CreateNotification(usr.getId(),notif_message,type ,id);
 		}
 		}
