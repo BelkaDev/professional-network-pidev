@@ -66,4 +66,11 @@ public class ContactWs {
 		cs.blockCandidate(blocker, toBlock);
 		return Response.status(Status.OK).entity("Blocked Contact").build();
 	}
+	
+	@GET
+	@Path("searchCandidate")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response searchCandidate(@QueryParam("criteria") String criteria) {
+		return Response.status(Status.FOUND).entity(cs.searchForCandidates(criteria)).build();
+	}
 }

@@ -15,6 +15,7 @@ import javax.persistence.PersistenceContext;
 import com.esprit.Iservice.candidate.IContactServiceLocal;
 
 import com.esprit.Iservice.candidate.IContactServiceRemote;
+import com.esprit.beans.Enterprise;
 import com.esprit.beans.Notification;
 import com.esprit.beans.candidate.Activity;
 import com.esprit.beans.candidate.Candidate;
@@ -97,7 +98,7 @@ public class ContactService implements IContactServiceLocal, IContactServiceRemo
 	@Override
 	public List<Candidate> searchForCandidates(String criteria) {
 		List<Candidate> toReturn = new ArrayList<>();
-		List<Candidate> lc=em.createQuery("select c from Candidate c where firstName like %"+criteria+"% or lastName like %"+criteria+"%").getResultList();
+		List<Candidate> lc=em.createQuery("select c from Candidate c where firstName like '%"+criteria+"%' or lastName like '%"+criteria+"%'").getResultList();
 		if(!lc.isEmpty())
 		{
 			toReturn.addAll(lc);
@@ -130,6 +131,11 @@ public class ContactService implements IContactServiceLocal, IContactServiceRemo
 		}
 		
 		return toReturn;
+	}
+	@Override
+	public List<Enterprise> searchForEnterprise(String criteria) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

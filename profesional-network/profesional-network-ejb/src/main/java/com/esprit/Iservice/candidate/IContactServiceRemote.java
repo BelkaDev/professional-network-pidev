@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.ejb.Remote;
 
+import com.esprit.beans.Enterprise;
 import com.esprit.beans.candidate.Candidate;
 import com.esprit.beans.candidate.Contact;
 
@@ -18,4 +19,5 @@ public interface IContactServiceRemote {
 	public Set<Contact> getRequests(int receiverId);
 	public Set<Candidate> getFriendsList(int candidateId);
 	public List<Candidate> searchForCandidates(String criteria);
+	public List<Enterprise> searchForEnterprise(String criteria);
 }
