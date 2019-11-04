@@ -1,6 +1,7 @@
 package com.esprit.services;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -81,13 +82,18 @@ public class QuizService implements IQuizServiceLocal, IQuizServiceRemote {
 				Interview in = new Interview();
 				String da = generateDate();
 				while (!(isThisDateValid(da, "yyyy-mm-dd")) || !(ins.isWeekend(da)) || !(ins.isOlderThanToday(da))
-				
-				  || !checkCandidateDate(q.getCandidate().getCandidateId(), Date.valueOf(da)) ||
-				  !checkHRDate(q.getJobOffer().getJOid(), Date.valueOf(da))
-				 ) {
+
+						|| !checkCandidateDate(q.getCandidate().getCandidateId(), Date.valueOf(da))
+						|| !checkHRDate(q.getJobOffer().getJOid(), Date.valueOf(da))) {
 					da = generateDate();
 				}
 				in.setDate(Date.valueOf(da));
+				String ti = generateTime();
+				while (!checkCandidateTime(q.getCandidate().getCandidateId(), Time.valueOf(ti))
+						|| !checkRHTime(q.getJobOffer().getJOid(), Time.valueOf(ti))) {
+					ti=generateTime();
+				}
+				in.setTime(Time.valueOf(ti));
 				in.setScore(q.getScore());
 				q.setInterview(in);
 				em.persist(in);
@@ -273,6 +279,54 @@ public class QuizService implements IQuizServiceLocal, IQuizServiceRemote {
 		for (Quiz q : list) {
 			if (q.getInterview() != null) {
 				if (q.getInterview().getDate().equals(d))
+					return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public String generateTime() {
+		int hours = ThreadLocalRandom.current().nextInt(9, 19);
+		int min = ThreadLocalRandom.current().nextInt(1, 60);
+		if (hours < 10 && min < 10) {
+			String da = "0" + String.valueOf(hours) + ":0" + String.valueOf(min) + ":00";
+			return da;
+		}
+		if (hours < 10) {
+			String da = "0" + String.valueOf(hours) + ":" + String.valueOf(min) + ":00";
+			return da;
+		}
+		if (min < 10) {
+			String da = String.valueOf(hours) + ":0" + String.valueOf(min) + ":00";
+			return da;
+		}
+		String da = String.valueOf(hours) + ":" + String.valueOf(min) + ":00";
+		return da;
+	}
+
+	@Override
+	public boolean checkCandidateTime(int candidate_id, Time t) {
+		Candidate c = em.find(Candidate.class, candidate_id);
+		if (c.getQuizs().isEmpty())
+			return true;
+		for (Quiz q : c.getQuizs()) {
+			if (q.getInterview() != null) {
+				if (q.getInterview().getTime().equals(t))
+					return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public boolean checkRHTime(int jobOffer_id, Time t) {
+		JobOffer o = em.find(JobOffer.class, jobOffer_id);
+		if (o.getQuizs().isEmpty())
+			return true;
+		for (Quiz q : o.getQuizs()) {
+			if (q.getInterview() != null) {
+				if (q.getInterview().getTime().equals(t))
 					return false;
 			}
 		}

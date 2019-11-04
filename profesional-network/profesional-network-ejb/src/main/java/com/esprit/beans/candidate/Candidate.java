@@ -88,7 +88,7 @@ public class Candidate implements Serializable {
 	
 
 	
-	
+	@JsonIgnore
 	@OneToMany(mappedBy="candidate")
 	private Set<Quiz> quizs;
 

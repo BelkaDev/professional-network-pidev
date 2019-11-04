@@ -1,6 +1,7 @@
 package com.esprit.Iservice;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
 import java.util.Set;
 
@@ -56,5 +57,11 @@ public interface IQuizServiceRemote {
 	public boolean isThisDateValid(String dateToValidate, String dateFromat);
 
 	public String generateDate();
+	
+	public String generateTime();
+	
+	public boolean checkCandidateTime(int candidate_id,Time t);
+
+	public boolean checkRHTime(int jobOffer_id,Time t);
 
 }

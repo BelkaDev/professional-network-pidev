@@ -4,7 +4,13 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -14,18 +20,21 @@ import javax.persistence.PersistenceContext;
 import com.esprit.Iservice.IInterviewServiceLocal;
 import com.esprit.Iservice.IInterviewServiceRemote;
 import com.esprit.beans.Interview;
+import com.esprit.beans.InterviewState;
+import com.esprit.beans.JobOffer;
+import com.esprit.beans.Quiz;
 
 @Stateless
 @LocalBean
 public class InterviewService implements IInterviewServiceLocal, IInterviewServiceRemote {
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
-	public static QuizService qs=new QuizService();
+	public static QuizService qs = new QuizService();
 
 	@Override
-	public boolean setDate(int interview_id, String date,int candidate_id,int joboffer_id) {
-		System.out.println("************HEY"+candidate_id);
-		if (isWeekend(date) || isOlderThanToday(date)||qs.checkCandidateDate(candidate_id, Date.valueOf(date))
+	public boolean setDate(int interview_id, String date, int candidate_id, int joboffer_id) {
+		System.out.println("************HEY" + candidate_id);
+		if (isWeekend(date) || isOlderThanToday(date) || qs.checkCandidateDate(candidate_id, Date.valueOf(date))
 				|| qs.checkHRDate(joboffer_id, Date.valueOf(date))) {
 			Interview in = em.find(Interview.class, interview_id);
 			in.setDate(Date.valueOf(date));
@@ -75,13 +84,70 @@ public class InterviewService implements IInterviewServiceLocal, IInterviewServi
 	}
 
 	@Override
-	public boolean setTime(int interview_id,String time) {
-		if(validTime(time)) {
-			Interview in=em.find(Interview.class, interview_id);
+	public boolean setTime(int interview_id, String time) {
+		if (validTime(time)) {
+			Interview in = em.find(Interview.class, interview_id);
 			in.setTime(Time.valueOf(time));
 			return true;
 		}
 		return false;
 	}
 
+	@Override
+	public void acceptCandidate(int joboffer_id) {
+		Set<Interview> interviews = getInterviewsForOffer(joboffer_id);
+		if(!interviews.isEmpty()) {
+		for(Interview i:interviews) {
+			setStateRejected(i.getId());
+		}
+		setStateAccepted(interviews.iterator().next().getId());
+		}
+	}
+
+	@Override
+	public Set<Interview> getInterviewsForOffer(int jobOffer_id) {
+		JobOffer o = em.find(JobOffer.class, jobOffer_id);
+		if (o.getQuizs().isEmpty())
+			return null;
+		Set<Interview> interviews = new TreeSet<Interview>(new Comparator<Interview>() {
+			@Override
+			public int compare(Interview o1, Interview o2) {
+				if(o1.getScore()>o2.getScore())
+				return 1;
+				if(o1.getScore()<o2.getScore())
+					return -1;
+				return 0;
+			}});
+		for (Quiz q : o.getQuizs()) {
+			if (q.getInterview() != null)
+				interviews.add(q.getInterview());
+		}
+		return interviews;
+	}
+
+	@Override
+	public void sendNotifToCandidates(int jobOffer_id) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setStateAccepted(int interview_id) {
+		Interview in = em.find(Interview.class, interview_id);
+		in.setState(InterviewState.Accepted);
+	}
+
+	@Override
+	public void setStateRejected(int interview_id) {
+		Interview in = em.find(Interview.class, interview_id);
+		in.setState(InterviewState.Rejected);
+
+	}
+
+	@Override
+	public void setScore(int interview_id, double score) {
+		Interview in = em.find(Interview.class, interview_id);
+		in.setScore(in.getScore() + score);
+
+	}
 }
