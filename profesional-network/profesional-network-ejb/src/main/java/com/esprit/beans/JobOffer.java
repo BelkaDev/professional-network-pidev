@@ -2,10 +2,7 @@ package com.esprit.beans;
 
 import java.io.Serializable;
 import java.sql.Date;
-<<<<<<< HEAD
 import java.util.List;
-=======
->>>>>>> 7a8bdf103001a35b5e8e1dc952ff1723121a1243
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -27,21 +24,21 @@ import com.esprit.enums.Tags;
 @Table(name = "JOBOFFER")
 public class JobOffer implements Serializable{
 	private static final long serialVersionUID = 1L;
-	
-	
-	@Id 
-	@GeneratedValue( strategy = GenerationType.IDENTITY ) 
-	@Column(name="JO_ID") 
+
+
+	@Id
+	@GeneratedValue( strategy = GenerationType.IDENTITY )
+	@Column(name="JO_ID")
 	int JOid;
-	@Column(name="JO_TITLE") 
+	@Column(name="JO_TITLE")
 	String JOtitle;
-	@Column(name="JO_AREA") 
+	@Column(name="JO_AREA")
 	String JOarea;
-	@Column(name="JO_DATE") 
+	@Column(name="JO_DATE")
 	Date JOdate;
-	@Column(name="JO_DESCRIPTION") 
+	@Column(name="JO_DESCRIPTION")
 	String JOdescription;
-	@Column(name="JO_EXPERIENCE") 
+	@Column(name="JO_EXPERIENCE")
 	int JOexperience;
 	@Column(name="JO_ISVALID")
 	int isValid;
@@ -49,10 +46,10 @@ public class JobOffer implements Serializable{
 	int VuesNumber;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "jobOffer", fetch = FetchType.EAGER)
 	private Set<Interests> Interests;
-	
+
 	@OneToMany(mappedBy="jobOffer")
 	private Set<Quiz> quizs;
-	
+
 	@ManyToOne
 	Enterprise enterprise;
 
@@ -60,21 +57,21 @@ public class JobOffer implements Serializable{
 		super();
 	}
 
-	
+
 	public JobOffer(String jOtitle, String jOarea, String jOdescription, int jOexperience) {
 		super();
-		
+
 		JOtitle = jOtitle;
 		JOarea = jOarea;
-		
+
 		JOdescription = jOdescription;
 		JOexperience = jOexperience;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	public JobOffer(int jOid, String jOtitle, String jOarea, String jOdescription) {
 		super();
 		JOid = jOid;
@@ -97,8 +94,8 @@ public class JobOffer implements Serializable{
 
 
 
-	
-	
+
+
 	public JobOffer(int jOid, String jOtitle, String jOarea, Date jOdate, String jOdescription, int jOexperience,
 			int isValid, Enterprise enterprise) {
 		super();
@@ -230,7 +227,7 @@ public class JobOffer implements Serializable{
 	public void setInterests(Set<Interests> interests) {
 		Interests = interests;
 
-
+	}
 
 
 
@@ -253,3 +250,4 @@ public class JobOffer implements Serializable{
 	
 	
 }
+	

@@ -56,11 +56,14 @@ public class PaymentServiceWs {
 	    		@PathParam(value="idPyment")int idPayment
 	    		)
 	    {
-		 ps.cancelPayment(idPayment);
+		 if(ps.cancelPayment(idPayment)) {
+			 return Response.status(Status.OK).entity("REQUEST SENDED TO ADMIN").build();
+		 }
 		 
-		 return Response.status(Status.OK).entity("REQUEST SENDED TO ADMIN").build();
+		 return Response.status(Status.NOT_ACCEPTABLE).entity("The payment was validated").build();
 		 
 	    }
+	 
 	 @GET
 	 @Path("getUPayments")
 	 @Produces(MediaType.APPLICATION_JSON)
@@ -80,7 +83,7 @@ public class PaymentServiceWs {
 	 
 	 
 	 @PUT
-     @Path("cancelPaymentAdmin{id}")
+     @Path("cancelPaymentAdmin/{id}")
      @Produces(MediaType.APPLICATION_JSON)
 	 public Response cancelPaymentAdmin(
 			 @PathParam(value="id")int id 
@@ -88,11 +91,14 @@ public class PaymentServiceWs {
 		
 			 )
 	 {
-		ps.ValidateCanceledPayment(id);
+		if(ps.ValidateCanceledPayment(id)) {
 		 return Response.status(200).entity("your payment was canceled succesuly").build();
 	 }
+		 return Response.status(Status.NOT_ACCEPTABLE).entity("your payment cant be canceled").build();
+
+	 }
 	 @PUT
-     @Path("validatePaymentAdmin{id}")
+     @Path("validatePaymentAdmin/{id}")
      @Produces(MediaType.APPLICATION_JSON)
 	 public Response validatePaymentAdmin(
 			 @PathParam(value="id")int id 
@@ -100,8 +106,11 @@ public class PaymentServiceWs {
 		
 			 )
 	 {
-		ps.validatePayment(id);
+		if(ps.validatePayment(id)) {
 		 return Response.status(200).entity("your payment was validated succesuly").build();
+	 }
+		return Response.status(Status.NOT_ACCEPTABLE).entity("your payment was canceled").build();
+		 
 	 }
 	 @DELETE
 	 @Path("deletePayment/{id}")

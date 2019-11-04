@@ -36,11 +36,11 @@ import com.esprit.enums.Role;
 
 @Path("user")
 public class UserWS {
-	
-	
+
+
 	@EJB
-	UserService userservice; 
-	
+	UserService userservice;
+
 	@Context
 	UriInfo uriInfo;
 	@POST
@@ -48,20 +48,20 @@ public class UserWS {
     @Produces(MediaType.APPLICATION_JSON)
 
     public Response addUser(
-    		
-    		@QueryParam("username")String username, 
+
+    		@QueryParam("username")String username,
     		@QueryParam("email")String email,
     		@QueryParam("password")String password,
     		@QueryParam("firstName")String firstName,
     		@QueryParam("lastName")String lastName,
-    		@QueryParam("role")Role role, 
+    		@QueryParam("role")Role role,
     		@QueryParam("birthDate")Date birthDate,
     		@QueryParam("gender") Gender gender,
     		@QueryParam("streetAddress")String streetAddress,
     		@QueryParam("city")String city,
     		@QueryParam("postalCode")int postalCode
-    		
-    	
+
+
     		)
  	{
 		Address d=new Address();
@@ -70,55 +70,49 @@ public class UserWS {
 		d.setStreetAddress(streetAddress);
 		
 		User user = new User(email, firstName, lastName, password, gender, birthDate, d, username, role); 
-<<<<<<< HEAD
-=======
 		if(userservice.UsernameMailUnique(user.getUsername(), user.getEmail())) {
->>>>>>> 7a8bdf103001a35b5e8e1dc952ff1723121a1243
 		userservice.addUser(user);
-	 		 
- 		
+
+
 	 	return Response.status(Status.CREATED).entity("ADDED").build();
-<<<<<<< HEAD
-			 
-=======
 	 	}
 		return Response.status(Status.NOT_ACCEPTABLE).entity("username or email exist").build();
 		 
->>>>>>> 7a8bdf103001a35b5e8e1dc952ff1723121a1243
-    }
-	
+
+	 	}
+
 	@POST
     @Path("addentuser")
     @Produces(MediaType.APPLICATION_JSON)
     public Response addEnterpriseUser(
-            @QueryParam("username")String username, 
+            @QueryParam("username")String username,
             @QueryParam("email")String email,
             @QueryParam("password")String password,
             @QueryParam("firstName")String firstName,
             @QueryParam("lastName")String lastName,
-            @QueryParam("role")Role role, 
+            @QueryParam("role")Role role,
             @QueryParam("birthDate")Date birthDate,
             @QueryParam("gender") Gender gender,
             @QueryParam("streetAddress")String streetAddress,
             @QueryParam("city")String city,
             @QueryParam("postalCode")int postalCode,
             @QueryParam("enterpriseId")int enterpriseId
-        
+
             )
     {
         Address d=new Address();
         d.setCity(city);
         d.setPostalCode(postalCode);
         d.setStreetAddress(streetAddress);
-        
-        User user = new User(email, firstName, lastName, password, gender, birthDate, d, username, role); 
+
+        User user = new User(email, firstName, lastName, password, gender, birthDate, d, username, role);
         userservice.addEnterpriseUser(user, enterpriseId);
-             
-        
+
+
         return Response.status(Status.CREATED).entity("ADDED").build();
-             
+
     }
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("authenticate")
@@ -131,26 +125,26 @@ public class UserWS {
 					userservice.updateToken(username,token);
 					System.out.println("****************** " + token);
 					 return Response.status(Status.CREATED).entity("CONNECTED").build();
-					
+
 				}
 				else {
 					return Response.status(Status.NOT_FOUND).entity("NOT FOUND").build();
 
 				}
-			
 
-		
+
+
 	}
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("profile")
 	public User Profile() {
 
 			return userservice.getUserById();
-			
 
-		
+
+
 	}
 
 	@PUT
@@ -160,7 +154,7 @@ public class UserWS {
 
 		userservice.ResetingPassword(username);
 			 return Response.status(Status.ACCEPTED).entity("Reseting Password").build();
-		
+
 	}
 	@PUT
 	@Path("confirm")
@@ -206,7 +200,7 @@ public class UserWS {
 
 		System.out.println("uriInfo.getAbsolutePath().toString() : " + uriInfo.getAbsolutePath().toString());
 		//System.out.println("Expiration date: " + toDate(LocalDateTime.now().plusMinutes(15L)));
-		
+
 		String jwtToken = Jwts.builder().setSubject(username).setIssuer(uriInfo.getAbsolutePath().toString())
 				//.setIssuedAt(new Date()).setExpiration(toDate(LocalDateTime.now().plusMinutes(15L)))
 				.signWith(SignatureAlgorithm.HS512, key).compact();
@@ -214,10 +208,9 @@ public class UserWS {
 		System.out.println("the returned token is : " + jwtToken);
 		return jwtToken;
 	}
-	private Date toDate(LocalDateTime localDateTime) {
+		private Date toDate(LocalDateTime localDateTime) {
 		return (Date) Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
 	}
 
-	
-}
 
+}
