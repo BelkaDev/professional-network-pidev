@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 @Entity
 @Table(name="Subscription")
@@ -19,6 +20,29 @@ public class Subscription implements Serializable {
 	
 	@Column(name="enterpriseId")
 	private int enterpriseId;
+	@ManyToOne
+	private Candidate Candidate;
+
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int iD) {
+		ID = iD;
+	}
+
+	public int getEnterpriseId() {
+		return enterpriseId;
+	}
+
+	public void setEnterpriseId(int enterpriseId) {
+		this.enterpriseId = enterpriseId;
+	}
+	
+	public void setCandidate(Candidate c)
+	{
+		this.Candidate=c;
+	}
 	
 	
 }

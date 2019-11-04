@@ -42,6 +42,9 @@ public class Candidate implements Serializable {
 	private String biography;
 	@Column(name = "candidate_rating")
 	private double rating;
+	
+	@Column(name="cv")
+	private String cv;
 
 
 	
@@ -76,6 +79,12 @@ public class Candidate implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="Candidate_ID")
 	private Set<Views> views;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="Candidate")
+	private Set<Subscription> subscriptions;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="Candidate",fetch = FetchType.EAGER)
+	private Set<JobApplication> jobApplications;
 	
 
 	
@@ -151,11 +160,26 @@ public class Candidate implements Serializable {
 	}
 	
 	
+	
+	public Set<Subscription> getSubscriptions() {
+		return subscriptions;
+	}
+	public void setSubscriptions(Set<Subscription> subscriptions) {
+		this.subscriptions = subscriptions;
+	}
 	public Set<Views> getViews() {
 		return views;
 	}
 	public void setViews(Set<Views> views) {
 		this.views = views;
+	}
+	
+	
+	public Set<JobApplication> getJobApplications() {
+		return jobApplications;
+	}
+	public void setJobApplications(Set<JobApplication> jobApplications) {
+		this.jobApplications = jobApplications;
 	}
 	public Set<Quiz> getQuizs() {
 		return quizs;
@@ -163,6 +187,13 @@ public class Candidate implements Serializable {
 	public void setQuizs(Set<Quiz> quizs) {
 		this.quizs = quizs;
 	}
+	public String getCv() {
+		return cv;
+	}
+	public void setCv(String cv) {
+		this.cv = cv;
+	}
+	
 	
 	
 
