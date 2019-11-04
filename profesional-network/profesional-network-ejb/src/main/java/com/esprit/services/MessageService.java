@@ -13,6 +13,7 @@ import com.esprit.Iservice.IMessageServiceRemote;
 import com.esprit.beans.Message;
 import com.esprit.beans.Quiz;
 import com.esprit.beans.User;
+import com.esprit.utils.UserSession;
 
 
 @Stateless
@@ -53,15 +54,21 @@ public class MessageService implements IMessageServiceLocal,IMessageServiceRemot
 	@Override
 	public void editMessage(int id,String body) {
 		Message msg = em.find(Message.class,id);
-		msg.setBody(body + " (edited)");		
-				em.merge(msg);
+		if (msg == null || msg.getSender().getId() != UserSession.getInstance().getId() )
+		{
+			msg.setBody(body + " (edited)");		
+			em.merge(msg);
+		}
 	
 	}
 
 	@Override
 	public void deleteMessage(int id) {
-		em.remove(em.find(Message.class, id));
-
+		Message msg = em.find(Message.class,id);
+		if (msg == null || msg.getSender().getId() != UserSession.getInstance().getId() )
+		{
+		em.remove(msg);
+		}
 	}
 
 	@Override

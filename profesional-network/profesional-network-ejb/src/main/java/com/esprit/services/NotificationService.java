@@ -92,8 +92,12 @@ public class NotificationService implements INotificationServiceLocal,INotificat
 			subject = "There is a new job opportunity for you";
 			}else if (type == NOTIFICATION_TYPE.Contact)
 			{
-			subject = "You have a new friend request.";
+			subject = "You have a new contact request.";
+			}else if (type == NOTIFICATION_TYPE.Accepted)
+			{
+			subject = "Your contact request has been accepted.";
 			}
+			
 
 			String content = String.format(format,subject,
 				new SimpleDateFormat("dd/MM/YY - HH:mm").format(date),type,targetId);

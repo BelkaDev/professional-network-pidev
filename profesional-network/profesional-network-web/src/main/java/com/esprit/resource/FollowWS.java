@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response.Status;
 
 import com.esprit.beans.User;
 import com.esprit.services.FollowingService;
+import com.esprit.utils.UserSession;
 
 @Path("follow")
 public class FollowWS {
@@ -28,9 +29,9 @@ public class FollowWS {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("user")
-	public Response followUser(@QueryParam("follower") int idFollower,
-			@QueryParam("followed") int idFollowed
+	public Response followUser(@QueryParam("followed") int idFollowed
 	) {	
+		int idFollower = UserSession.getInstance().getId();
 		followService.followUser(idFollower, idFollowed);
 		return Response.status(Response.Status.CREATED).entity(out).build();
 	}
@@ -40,9 +41,9 @@ public class FollowWS {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("post")
-	public Response followPost(@QueryParam("follower") int idFollower,
-			@QueryParam("post") int idPost
+	public Response followPost(@QueryParam("post") int idPost
 	) {	
+		int idFollower = UserSession.getInstance().getId();
 		followService.followPost(idFollower, idPost);
 		return Response.status(Response.Status.CREATED).entity(out).build();
 	}
@@ -61,7 +62,6 @@ public class FollowWS {
 			return Response.ok(followers).build();
 
 	}
-	
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

@@ -19,6 +19,7 @@ import com.esprit.beans.Reaction;
 
 import com.esprit.enums.REACTION_TYPE;
 import com.esprit.services.ReactionService;
+import com.esprit.utils.UserSession;
 
 
 @Path("reaction")
@@ -30,11 +31,10 @@ public class ReactionWS {
 	@POST
 		@Consumes(MediaType.APPLICATION_JSON)
 	@Path("add")	
-	public Response addReaction(@QueryParam("idUser") int idUser,
-			@QueryParam("idPost") int idPost,
+	public Response addReaction(@QueryParam("idPost") int idPost,
 			@QueryParam("type") REACTION_TYPE reactionType
 	) {
-	
+		int idUser = UserSession.getInstance().getId();
 		if(ReactionService.addReaction(idUser,idPost, reactionType))
 		{
 		return Response.status(Response.Status.CREATED).entity(out).build();

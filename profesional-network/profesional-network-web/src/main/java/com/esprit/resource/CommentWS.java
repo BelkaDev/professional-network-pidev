@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import com.esprit.beans.Comment;
 import com.esprit.services.CommentService;
+import com.esprit.utils.UserSession;
 
 
 @Path("comment")
@@ -31,11 +32,10 @@ public class CommentWS {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("add")	
-	public Response addComment(@QueryParam("idUser") int idUser,
-			@QueryParam("idPost") int idPost,
+	public Response addComment(@QueryParam("idPost") int idPost,
 			@QueryParam("content") String content
 	) {
-		
+		int idUser = UserSession.getInstance().getId();
 		if(CommentService.addComment(idUser,idPost,content)) {
 		return Response.status(Response.Status.CREATED).entity(out).build();
 	}

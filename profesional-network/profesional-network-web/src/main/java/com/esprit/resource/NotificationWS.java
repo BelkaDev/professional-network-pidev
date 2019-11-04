@@ -20,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import com.esprit.services.NotificationService;
+import com.esprit.utils.UserSession;
 import com.esprit.beans.Notification;
 import com.esprit.enums.NOTIFICATION_TYPE;
 
@@ -51,7 +52,19 @@ public class NotificationWS {
     	String message = notificationService.parseText(type,body,trigger,target);
     	notificationService.CreateNotification(idReciever, message, type,target);		
     }
-    
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("mynotifs")
+	public Response showMyNotifs() {	
+		List<Notification> notifs =
+		notificationService.userNotifications(UserSession.getInstance().getId());
+		if (notifs.isEmpty() )
+		return Response.status(Response.Status.NOT_FOUND).entity("You don't have any notifs").build();
+		else
+		return Response.status(Status.OK).entity(notifs).build();
+	}
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("show")
@@ -62,6 +75,7 @@ public class NotificationWS {
 		else
 		return Response.status(Status.OK).entity(notif).build();
 	}
+	
 
 }
 

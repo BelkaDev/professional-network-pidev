@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.esprit.services.BlockingService;
+import com.esprit.utils.UserSession;
 
 @Path("block")
 public class BlockWS {
@@ -23,9 +24,9 @@ public class BlockWS {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("user")
-	public Response followUser(@QueryParam("blocking") int idBlocking,
-			@QueryParam("blocked") int idBlocked
+	public Response followUser(@QueryParam("blocked") int idBlocked
 	) {	
+		int idBlocking = UserSession.getInstance().getId();
 		blockingService.blockUser(idBlocking, idBlocked);
 		return Response.status(Response.Status.CREATED).entity(out).build();
 	}

@@ -17,6 +17,7 @@ import com.esprit.beans.Post;
 import com.esprit.beans.User;
 import com.esprit.enums.NOTIFICATION_TYPE;
 import com.esprit.enums.REACTION_TYPE;
+import com.esprit.utils.UserSession;
 
 
 @Stateless
@@ -77,7 +78,7 @@ public class ReactionService implements IReactionServiceLocal,IReactionServiceRe
 	public boolean updateReaction(int idReaction, REACTION_TYPE type)
 	{
 		Reaction react = em.find(Reaction.class,idReaction);
-		if (react == null ) {
+		if (react == null || react.getReactingUser().getId() != UserSession.getInstance().getId()) {
 			return false;
 		}
 		Timestamp date = new Timestamp(System.currentTimeMillis());
@@ -89,7 +90,7 @@ public class ReactionService implements IReactionServiceLocal,IReactionServiceRe
 	@Override
 	public boolean deleteReaction(int id) {
 		Reaction react = em.find(Reaction.class,id);
-		if (react == null ) {
+		if (react == null  || react.getReactingUser().getId() != UserSession.getInstance().getId() ) {
 			return false;
 		}
 		em.remove(react);

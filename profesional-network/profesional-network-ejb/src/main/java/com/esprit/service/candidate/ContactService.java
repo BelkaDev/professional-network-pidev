@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -45,9 +44,10 @@ public class ContactService implements IContactServiceLocal, IContactServiceRemo
 		con.setStatus("pending");
 		c.getContacts().add(con);
 		
+		Candidate sender = em.find(Candidate.class, senderId);
 		// notify reciever for the request
 		// Notify won't work here cause it works on users not candidates
-		String notif_message = "candidate.getFirstName()+  +candidate.getLastName() wants to get in contact with you.";
+		String notif_message = sender.getFirstName()+" "+sender.getLastName()+" wants to get in contact with you.";
 		NOTIFICATION_TYPE type = NOTIFICATION_TYPE.Contact;
 		notificationservice.CreateNotification(receiverId,notif_message,type,senderId);
 	}
@@ -56,10 +56,11 @@ public class ContactService implements IContactServiceLocal, IContactServiceRemo
 		Contact c = em.find(Contact.class, requestId);
 		em.remove(c);
 		
+		
 		//remove notification from reciever
 		Notification notif = new Notification();
 		notif.setTarget(NOTIFICATION_TARGET.Profile);
-		//notif.setReciever(c.getReciever);
+		//notif.setReciever(c.get);
 		//notif.setTargetId(c.getSender.getId());
 		//notificationservice.cancelNotif(notif);
 		

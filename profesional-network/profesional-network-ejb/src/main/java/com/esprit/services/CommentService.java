@@ -17,6 +17,7 @@ import com.esprit.beans.Comment;
 import com.esprit.beans.Post;
 import com.esprit.beans.User;
 import com.esprit.enums.NOTIFICATION_TYPE;
+import com.esprit.utils.UserSession;
 
 
 @Stateless
@@ -77,7 +78,7 @@ public class CommentService implements ICommentServiceLocal,ICommentServiceRemot
 	public boolean updateComment(int id,String content) {
 		
 		Comment com = em.find(Comment.class,id);
-		if (com == null ) {
+		if (com == null || com.getCommentingUser().getId() != UserSession.getInstance().getId() ) {
 			return false;
 		}
 		Timestamp date = new Timestamp(System.currentTimeMillis());
@@ -89,7 +90,7 @@ public class CommentService implements ICommentServiceLocal,ICommentServiceRemot
 	@Override
 	public boolean deleteComment(int id) {
 		Comment com = em.find(Comment.class, id);
-		if (com == null)
+		if (com == null|| com.getCommentingUser().getId() != UserSession.getInstance().getId())
 		{
 			return false;
 		}

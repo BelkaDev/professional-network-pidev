@@ -21,6 +21,7 @@ import com.esprit.beans.Message;
 import com.esprit.beans.Notification;
 import com.esprit.services.MessageService;
 import com.esprit.services.NotificationService;
+import com.esprit.utils.UserSession;
 
 @Path("message")
 public class MessageWS {
@@ -34,10 +35,11 @@ public class MessageWS {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("add")
-	public Response addMessage(@QueryParam("sender") int idSender,
-			@QueryParam("recipient") int idRecipient,
+	public Response addMessage(@QueryParam("recipient") int idRecipient,
 			@QueryParam("body") String body
 	) {	
+
+		int idSender = UserSession.getInstance().getId();
 		MessageService.sendMessage(idSender, idRecipient, body);
 		return Response.status(Response.Status.CREATED).entity(out).build();
 	}
@@ -78,6 +80,21 @@ public class MessageWS {
 
 
 		List<Message> messages = MessageService.findMsgBySender(sender);
+
+		if (messages == null)
+			return Response.status(Status.NOT_FOUND).entity("No Messages Found").build();
+		else
+			return Response.status(Status.OK).entity(messages).build();
+
+	}
+	
+	@GET
+	@Path("mymessages")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findMyMessages() {
+		
+
+		List<Message> messages = MessageService.findMsgByReciever(UserSession.getInstance().getId());
 
 		if (messages == null)
 			return Response.status(Status.NOT_FOUND).entity("No Messages Found").build();

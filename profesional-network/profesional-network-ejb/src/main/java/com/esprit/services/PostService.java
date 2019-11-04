@@ -2,8 +2,6 @@ package com.esprit.services;
 
 
 import java.io.File;
-import java.net.URLConnection;
-import java.nio.file.Files;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -20,7 +18,6 @@ import com.esprit.Iservice.IPostServiceRemote;
 import com.esprit.beans.FileUpload;
 import com.esprit.beans.Post;
 import com.esprit.beans.User;
-import com.esprit.enums.FILE_TYPE;
 import com.esprit.enums.NOTIFICATION_TYPE;
 import com.esprit.enums.POST_TYPE;
 import com.esprit.utils.MimeTypeToEnums;
