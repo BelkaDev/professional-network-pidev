@@ -97,6 +97,5 @@ public class CommentWS {
 		else
 			return Response.status(Status.OK).entity(reactions).build();
 
-	}
-	
+	}	
 }

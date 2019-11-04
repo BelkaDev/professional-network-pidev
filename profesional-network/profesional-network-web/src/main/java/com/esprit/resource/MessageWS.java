@@ -18,7 +18,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import com.esprit.beans.Message;
-import com.esprit.beans.Notification;
 import com.esprit.services.MessageService;
 import com.esprit.services.NotificationService;
 import com.esprit.utils.UserSession;
