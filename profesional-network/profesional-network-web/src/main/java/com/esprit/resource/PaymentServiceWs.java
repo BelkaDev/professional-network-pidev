@@ -25,7 +25,7 @@ public class PaymentServiceWs {
 	PaymentService ps;
 	
 	
-	 @PUT
+	 	@PUT
 	    @Path("add")
 	    @Produces(MediaType.APPLICATION_JSON)
 	    public Response addClaim(         

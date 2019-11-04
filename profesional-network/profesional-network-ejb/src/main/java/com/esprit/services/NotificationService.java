@@ -68,14 +68,13 @@ public class NotificationService implements INotificationServiceLocal,INotificat
 		
 		/* check if notification exists */
 		int duplicateId = this.findDuplicate(newNotification);
-		if (duplicateId != -1)
+		if (duplicateId == -1)
 		{
-			this.updateNotif(duplicateId,body);
+			em.persist(newNotification);
+
 		} else
 		{
-		em.persist(newNotification);
-		}
-		
+		this.updateNotif(duplicateId,body);
 		/* mail notification */
 		if (reciever.getRecieveMailNotifs()) {
 			
@@ -102,7 +101,7 @@ public class NotificationService implements INotificationServiceLocal,INotificat
 			
 			mail.sendEmail(reciever.getEmail(), subject, content);	
 		}
-		
+		}
 	}
 	
 	public String parseText(NOTIFICATION_TYPE type,String body,int triggerId,int target) {

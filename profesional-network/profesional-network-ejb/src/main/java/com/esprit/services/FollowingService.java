@@ -10,17 +10,12 @@ import javax.persistence.PersistenceContext;
 
 import com.esprit.Iservice.IFollowingServiceLocal;
 import com.esprit.Iservice.IFollowingServiceRemote;
-import com.esprit.Iservice.INotificationServiceLocal;
 import com.esprit.beans.Following;
-import com.esprit.beans.Notification;
 import com.esprit.beans.User;
 import com.esprit.enums.NOTIFICATION_TARGET;
-import com.esprit.enums.NOTIFICATION_TYPE;
 
-import com.esprit.utils.EmailUtil;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Stateless
 @LocalBean

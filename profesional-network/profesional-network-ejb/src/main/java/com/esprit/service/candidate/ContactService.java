@@ -29,12 +29,13 @@ import com.esprit.services.NotificationService;
 @Stateless
 @LocalBean
 public class ContactService implements IContactServiceLocal, IContactServiceRemote {
-
-	@EJB
-	NotificationService notificationservice = new NotificationService();
 	
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
+	
+	@EJB
+	NotificationService notificationservice = new NotificationService();
+	
 	@Override
 	public void requestConnection(int senderId, int receiverId) {
 		Candidate c = em.find(Candidate.class, receiverId);
@@ -44,6 +45,7 @@ public class ContactService implements IContactServiceLocal, IContactServiceRemo
 		c.getContacts().add(con);
 		
 		// notify reciever for the request
+		// Notify won't work here cause it works on users not candidates
 		String notif_message = "candidate.getFirstName()+  +candidate.getLastName() wants to get in contact with you.";
 		NOTIFICATION_TYPE type = NOTIFICATION_TYPE.Contact;
 		notificationservice.CreateNotification(receiverId,notif_message,type,senderId);

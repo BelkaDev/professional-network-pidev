@@ -62,25 +62,25 @@ public class User implements Serializable {
 	@ManyToOne(cascade = CascadeType.ALL)
 	Enterprise enterprise;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Post> Posts;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "commentingUser", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "commentingUser", fetch = FetchType.EAGER)
 	private Set<Comment> Comments;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "reactingUser", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "reactingUser", fetch = FetchType.EAGER)
 	private Set<Reaction> Reactions;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "sender", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "sender", fetch = FetchType.EAGER)
 	private Set<Message> Messages;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "reciever", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "reciever", fetch = FetchType.EAGER)
 	private Set<Notification> Notifications;
 	
-	@OneToMany(cascade =CascadeType.ALL,mappedBy= "follower",fetch = FetchType.EAGER)
+	@OneToMany(mappedBy= "follower",fetch = FetchType.EAGER)
 	private Set<Following> Followers;
 	  
-	@OneToMany(cascade =CascadeType.ALL,mappedBy= "blocking",fetch = FetchType.EAGER)
+	@OneToMany(mappedBy= "blocking",fetch = FetchType.EAGER)
 	private Set<Blacklist> Blacklist;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "whoClaim")

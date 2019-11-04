@@ -61,10 +61,10 @@ public class PostWS {
 	@POST
 	@Consumes("*/*")
 	@Path("addWithFile")
-	public Response addPost(@QueryParam("idUser") int idUser,
-			@QueryParam("content") String content,
+	public Response addPost(@QueryParam("content") String content,
 			MultipartFormDataInput input
 	) {
+			int idUser = UserSession.getInstance().getId();
 		   if (input == null || input.getParts() == null || input.getParts().isEmpty()) {
 		        throw new IllegalArgumentException("Multipart request is empty");
 		   }
@@ -82,8 +82,8 @@ public class PostWS {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("share")
-	public Response sharePost(@QueryParam("idUser") int idUser,
-			@QueryParam("idPost") int idPost) {
+	public Response sharePost(@QueryParam("idPost") int idPost) {
+		int idUser = UserSession.getInstance().getId();
 		if (!PostService.sharePost(idPost,idUser))
 		{
 		return Response.status(Status.NOT_FOUND).entity("post doesn't exist").build();
@@ -97,12 +97,12 @@ public class PostWS {
 	@Path("delete")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response removePost(@QueryParam("id") int id) {
-		
+
 		if(PostService.deletePost(id))
 		{
 		return Response.status(Status.OK).entity("the Post has been deleted").build();
 		}
-		return Response.status(Status.NOT_FOUND).entity("Post doesn't exist").build();
+		return Response.status(Status.NOT_FOUND).entity("Error").build();
 		
 	}
 	
@@ -118,7 +118,7 @@ public class PostWS {
 		{
 		return Response.status(Status.OK).entity("post updated").build();
 		}
-		return Response.status(Status.NOT_FOUND).entity("Post doesn't exist").build();
+		return Response.status(Status.NOT_FOUND).entity("Error").build();
 	}
 	
 	@PUT
@@ -137,7 +137,7 @@ public class PostWS {
 		{
 		return Response.status(Status.OK).entity("post updated").build();
 		}
-		return Response.status(Status.NOT_FOUND).entity("Post doesn't exist").build();
+		return Response.status(Status.NOT_FOUND).entity("Error").build();
 	}
 	
 	@GET

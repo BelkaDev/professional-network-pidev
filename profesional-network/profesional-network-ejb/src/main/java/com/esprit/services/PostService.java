@@ -24,6 +24,7 @@ import com.esprit.enums.FILE_TYPE;
 import com.esprit.enums.NOTIFICATION_TYPE;
 import com.esprit.enums.POST_TYPE;
 import com.esprit.utils.MimeTypeToEnums;
+import com.esprit.utils.UserSession;
 
 @Stateless
 @LocalBean
@@ -101,7 +102,7 @@ public class PostService implements IPostServiceLocal,IPostServiceRemote {
 
 		Timestamp date = new Timestamp(System.currentTimeMillis());
 		Post post = em.find(Post.class,id);
-		if (post == null ) {
+		if (post == null || post.getUser().getId() != UserSession.getInstance().getId() ) {
 			return false;
 		}
 
@@ -120,13 +121,22 @@ public class PostService implements IPostServiceLocal,IPostServiceRemote {
 		post.setContent(content +" [edited on "+" "+new SimpleDateFormat("dd/MM/YY - HH:mm").format(date)+"]");
 		post.setType(mimetypetoenums.toPostType(mimeType));	
 		em.merge(post);
+		em.flush();
+		
+		// other posts that share this
+		List<Post> posts = sharingPost(id);
+		for (Post p : posts) {
+			p.setType(post.getType());
+			p.setContent(content);
+			em.merge(p);
+		}
 		return true;
 	}
 
 	@Override
 	public boolean deletePost(int id) {
 		Post post = em.find(Post.class, id);
-		if (post == null)
+		if (post == null || post.getUser().getId() != UserSession.getInstance().getId())
 		{
 			return false;
 		}

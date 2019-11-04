@@ -1,5 +1,8 @@
 package com.esprit.services;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,6 +24,13 @@ import com.esprit.beans.UserPack;
 import com.esprit.enums.NOTIFICATION_TYPE;
 import com.esprit.utils.EmailUtil;
 import com.esprit.utils.UserSession;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.pdf.PdfWriter;
 
 @LocalBean
 @Stateless
@@ -54,8 +64,32 @@ public class PaymentService implements IPayementServiceLocal,IPayementServiceRem
 			em.persist(p);
 			up.setPayment(p);
 			em.merge(up);
-			mail.sendEmail(UserSession.getInstance().getEmail(), "your payment will be treated ", "instead of your payment :"+up.getPack().getTitle()+" /n"+"the Adminastrator will treat your payment details");
 			
+			/* CREATE NEW PDF + SEND IT TO EMAIL */
+
+		    File dir = new File(System.getProperty("user.dir")+"/payments/");
+		    if (!dir.exists()) dir.mkdirs();
+			
+			String filepath =  System.getProperty("user.dir")+"/payments/"+p.getCardExpirationDate()+".pdf";
+			Document document = new Document();
+
+			try {
+				PdfWriter.getInstance(document, new FileOutputStream(filepath));
+			} catch (FileNotFoundException | DocumentException e1) {
+				e1.printStackTrace();
+			}
+			document.open();
+			Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+			Chunk chunk = new Chunk("Hello World", font);
+			try {
+				document.add(chunk);
+			} catch (DocumentException e) {
+				e.printStackTrace();
+			}
+			document.close();
+			
+			mail.sendAttachmentEmail(UserSession.getInstance().getEmail(), "Professional Network : Your payment has been scheduled","Your payment has been scheduled\nYou can find the details in the attachment." ,
+					filepath,p.getCardExpirationDate().toString()+".pdf");
 			return true;
 		}
 		else if((length==16)&& (length1==3) && (expirationDate.after(d)) &&(up.getEndDate().before(d)) )
