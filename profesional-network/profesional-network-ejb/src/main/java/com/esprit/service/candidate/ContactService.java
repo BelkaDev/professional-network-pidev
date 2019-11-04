@@ -16,6 +16,7 @@ import com.esprit.Iservice.candidate.IContactServiceLocal;
 
 import com.esprit.Iservice.candidate.IContactServiceRemote;
 import com.esprit.beans.Enterprise;
+import com.esprit.beans.JobOffer;
 import com.esprit.beans.Notification;
 import com.esprit.beans.candidate.Activity;
 import com.esprit.beans.candidate.Candidate;
@@ -23,6 +24,7 @@ import com.esprit.beans.candidate.Certification;
 import com.esprit.beans.candidate.Contact;
 import com.esprit.beans.candidate.Experience;
 import com.esprit.beans.candidate.Skill;
+import com.esprit.beans.candidate.Subscription;
 import com.esprit.enums.NOTIFICATION_TARGET;
 import com.esprit.enums.NOTIFICATION_TYPE;
 import com.esprit.services.NotificationService;
@@ -45,11 +47,13 @@ public class ContactService implements IContactServiceLocal, IContactServiceRemo
 		con.setStatus("pending");
 		c.getContacts().add(con);
 		
+		
+		
 		// notify reciever for the request
 		// Notify won't work here cause it works on users not candidates
-		String notif_message = "candidate.getFirstName()+  +candidate.getLastName() wants to get in contact with you.";
+		/*String notif_message = "candidate.getFirstName()+  +candidate.getLastName() wants to get in contact with you.";
 		NOTIFICATION_TYPE type = NOTIFICATION_TYPE.Contact;
-		notificationservice.CreateNotification(receiverId,notif_message,type,senderId);
+		notificationservice.CreateNotification(receiverId,notif_message,type,senderId);*/
 	}
 	@Override
 	public void cancelRequest(int requestId) {
@@ -73,7 +77,6 @@ public class ContactService implements IContactServiceLocal, IContactServiceRemo
 	public void acceptRequest(int requestId) {
 		Contact c = em.find(Contact.class, requestId);
 		c.setStatus("accepted");
-		//merge na9sa ?
 		
 		//notify sender for being accepted
 		//String notif_message = "candidate.getFirstName()+  +candidate.getLastName() accepted your contact request.";
@@ -134,10 +137,44 @@ public class ContactService implements IContactServiceLocal, IContactServiceRemo
 	}
 	@Override
 	public List<Enterprise> searchForEnterprise(String criteria) {
-		// TODO Auto-generated method stub
-		return null;
+		return em.createQuery("select e from ENTERPRISE e where ENT_NAME like '%"+criteria+"%'").getResultList();
 	}
-	
-
-	
+	@Override
+	public List<JobOffer> getOffersByEnterprise(int enterpriseId) {
+		return em.createQuery("select j from JOBOFFER j where enterprise_ENT_ID = "+enterpriseId).getResultList();
+	}
+	@Override
+	public List<Candidate> getContactsInEnterprise(int candidateId, int enterpriseId) {
+		List<Candidate> candidateIdList = em.createQuery("select s.Candidate from Subscription s where enterpriseId="+enterpriseId).getResultList();
+		System.out.println(candidateIdList);
+		Set <Candidate> allFriends = this.getFriendsList(candidateId);
+		List<Candidate> toReturn = new ArrayList<>();
+		for(Candidate c : allFriends)
+		{
+			for(Candidate i : candidateIdList)
+			{
+				if(c.getCandidateId()==i.getCandidateId())
+				{
+					toReturn.add(c);
+				}
+			}
+		}
+		return toReturn;
+	}
+	@Override
+	public void subscribeToEnterprise(int candidateId, int enterpriseId) {
+		Subscription s = new Subscription();
+		s.setEnterpriseId(enterpriseId);
+		Candidate c = em.find(Candidate.class, candidateId);
+		s.setCandidate(c);
+		c.getSubscriptions().add(s);
+	}
+	@Override
+	public Set<Subscription> getSubscriptions(int candidateId) {
+		return em.find(Candidate.class, candidateId).getSubscriptions();
+	}
+	@Override
+	public void cancelSubscription(int subscriptionId) {
+		em.remove(em.find(Subscription.class, subscriptionId));
+	}
 }

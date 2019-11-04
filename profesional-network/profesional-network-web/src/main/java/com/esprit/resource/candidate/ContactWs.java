@@ -1,4 +1,4 @@
-package com.esprit.resource;
+package com.esprit.resource.candidate;
 
 import javax.ejb.EJB;
 import javax.ws.rs.DELETE;
@@ -73,4 +73,54 @@ public class ContactWs {
 	public Response searchCandidate(@QueryParam("criteria") String criteria) {
 		return Response.status(Status.FOUND).entity(cs.searchForCandidates(criteria)).build();
 	}
+	
+	@GET
+	@Path("searchEnterprise")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response searchEnterprise(@QueryParam("criteria") String criteria) {
+		return Response.status(Status.FOUND).entity(cs.searchForEnterprise(criteria)).build();
+	}
+	
+	@GET
+	@Path("getOffersByEnterprise")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getOffers(@QueryParam("enterpriseId") int enterpriseId) {
+		return Response.status(Status.FOUND).entity(cs.getOffersByEnterprise(enterpriseId)).build();
+	}
+	
+	@GET
+	@Path("getContactsInEnterprise")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getContactsInEnterprise(@QueryParam("candidateId") int candidateId,@QueryParam("enterpriseId") int enterpriseId) {
+		return Response.status(Status.FOUND).entity(cs.getContactsInEnterprise(candidateId, enterpriseId)).build();
+	}
+	
+	@POST
+	@Path("subscribe")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response subscribeToEnterprise(@QueryParam("candidateId") int candidateId,
+			@QueryParam("enterpriseId") int enterpriseId) {
+		cs.subscribeToEnterprise(candidateId, enterpriseId);
+		return Response.status(Status.CREATED).entity("Subscribed").build();
+	}
+	
+	@GET
+	@Path("getSubscriptions")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getSubscriptions(@QueryParam("candidateId") int candidateId) {
+		return Response.status(Status.FOUND).entity(cs.getSubscriptions(candidateId)).build();
+	}
+	
+	@DELETE
+	@Path("cancelSubscription")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response cancelSubscription(@QueryParam("subscriptionId") int subscriptionId) {
+		cs.cancelSubscription(subscriptionId);
+		return Response.status(Status.OK).entity("the Subscription has been canceled").build();
+	}
+	
+	
+	
+	
+	
 }
