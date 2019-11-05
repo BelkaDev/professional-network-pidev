@@ -22,22 +22,14 @@ import javax.persistence.Transient;
 
 import com.esprit.beans.Interests;
 import com.esprit.beans.Quiz;
-
+import com.esprit.beans.User;
 import com.esprit.enums.Tags;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "Candidate")
-public class Candidate implements Serializable {
+public class Candidate extends User implements Serializable {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID")
-	private int candidateId;
-	@Column(name = "firstname")
-	private String firstName;
-	@Column(name = "lastname")
-	private String lastName;
 	@Column(name = "biography")
 	private String biography;
 	@Column(name = "candidate_rating")
@@ -94,26 +86,7 @@ public class Candidate implements Serializable {
 
 	
 
-	public int getCandidateId() {
-		return candidateId;
-	}
-	public void setCandidateId(int candidateId) {
-		this.candidateId = candidateId;
-	}
-	
-	
-	public String getFirstName() {
-		return firstName;
-	}
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-	public String getLastName() {
-		return lastName;
-	}
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+
 	public String getBiography() {
 		return biography;
 	}
