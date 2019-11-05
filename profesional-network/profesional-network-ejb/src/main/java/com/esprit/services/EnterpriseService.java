@@ -3,7 +3,6 @@ package com.esprit.services;
 
 import java.sql.Date;
 import java.util.List;
-import java.util.concurrent.ThreadPoolExecutor.AbortPolicy;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -17,7 +16,6 @@ import com.esprit.beans.Enterprise;
 import com.esprit.beans.EnterpriseEvent;
 import com.esprit.beans.JobOffer;
 import com.esprit.beans.User;
-import com.esprit.beans.candidate.Subscription;
 import com.esprit.enums.Role;
 import com.esprit.utils.UserSession;
 
@@ -33,7 +31,7 @@ public class EnterpriseService  implements EnterpriseSeviceRemote{
 		
 User user = em.find(User.class, UserSession.getInstance().getId());
 		
-		if(user.getRole()==Role.Enterprise_Admin) {
+		if(UserSession.getInstance().getRole()==Role.Enterprise_Admin) {
 			
 			em.persist(enterprise);
 			Enterprise ent = em.find(Enterprise.class, enterprise.getEid());
@@ -90,15 +88,11 @@ User user = em.find(User.class, UserSession.getInstance().getId());
 	}
 	
 	@Override
-	public List<Subscription> getEntSubscribers(int Eid) {
-
-		TypedQuery<Subscription> q1 = em.createQuery("select s from Subscription s where enterpriseId=:Eid", Subscription.class);
-		q1.setParameter("Eid", Eid);
-		List<Subscription> s= q1.getResultList();
-		
-		return s;
-
+	public List<Enterprise> getAllEnterprise() {
+		TypedQuery<Enterprise> q1 = em.createQuery("select e from Enterprise e", Enterprise.class);
+		return q1.getResultList();
 	}
+	
 	
 
 }

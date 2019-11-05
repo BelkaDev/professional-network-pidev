@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.esprit.beans.candidate.Candidate;
@@ -32,6 +33,8 @@ public class EventParticipation  implements Serializable{
 	@ManyToOne
 	Candidate candidate;
 
+	@ManyToOne
+	User user;
 	
 	
 	public EventParticipation() {
@@ -40,6 +43,14 @@ public class EventParticipation  implements Serializable{
 
 	
 	
+	public EventParticipation(int ePid, EnterpriseEvent enterpriseEvent) {
+		super();
+		EPid = ePid;
+		this.enterpriseEvent = enterpriseEvent;
+	}
+
+
+
 	public EventParticipation(EnterpriseEvent enterpriseEvent, Candidate candidate) {
 		super();
 		this.enterpriseEvent = enterpriseEvent;
@@ -54,6 +65,20 @@ public class EventParticipation  implements Serializable{
 		this.enterpriseEvent = enterpriseEvent;
 		this.candidate = candidate;
 	}
+	
+	
+
+	public EventParticipation(int ePid, String ridactionCode, EnterpriseEvent enterpriseEvent, Candidate candidate,
+			User user) {
+		super();
+		EPid = ePid;
+		RidactionCode = ridactionCode;
+		this.enterpriseEvent = enterpriseEvent;
+		this.candidate = candidate;
+		this.user = user;
+	}
+
+
 
 	public int getEPid() {
 		return EPid;
@@ -90,6 +115,32 @@ public class EventParticipation  implements Serializable{
 	public void setRidactionCode(String ridactionCode) {
 		RidactionCode = ridactionCode;
 	}
+
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((candidate == null) ? 0 : candidate.hashCode());
+		result = prime * result + ((enterpriseEvent == null) ? 0 : enterpriseEvent.hashCode());
+		return result;
+	}
+
+
+
+	public User getUser() {
+		return user;
+	}
+
+
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+
+
 	
 	
 	

@@ -18,9 +18,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.esprit.beans.Enterprise;
-import com.esprit.beans.JobOffer;
+import com.esprit.beans.EnterpriseEvent;
 import com.esprit.beans.User;
-import com.esprit.beans.candidate.Subscription;
+
 import com.esprit.services.EnterpriseService;
 import com.esprit.utils.UserSession;
 
@@ -78,15 +78,24 @@ public class EnterpriseWS {
 		return Response.status(200).entity(status).build();
 	}
 	
+	
+	
+	
+	
 	@GET 
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("getSubscribers")
-	public List<Subscription> getSubscribers(@QueryParam("Eid") int Eid) {
-		return enterprisews.getEntSubscribers(Eid);
+	@Path("getallent")
+	public List<Enterprise> getallent() {
+		return enterprisews.getAllEnterprise();
 	}
 	
 	
-	
+	@GET 
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("getentbyid")
+	public Enterprise getentbyid(@QueryParam("Eid") int Eid) {
+		return enterprisews.getenterpriseById(Eid);
+	}
 	
 	
 	

@@ -13,8 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 
 @Entity
 @Table(name = "JOBOFFER")
@@ -43,7 +41,7 @@ public class JobOffer implements Serializable{
 	@Column(name="tags")
 	private String interests;
 	
-	@JsonIgnore
+
 	@OneToMany(mappedBy="jobOffer")
 	private Set<Quiz> quizs;
 
@@ -91,6 +89,33 @@ public class JobOffer implements Serializable{
 
 
 
+
+
+	public JobOffer(String jOtitle, String jOarea, String jOdescription, int jOexperience, String interests) {
+		super();
+		JOtitle = jOtitle;
+		JOarea = jOarea;
+		JOdescription = jOdescription;
+		JOexperience = jOexperience;
+		this.interests = interests;
+	}
+
+
+	public JobOffer(int jOid, String jOtitle, String jOarea, Date jOdate, String jOdescription, int jOexperience,
+			int isValid, int vuesNumber, String interests, Set<Quiz> quizs, Enterprise enterprise) {
+		super();
+		JOid = jOid;
+		JOtitle = jOtitle;
+		JOarea = jOarea;
+		JOdate = jOdate;
+		JOdescription = jOdescription;
+		JOexperience = jOexperience;
+		this.isValid = isValid;
+		VuesNumber = vuesNumber;
+		this.interests = interests;
+		this.quizs = quizs;
+		this.enterprise = enterprise;
+	}
 
 
 	public JobOffer(int jOid, String jOtitle, String jOarea, Date jOdate, String jOdescription, int jOexperience,
@@ -241,16 +266,6 @@ public class JobOffer implements Serializable{
 
 	public void setQuizs(Set<Quiz> quizs) {
 		this.quizs = quizs;
-	}
-
-
-	public JobOffer(String jOtitle, String jOarea, String jOdescription, int jOexperience, String interests) {
-		super();
-		JOtitle = jOtitle;
-		JOarea = jOarea;
-		JOdescription = jOdescription;
-		JOexperience = jOexperience;
-		this.interests = interests;
 	}
 	
 	

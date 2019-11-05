@@ -14,6 +14,9 @@ import com.esprit.Iservice.EnterpriseEventServiceRemote;
 import com.esprit.beans.Enterprise;
 import com.esprit.beans.EnterpriseEvent;
 import com.esprit.beans.JobOffer;
+import com.esprit.beans.User;
+import com.esprit.enums.Role;
+import com.esprit.utils.UserSession;
 
 @Stateless
 @LocalBean
@@ -23,8 +26,14 @@ public class EnterpriseEventService implements EnterpriseEventServiceRemote{
 	EntityManager em;
 
 	@Override
-	public int AddEnterpriseEvent(EnterpriseEvent event, int enterpriseId) {
-		Enterprise entrepriseManagedEntity = em.find(Enterprise.class, enterpriseId);
+	public int AddEnterpriseEvent(EnterpriseEvent event) {
+		User user = em.find(User.class, UserSession.getInstance().getId());
+		
+		if(UserSession.getInstance().getRole()==Role.Enterprise_Admin) {
+		
+		
+		
+		Enterprise entrepriseManagedEntity = em.find(Enterprise.class, user.getEnterprise().getEid());
 
 		event.setEnterprise(entrepriseManagedEntity);
 		event.setEEvues(0);
@@ -32,6 +41,8 @@ public class EnterpriseEventService implements EnterpriseEventServiceRemote{
 		event.setEEtickets(0);
 		em.persist(event);
 		return event.getEEid();
+		}
+		return 0;
 	}
 
 	@Override
