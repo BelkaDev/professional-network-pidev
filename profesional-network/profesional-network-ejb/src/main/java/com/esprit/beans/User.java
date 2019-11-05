@@ -414,4 +414,20 @@ public class User implements Serializable {
 		return true;
 	}
 
+
+	public User(String email, String firstName, String lastName, String password, Gender gender, Date birthDate,
+			Address address, String username, Role role, String interests) {
+		super();
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.password = password;
+		this.gender = gender;
+		this.birthDate = birthDate;
+		this.address = address;
+		this.username = username;
+		this.role = role;
+		this.interests = interests;
+	}
+
 }

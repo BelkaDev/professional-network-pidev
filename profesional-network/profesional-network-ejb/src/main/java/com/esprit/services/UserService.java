@@ -82,7 +82,7 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 		
 		User user=q.getSingleResult();
 		
-		if(BCrypt.checkpw(password, user.getPassword()) && user.isEnable()==true)
+		if(BCrypt.checkpw(password, user.getPassword())&& user.isEnable()==true)
 		{
 			UserSession.getInstance().cleanUserSession();
 			UserSession.getInstance(user);

@@ -206,4 +206,17 @@ public class PaymentService implements IPayementServiceLocal,IPayementServiceRem
 		return false;
 	}
 
+	@Override
+	public boolean isPremium(int userId) {
+		User u=em.find(User.class, userId);
+		TypedQuery<UserPack> query=em.createQuery("select up from UserPack up where up.user=:id",UserPack.class);
+		query.setParameter("id", u);
+		List<UserPack> results=query.getResultList();
+		for(UserPack ur : results) {
+			if(ur.isValid())
+				return true;
+		}
+		return false;
+	}
+
 }

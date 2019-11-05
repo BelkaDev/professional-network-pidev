@@ -43,7 +43,19 @@ public class InterviewWS {
 			return Response.status(Status.OK).entity("the time has been set").build();
 		return Response.status(Status.BAD_REQUEST).entity("invalid time has to be between 9 and 18").build();
 	}
-	
-	
+	@PUT
+	@Path("setScore")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response setInterviewScore(@QueryParam("idI")int interview_id,@QueryParam("score")double score) {
+		interviewService.setScore(interview_id, score);
+		return Response.status(Status.OK).entity("the score for this interview has been set").build();
+	}
+	@PUT
+	@Path("chooseWinner")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response selectCandidate(@QueryParam("idJo")int joboffer_id) {
+		interviewService.acceptCandidate(joboffer_id);
+		return Response.status(Status.OK).entity("Welcome your new employee").build();
+	}
 
 }

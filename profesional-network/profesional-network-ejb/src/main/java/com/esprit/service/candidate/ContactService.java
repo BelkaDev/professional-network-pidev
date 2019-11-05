@@ -77,6 +77,11 @@ public class ContactService implements IContactServiceLocal, IContactServiceRemo
 	public void acceptRequest(int requestId) {
 		Contact c = em.find(Contact.class, requestId);
 		c.setStatus("accepted");
+		Contact c1 = new Contact();
+		Candidate ca = em.find(Candidate.class, c.getContactId());
+		c1.setContactId(c.getCandidate().getCandidateId());
+		c1.setStatus("accepted");
+		ca.getContacts().add(c1);
 		
 		//notify sender for being accepted
 		//String notif_message = "candidate.getFirstName()+  +candidate.getLastName() accepted your contact request.";

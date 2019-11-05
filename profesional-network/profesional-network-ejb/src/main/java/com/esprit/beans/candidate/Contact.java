@@ -8,7 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity()
 @Table(name="Contact")
@@ -22,6 +25,8 @@ public class Contact implements Serializable {
 	private int contactId;
 	@Column(name="status")
 	private String status;
+	@ManyToOne
+	private Candidate Candidate;
 	public int getID() {
 		return ID;
 	}
@@ -40,6 +45,13 @@ public class Contact implements Serializable {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	public Candidate getCandidate() {
+		return Candidate;
+	}
+	public void setCandidate(Candidate candidate) {
+		Candidate = candidate;
+	}
+	
 	
 
 	

@@ -242,6 +242,16 @@ public class JobOffer implements Serializable{
 	public void setQuizs(Set<Quiz> quizs) {
 		this.quizs = quizs;
 	}
+
+
+	public JobOffer(String jOtitle, String jOarea, String jOdescription, int jOexperience, String interests) {
+		super();
+		JOtitle = jOtitle;
+		JOarea = jOarea;
+		JOdescription = jOdescription;
+		JOexperience = jOexperience;
+		this.interests = interests;
+	}
 	
 	
 	

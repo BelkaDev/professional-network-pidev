@@ -92,11 +92,13 @@ public class CandidateWs {
 	@POST
 	@Path("addCandidate")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addCandidate(@QueryParam("biography") String biography,
+	public Response addCandidate(@QueryParam("firstName") String firstName,@QueryParam("lastName") String lastName,@QueryParam("biography") String biography,
 			@QueryParam("rating") double rating,MultipartFormDataInput input) {
 		CreateFolderIfNotExist(UPLOAD_FOLDER);
 		String fileName = uploadFile(input.getFormDataMap());
 		Candidate c = new Candidate();
+		c.setFirstName(firstName);
+		c.setLastName(lastName);
 		c.setBiography(biography);
 		c.setRating(rating);
 		c.setCv(fileName);
@@ -115,7 +117,7 @@ public class CandidateWs {
 	@Path("addExperience")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addExperience(@QueryParam("designation") String designation,
-			@QueryParam("type") String type,@QueryParam("startDate") Date startDate,@QueryParam("startDate") Date endDate,@QueryParam("candidateID") int candidateID) {
+			@QueryParam("type") String type,@QueryParam("startDate") Date startDate,@QueryParam("endDate") Date endDate,@QueryParam("candidateID") int candidateID) {
 		Experience e = new Experience();
 		e.setDesignation(designation);
 		e.setType(type);
