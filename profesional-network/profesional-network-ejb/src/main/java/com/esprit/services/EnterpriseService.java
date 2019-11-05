@@ -31,7 +31,7 @@ public class EnterpriseService  implements EnterpriseSeviceRemote{
 		
 User user = em.find(User.class, UserSession.getInstance().getId());
 		
-		if(user.getRole()==Role.Enterprise_Admin) {
+		if(UserSession.getInstance().getRole()==Role.Enterprise_Admin) {
 			
 			em.persist(enterprise);
 			Enterprise ent = em.find(Enterprise.class, enterprise.getEid());
@@ -87,7 +87,11 @@ User user = em.find(User.class, UserSession.getInstance().getId());
 
 	}
 	
-	
+	@Override
+	public List<Enterprise> getAllEnterprise() {
+		TypedQuery<Enterprise> q1 = em.createQuery("select e from Enterprise e", Enterprise.class);
+		return q1.getResultList();
+	}
 	
 	
 

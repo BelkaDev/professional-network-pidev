@@ -60,6 +60,15 @@ public class JobOfferWS {
 	
 	
 	
+	@GET 
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("searchjoboffer")
+	public List<JobOffer> searchjoboffer(@QueryParam("search") String search) {
+		return jobofferws.SearchJoboffer(search);
+	}
+	
+	
+	
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -68,7 +77,7 @@ public class JobOfferWS {
 			@QueryParam("JOarea") String JOarea,
 			@QueryParam("JOdescription") String JOdescription, 
 			@QueryParam("JOexperience") int JOexperience,
-			@QueryParam("interests")String interests
+			@QueryParam("interests") String interests
 			
 
 	) {

@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.esprit.beans.Enterprise;
+import com.esprit.beans.EnterpriseEvent;
 import com.esprit.beans.User;
 
 import com.esprit.services.EnterpriseService;
@@ -80,6 +81,21 @@ public class EnterpriseWS {
 	
 	
 	
+	
+	@GET 
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("getallent")
+	public List<Enterprise> getallent() {
+		return enterprisews.getAllEnterprise();
+	}
+	
+	
+	@GET 
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("getentbyid")
+	public Enterprise getentbyid(@QueryParam("Eid") int Eid) {
+		return enterprisews.getenterpriseById(Eid);
+	}
 	
 	
 	

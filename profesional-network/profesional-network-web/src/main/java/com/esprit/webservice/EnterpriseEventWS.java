@@ -38,15 +38,18 @@ public class EnterpriseEventWS {
 			@QueryParam("EEdescription") String EEdescription,
 			@QueryParam("EEminparticipants") int EEminparticipants,
 			@QueryParam("EEmaxparticipants") int EEmaxparticipants,
-			@QueryParam("EEprice") float EEprice,
-			@QueryParam("enterpriseId") int enterpriseId
+			@QueryParam("EEprice") float EEprice
+			
 
 	) {
 		
 		EnterpriseEvent ee= new EnterpriseEvent(EEtitle,EEplace,EESdate,EEEdate,EEdescription,EEminparticipants,EEmaxparticipants,EEprice);
-		enterpriseeventws.AddEnterpriseEvent(ee,enterpriseId);
+		enterpriseeventws.AddEnterpriseEvent(ee);
 		return Response.status(200).entity(status).build();
 	}
+	
+	
+	
 	
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)

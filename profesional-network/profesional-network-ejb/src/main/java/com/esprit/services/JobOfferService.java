@@ -35,6 +35,10 @@ public class JobOfferService implements JobOfferServiceRemote {
 	UserService userservice = new UserService();
 	@EJB
 	NotificationService notificationservice = new NotificationService();
+	@EJB
+	InterestsService intersetsservice;
+	
+	
 	
 	@Override
 	public int AddJobOffer(JobOffer joboffer) {
@@ -48,11 +52,14 @@ public class JobOfferService implements JobOfferServiceRemote {
 			Calendar currenttime = Calendar.getInstance();
 			Date JOdate = new Date((currenttime.getTime()).getTime());
 			joboffer.setJOdate(JOdate);
+			
 			em.persist(joboffer);
+			
+			
 			return joboffer.getJOid();
 		}
 
-		else if (UserSession.getInstance().getRole() == Role.Human_Resouces | UserSession.getInstance().getRole() == Role.Enterprise_Admin) {
+		else if (UserSession.getInstance().getRole() == Role.Human_Resouces ) {
 			
 			Enterprise enterpriseManagedEntity = em.find(Enterprise.class, user.getEnterprise().getEid());
 			joboffer.setEnterprise(enterpriseManagedEntity);
@@ -122,13 +129,16 @@ public class JobOfferService implements JobOfferServiceRemote {
 
 	@Override
 	public int ValidateJoboffer(int id) {
+		User user= em.find(User.class, UserSession.getInstance().getId());
+		if(UserSession.getInstance().getRole() == Role.Human_Resouces) {
+		
 		Query query = em.createQuery("update JobOffer j set j.isValid=1 where j.JOid=:id");
 		query.setMaxResults(1);
 		query.setParameter("id", id);
 		int validate = query.executeUpdate();
 		List<String> jobtags = fetchOfferTags(id);
 		
-		List <User> allUsers = userservice.allUsers();
+		List <User> allUsers = userservice.getUserByRole();
 		for (User usr : allUsers) {
 		List<String> userinterests = userservice.fetchUserInterests(usr.getId());
 		userinterests.retainAll(jobtags); // get common tags
@@ -140,7 +150,10 @@ public class JobOfferService implements JobOfferServiceRemote {
 		notificationservice.CreateNotification(usr.getId(),notif_message,type ,id);
 		}
 		}
+		
 		return validate;
+		}
+		return 0;
 	
 	}
 	
@@ -160,4 +173,21 @@ public class JobOfferService implements JobOfferServiceRemote {
 		
 	}
 
+	@Override
+	public List<JobOffer> SearchJoboffer(String search) {
+		TypedQuery<JobOffer> queryc = em.createQuery("SELECT j FROM JobOffer j WHERE j.JOtitle LIKE :input or j.JOarea LIKE :input or j.JOdescription LIKE :input or j.JOexperience LIKE :input ORDER BY j.JOdate DESC ",JobOffer.class);
+		queryc.setParameter("input", "%" + search + "%");
+		return queryc.getResultList();
+		
+	}
+
+
+	
+	
+	
+	
+	
+	
+	
+	
 }

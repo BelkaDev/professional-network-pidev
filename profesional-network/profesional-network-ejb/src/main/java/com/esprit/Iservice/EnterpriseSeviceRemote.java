@@ -16,6 +16,7 @@ public interface EnterpriseSeviceRemote {
 	public void DeleteEnterprise(int id);
 	public int ModifyEnterprise(int id, String name, String domain,String location,int empnumber, String descrip);
 	public Enterprise getenterpriseById(int Eid);
+	public List<Enterprise> getAllEnterprise();
 	
 	
 	

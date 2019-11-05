@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 
 import com.esprit.Iservice.IInterestsServiceLocal;
 import com.esprit.beans.User;
+import com.esprit.beans.candidate.Candidate;
 import com.esprit.beans.JobOffer;
 import com.esprit.utils.UserSession;
 @Stateless
@@ -28,11 +29,19 @@ public class InterestsService implements IInterestsServiceLocal{
 		user.setInterests(interest);
 		em.merge(user);
 	}
+	
+	@Override
+	public void candidateAddInterest(String interest,int id) {
+		Candidate c= em.find(Candidate.class, id);
+		c.setInterests(interest);
+		em.merge(c);
+	}
 
 	@Override
 	public void offerAddInterest(int idOffer,String interest) {
 		JobOffer offer= em.find(JobOffer.class,idOffer);
 		offer.setInterests(interest);
+		em.merge(offer);
 	}
 
 

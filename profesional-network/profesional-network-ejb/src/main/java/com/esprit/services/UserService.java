@@ -133,6 +133,14 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 		User user=em.find(User.class, UserSession.getInstance().getId());
 		return user;
 	}
+	
+	public List<User> getUserByRole(){
+		
+		return em.createQuery("select u from User u where u.role= :role", User.class)
+				.setParameter("role", Role.Candidate)
+				.getResultList();
+		
+	}
 	@Override
 	public void ResetingPassword(String userName) {
 		TypedQuery<User> q=  em.createQuery("SELECT u from User u where u.username= :username ",User.class);

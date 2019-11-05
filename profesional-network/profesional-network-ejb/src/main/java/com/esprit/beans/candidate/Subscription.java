@@ -39,6 +39,12 @@ public class Subscription implements Serializable {
 		this.enterpriseId = enterpriseId;
 	}
 	
+	
+	
+	public Candidate getCandidate() {
+		return Candidate;
+	}
+
 	public void setCandidate(Candidate c)
 	{
 		this.Candidate=c;

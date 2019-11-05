@@ -50,6 +50,18 @@ public class Candidate implements Serializable {
 	@Column(name="cv")
 	private String cv;
 
+	@Column(name="interests")
+    private String interests;	
+	
+
+	
+	
+	public String getInterests() {
+		return interests;
+	}
+	public void setInterests(String interests) {
+		this.interests = interests;
+	}
 
 	
 	@JsonIgnoreProperties({"candidate"})
@@ -85,6 +97,7 @@ public class Candidate implements Serializable {
 	@JoinColumn(name="Candidate_ID")
 	private Set<Views> views;
 	
+	@JsonIgnoreProperties({"candidate"})
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="Candidate")
 	private Set<Subscription> subscriptions;
 	
