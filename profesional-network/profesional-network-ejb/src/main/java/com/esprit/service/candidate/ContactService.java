@@ -50,23 +50,15 @@ public class ContactService implements IContactServiceLocal, IContactServiceRemo
 		
 		// notify reciever for the request
 		// Notify won't work here cause it works on users not candidates
-		/*String notif_message = "candidate.getFirstName()+  +candidate.getLastName() wants to get in contact with you.";
+		String notif_message = c.getFirstName()+" "+c.getLastName()+" wants to get in contact with you.";
 		NOTIFICATION_TYPE type = NOTIFICATION_TYPE.Contact;
-		notificationservice.CreateNotification(receiverId,notif_message,type,senderId);*/
+		notificationservice.CreateNotification(receiverId,notif_message,type,senderId);
 	}
 	@Override
 	public void cancelRequest(int requestId) {
 		Contact c = em.find(Contact.class, requestId);
 		em.remove(c);
-		
-		
-		//remove notification from reciever
-		Notification notif = new Notification();
-		notif.setTarget(NOTIFICATION_TARGET.Profile);
-		//notif.setReciever(c.get);
-		//notif.setTargetId(c.getSender.getId());
-		//notificationservice.cancelNotif(notif);
-		
+	
 	}
 	@Override
 	public Set<Contact> getRequests(int receiverId) {
@@ -85,7 +77,6 @@ public class ContactService implements IContactServiceLocal, IContactServiceRemo
 		
 		//notify sender for being accepted
 		//String notif_message = "candidate.getFirstName()+  +candidate.getLastName() accepted your contact request.";
-		NOTIFICATION_TYPE type = NOTIFICATION_TYPE.Accepted;
 		//notificationservice.CreateNotification(c.getSender(),type,notif_message,c.getReciever());
 	}
 	@Override

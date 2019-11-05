@@ -26,18 +26,23 @@ import javax.validation.constraints.AssertTrue;
 
 import com.esprit.enums.NOTIFICATION_TARGET;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Notification implements Serializable { 
     
 	private static final long serialVersionUID = 1L;
+	@JsonIgnore
 	private Integer id;	
     private String message;
+	@JsonIgnore
     private User reciever;
     @AssertFalse
+	@JsonIgnore
     private boolean seen;
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd,HH:00", timezone="CET")
     private Timestamp date;
+	@JsonIgnore
     private Integer targetId;
 	private NOTIFICATION_TARGET target;
 

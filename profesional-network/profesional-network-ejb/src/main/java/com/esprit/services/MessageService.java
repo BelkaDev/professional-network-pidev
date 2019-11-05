@@ -3,6 +3,8 @@ package com.esprit.services;
 
 import java.sql.Timestamp;
 import java.util.List;
+
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -13,6 +15,7 @@ import com.esprit.Iservice.IMessageServiceRemote;
 import com.esprit.beans.Message;
 import com.esprit.beans.Quiz;
 import com.esprit.beans.User;
+import com.esprit.enums.NOTIFICATION_TYPE;
 import com.esprit.utils.UserSession;
 
 
@@ -23,6 +26,9 @@ public class MessageService implements IMessageServiceLocal,IMessageServiceRemot
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
 
+	@EJB
+	NotificationService notificationservice = new NotificationService();
+	
 	@Override
 	public void sendMessage(int idSender, int idRecipient, String body) {
 
@@ -34,14 +40,12 @@ public class MessageService implements IMessageServiceLocal,IMessageServiceRemot
 		msg.setSender(sender);
 		msg.setStatus(0);
 		msg.setRecipient(idRecipient);
-			
+		em.persist(msg);
+		String notif_message = sender.getFirstName()+" "+sender.getLastName()+": "+body;
+		NOTIFICATION_TYPE type = NOTIFICATION_TYPE.Message;
+		notificationservice.CreateNotification(idRecipient,notif_message,type ,idSender);
 		
-		if ((msg.getRecipient() == 0 )){
-			System.out.println("The destinator doesn't exist.");}
-			else {
-				em.persist(msg);
-			}
-		}
+	}
 		
 	@Override
 	public List<Message> findAllMessages() {
