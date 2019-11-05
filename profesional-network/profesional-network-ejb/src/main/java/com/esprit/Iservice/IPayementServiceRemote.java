@@ -17,6 +17,6 @@ public interface IPayementServiceRemote {
 	public boolean ValidateCanceledPayment(int idP);
 	public boolean validatePayment(int idP);
 	public boolean removePayment(int id);
-	
+	public boolean numCardvalid(String num);
 	public boolean isPremium(int userId);
 }

@@ -17,6 +17,7 @@ import com.esprit.beans.Pack;
 import com.esprit.beans.User;
 import com.esprit.beans.UserPack;
 import com.esprit.enums.PackType;
+import com.esprit.utils.UserSession;
 
 @Stateless
 @LocalBean
@@ -85,8 +86,8 @@ public class PackService implements IPackServiceLocal, IPackServiceRemote {
 	}
 	
 	@Override
-	public void payPack(int id, int packId) {
-		User u = em.find(User.class, id);
+	public void addPackToPayIt(int packId) {
+		User u = em.find(User.class, UserSession.getInstance().getId());
 		Pack p = em.find(Pack.class, packId);
 		System.out.println("/**********************************"+u.getId()+" "+ p.getId());
 		UserPack up = new UserPack();
@@ -94,23 +95,30 @@ public class PackService implements IPackServiceLocal, IPackServiceRemote {
 		up.setPack(p);
 		up.setUser(u);
 		System.out.println("*************"+up.getPack()+" "+up.getUser());
-		up.setValid(true);
-		
+		up.setValid(false);
+		if(p.getReduction()!=0)
+		{
 		up.setStartDate(p.getStartDate());
 		up.setEndDate(p.getEndDate());
+		
+		}
 		em.persist(up);
 		u.getPacks().add(up);
 		p.getUsers().add(up);
+		em.merge(u);
+		em.merge(p);
 
 	}
 	@Override
 	public void bonusPack(UserPack up) {
 		em.persist(up);
 	}
-	public UserPack getUserPack(int id)
+	@Override
+	public UserPack getUserPack()
 	{
-		
-		TypedQuery<UserPack> query = em.createQuery("select e from UserPack e where e.", UserPack.class);
+		User u=em.find(User.class, UserSession.getInstance().getId());
+		TypedQuery<UserPack> query = em.createQuery("select e from UserPack e where e.user= :id", UserPack.class);
+		query.setParameter("id",u );
 		UserPack results = query.getSingleResult();
 		return results;
 		

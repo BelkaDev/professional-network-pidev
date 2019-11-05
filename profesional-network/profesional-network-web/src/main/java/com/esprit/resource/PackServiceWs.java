@@ -21,6 +21,7 @@ import com.esprit.beans.Pack;
 import com.esprit.beans.User;
 import com.esprit.enums.PackType;
 import com.esprit.services.PackService;
+import com.esprit.utils.UserSession;
 
 @Path("pack")
 public class PackServiceWs {
@@ -72,7 +73,7 @@ public class PackServiceWs {
 			l.add(a);
 			for (User u : ps.getUsers()) {
 				if (u.getPacks().contains(p)) {
-
+					
 					a = "User : " + u.getFirstName() + "," + u.getLastName() + ", bought :" + p.getTitle() + ", type:"
 							+ p.getType() + ",from " + p.getStartDate() + " au " + p.getEndDate();
 					l.add(a);
@@ -128,11 +129,11 @@ public class PackServiceWs {
 	}
 
 	@PUT
-	@Path("payPack/{id}/{idP}")
+	@Path("payPack/{idP}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response payPack(@PathParam(value = "id") int id, @PathParam(value = "idP") int idP) {
-		ps.payPack(id, idP);
-		return Response.status(200).entity("pack paid " + id).build();
+	public Response payPack( @PathParam(value = "idP") int idP) {
+		ps.addPackToPayIt( idP);
+		return Response.status(200).entity("pack paid " + UserSession.getInstance().getId()).build();
 	}
 
 }
