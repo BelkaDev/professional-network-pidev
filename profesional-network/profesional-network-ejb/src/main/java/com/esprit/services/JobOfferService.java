@@ -56,7 +56,7 @@ public class JobOfferService implements JobOfferServiceRemote {
 			
 			Enterprise enterpriseManagedEntity = em.find(Enterprise.class, user.getEnterprise().getEid());
 			joboffer.setEnterprise(enterpriseManagedEntity);
-			joboffer.setIsValid(0);
+			joboffer.setIsValid(1);
 			joboffer.setVuesNumber(0);
 			Calendar currenttime = Calendar.getInstance();
 			Date JOdate = new Date((currenttime.getTime()).getTime());

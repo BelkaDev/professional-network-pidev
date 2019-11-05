@@ -67,11 +67,12 @@ public class JobOfferWS {
 	public Response addjoboffer(@QueryParam("JOtitle") String JOtitle,
 			@QueryParam("JOarea") String JOarea,
 			@QueryParam("JOdescription") String JOdescription, 
-			@QueryParam("JOexperience") int JOexperience
+			@QueryParam("JOexperience") int JOexperience,
+			@QueryParam("interests")String interests
 			
 
 	) {
-		JobOffer j = new JobOffer(JOtitle, JOarea, JOdescription,JOexperience);
+		JobOffer j = new JobOffer(JOtitle, JOarea, JOdescription,JOexperience,interests);
 
 		jobofferws.AddJobOffer(j);
 		return Response.status(200).entity(status).build();

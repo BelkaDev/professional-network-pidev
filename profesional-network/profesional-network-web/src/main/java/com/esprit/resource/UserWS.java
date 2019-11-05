@@ -59,7 +59,8 @@ public class UserWS {
     		@QueryParam("gender") Gender gender,
     		@QueryParam("streetAddress")String streetAddress,
     		@QueryParam("city")String city,
-    		@QueryParam("postalCode")int postalCode
+    		@QueryParam("postalCode")int postalCode,
+    		@QueryParam("interests")String interests
 
 
     		)
@@ -69,7 +70,8 @@ public class UserWS {
 		d.setPostalCode(postalCode);
 		d.setStreetAddress(streetAddress);
 		
-		User user = new User(email, firstName, lastName, password, gender, birthDate, d, username, role); 
+		User user = new User(email, firstName, lastName, password, gender, birthDate, d, username, role,interests);
+		
 		if(userservice.UsernameMailUnique(user.getUsername(), user.getEmail())) {
 		userservice.addUser(user);
 
