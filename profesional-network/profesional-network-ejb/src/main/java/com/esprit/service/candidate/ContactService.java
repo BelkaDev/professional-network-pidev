@@ -153,7 +153,7 @@ public class ContactService implements IContactServiceLocal, IContactServiceRemo
 		{
 			for(Candidate i : candidateIdList)
 			{
-				if(c.getId()==i.getId())
+				if(c.getCandidateId()==i.getCandidateId())
 				{
 					toReturn.add(c);
 				}
