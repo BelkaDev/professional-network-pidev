@@ -33,9 +33,9 @@ public class MessageWS {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("add")
-	public Response addMessage(@QueryParam("recipient") int idRecipient,
-			@QueryParam("body") String body
+	@Path("send")
+	public Response addMessage(@QueryParam("to") int idRecipient,
+			@QueryParam("content") String body
 	) {	
 
 		int idSender = UserSession.getInstance().getId();

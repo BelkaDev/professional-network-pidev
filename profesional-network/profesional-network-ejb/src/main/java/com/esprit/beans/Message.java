@@ -24,10 +24,11 @@ public class Message implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
     private Timestamp date;
-    @JsonIgnoreProperties({"whoclaims","messages","comments","reactions"})
+    @JsonIgnoreProperties({"whoclaims","messages","comments","reactions","password"})
 	private User sender;
     private int recipient;
     private String body;
+    @JsonIgnore
     private int status;
     
     
