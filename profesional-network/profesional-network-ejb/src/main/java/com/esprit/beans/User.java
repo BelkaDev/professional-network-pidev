@@ -57,7 +57,8 @@ public class User implements Serializable {
     private Role role;
 	@Column(name="interests")
     private String interests;	
-
+	@Column(name="accountCreationDate")
+	private Date accountCreationDate;
 	// ****************************
 	@ManyToOne(cascade = CascadeType.ALL)
 	Enterprise enterprise;
@@ -367,6 +368,17 @@ public class User implements Serializable {
 
 	public void setRecieveMailNotifs(boolean recieveMailNotifs) {
 		this.recieveMailNotifs = recieveMailNotifs;
+	}
+	
+
+
+	public Date getAccountCreationDate() {
+		return accountCreationDate;
+	}
+
+
+	public void setAccountCreationDate(Date accountCreationDate) {
+		this.accountCreationDate = accountCreationDate;
 	}
 
 

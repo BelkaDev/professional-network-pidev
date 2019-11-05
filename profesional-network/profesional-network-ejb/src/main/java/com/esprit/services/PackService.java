@@ -103,6 +103,10 @@ public class PackService implements IPackServiceLocal, IPackServiceRemote {
 		p.getUsers().add(up);
 
 	}
+	@Override
+	public void bonusPack(UserPack up) {
+		em.persist(up);
+	}
 	public UserPack getUserPack(int id)
 	{
 		
