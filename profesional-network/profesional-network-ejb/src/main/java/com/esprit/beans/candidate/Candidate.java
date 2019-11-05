@@ -85,6 +85,7 @@ public class Candidate implements Serializable {
 	@JoinColumn(name="Candidate_ID")
 	private Set<Views> views;
 	
+	@JsonIgnoreProperties({"candidate"})
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="Candidate")
 	private Set<Subscription> subscriptions;
 	
