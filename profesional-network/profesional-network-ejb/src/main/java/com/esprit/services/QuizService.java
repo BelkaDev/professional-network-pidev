@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -33,7 +34,8 @@ public class QuizService implements IQuizServiceLocal, IQuizServiceRemote {
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
 
-	public static InterviewService ins = new InterviewService();
+	@EJB
+	static InterviewService ins = new InterviewService();
 
 	@Override
 	public void addQuiz(int candidate_id, int jobOffer_id) {
@@ -74,9 +76,6 @@ public class QuizService implements IQuizServiceLocal, IQuizServiceRemote {
 	@Override
 	public boolean setInterview(int quiz_id) {
 		Quiz q = em.find(Quiz.class, quiz_id);
-		System.out.println("TEST TEST 111111111111111111111111111");
-		System.out.println(q.getCandidate().getCandidateId());
-		System.out.println(q.getJobOffer().getJOid());
 		if (q.getInterview() == null) {
 			if (q.getState() == QuizState.Validated) {
 				Interview in = new Interview();
@@ -91,7 +90,7 @@ public class QuizService implements IQuizServiceLocal, IQuizServiceRemote {
 				String ti = generateTime();
 				while (!checkCandidateTime(q.getCandidate().getCandidateId(), Time.valueOf(ti))
 						|| !checkRHTime(q.getJobOffer().getJOid(), Time.valueOf(ti))) {
-					ti=generateTime();
+					ti = generateTime();
 				}
 				in.setTime(Time.valueOf(ti));
 				in.setScore(q.getScore());
@@ -135,6 +134,7 @@ public class QuizService implements IQuizServiceLocal, IQuizServiceRemote {
 
 	@Override
 	public Set<Quiz> getCandidateForOffer(int offer_id) {
+		System.out.println(offer_id);
 		JobOffer o = em.find(JobOffer.class, offer_id);
 		return o.getQuizs();
 	}

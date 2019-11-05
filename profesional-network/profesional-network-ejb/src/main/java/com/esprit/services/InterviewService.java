@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -23,13 +24,18 @@ import com.esprit.beans.Interview;
 import com.esprit.beans.InterviewState;
 import com.esprit.beans.JobOffer;
 import com.esprit.beans.Quiz;
+import com.esprit.enums.NOTIFICATION_TARGET;
+import com.esprit.enums.NOTIFICATION_TYPE;
 
 @Stateless
 @LocalBean
 public class InterviewService implements IInterviewServiceLocal, IInterviewServiceRemote {
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
-	public static QuizService qs = new QuizService();
+	@EJB
+	 QuizService qs = new QuizService();
+	@EJB
+	 NotificationService ns = new NotificationService();
 
 	@Override
 	public boolean setDate(int interview_id, String date, int candidate_id, int joboffer_id) {
@@ -96,28 +102,31 @@ public class InterviewService implements IInterviewServiceLocal, IInterviewServi
 	@Override
 	public void acceptCandidate(int joboffer_id) {
 		Set<Interview> interviews = getInterviewsForOffer(joboffer_id);
-		if(!interviews.isEmpty()) {
-		for(Interview i:interviews) {
-			setStateRejected(i.getId());
+		if (!interviews.isEmpty()) {
+			for (Interview i : interviews) {
+				setStateRejected(i.getId());
+			}
+			setStateAccepted(interviews.iterator().next().getId());
 		}
-		setStateAccepted(interviews.iterator().next().getId());
-		}
+		sendNotifToCandidates(joboffer_id);
 	}
 
 	@Override
 	public Set<Interview> getInterviewsForOffer(int jobOffer_id) {
 		JobOffer o = em.find(JobOffer.class, jobOffer_id);
+		System.out.println("*********************" + o.getJOdescription() + "*************************");
 		if (o.getQuizs().isEmpty())
 			return null;
 		Set<Interview> interviews = new TreeSet<Interview>(new Comparator<Interview>() {
 			@Override
 			public int compare(Interview o1, Interview o2) {
-				if(o1.getScore()>o2.getScore())
-				return 1;
-				if(o1.getScore()<o2.getScore())
+				if (o1.getScore() > o2.getScore())
 					return -1;
+				if (o1.getScore() < o2.getScore())
+					return 1;
 				return 0;
-			}});
+			}
+		});
 		for (Quiz q : o.getQuizs()) {
 			if (q.getInterview() != null)
 				interviews.add(q.getInterview());
@@ -127,8 +136,14 @@ public class InterviewService implements IInterviewServiceLocal, IInterviewServi
 
 	@Override
 	public void sendNotifToCandidates(int jobOffer_id) {
-		// TODO Auto-generated method stub
-
+		System.out.println("*********************************************NotifTest******************************");
+		System.out.println(jobOffer_id);
+		Set<Quiz> quizs = em.find(JobOffer.class, jobOffer_id).getQuizs();
+		 for (Quiz q : quizs) {
+		ns.CreateNotification(q.getCandidate().getCandidateId() ,
+				q.getInterview().getState().toString(), NOTIFICATION_TYPE.Offer,
+				q.getInterview().getId());
+		 }
 	}
 
 	@Override
