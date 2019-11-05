@@ -26,17 +26,13 @@ import javax.validation.constraints.AssertTrue;
 
 import com.esprit.enums.NOTIFICATION_TARGET;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class Notification implements Serializable { 
     
 	private static final long serialVersionUID = 1L;
-    @JsonIgnore
 	private Integer id;	
     private String message;
-    @JsonIgnore
     private User reciever;
     @AssertFalse
     private boolean seen;
