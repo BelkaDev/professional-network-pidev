@@ -75,7 +75,7 @@ public class QuizService implements IQuizServiceLocal, IQuizServiceRemote {
 	public boolean setInterview(int quiz_id) {
 		Quiz q = em.find(Quiz.class, quiz_id);
 		System.out.println("TEST TEST 111111111111111111111111111");
-		System.out.println(q.getCandidate().getCandidateId());
+		System.out.println(q.getCandidate().getId());
 		System.out.println(q.getJobOffer().getJOid());
 		if (q.getInterview() == null) {
 			if (q.getState() == QuizState.Validated) {
@@ -83,13 +83,13 @@ public class QuizService implements IQuizServiceLocal, IQuizServiceRemote {
 				String da = generateDate();
 				while (!(isThisDateValid(da, "yyyy-mm-dd")) || !(ins.isWeekend(da)) || !(ins.isOlderThanToday(da))
 
-						|| !checkCandidateDate(q.getCandidate().getCandidateId(), Date.valueOf(da))
+						|| !checkCandidateDate(q.getCandidate().getId(), Date.valueOf(da))
 						|| !checkHRDate(q.getJobOffer().getJOid(), Date.valueOf(da))) {
 					da = generateDate();
 				}
 				in.setDate(Date.valueOf(da));
 				String ti = generateTime();
-				while (!checkCandidateTime(q.getCandidate().getCandidateId(), Time.valueOf(ti))
+				while (!checkCandidateTime(q.getCandidate().getId(), Time.valueOf(ti))
 						|| !checkRHTime(q.getJobOffer().getJOid(), Time.valueOf(ti))) {
 					ti=generateTime();
 				}
@@ -222,7 +222,7 @@ public class QuizService implements IQuizServiceLocal, IQuizServiceRemote {
 	public List<JobOffer> sendOffers(int quiz_id) {
 		Quiz q = em.find(Quiz.class, quiz_id);
 		if (q.getState() == QuizState.Failed)
-			return selectOffers(q.getCandidate().getCandidateId());
+			return selectOffers(q.getCandidate().getId());
 		return null;
 	}
 
