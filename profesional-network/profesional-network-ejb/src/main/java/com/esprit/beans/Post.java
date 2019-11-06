@@ -39,7 +39,7 @@ public class Post implements Serializable {
     private String content;
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd,HH:00", timezone="CET")
     private Timestamp date;
-    @JsonIgnoreProperties({"whoclaims","messages","comments","reactions"})
+    @JsonIgnore
     private User user;
     private POST_TYPE type;
     @JsonIgnore

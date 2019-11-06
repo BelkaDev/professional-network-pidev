@@ -31,7 +31,7 @@ public class ReactionWS {
 	@POST
 		@Consumes(MediaType.APPLICATION_JSON)
 	@Path("add")	
-	public Response addReaction(@QueryParam("idPost") int idPost,
+	public Response addReaction(@QueryParam("post") int idPost,
 			@QueryParam("type") REACTION_TYPE reactionType
 	) {
 		int idUser = UserSession.getInstance().getId();

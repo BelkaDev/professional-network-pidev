@@ -32,7 +32,7 @@ public class CommentWS {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("add")	
-	public Response addComment(@QueryParam("idPost") int idPost,
+	public Response addComment(@QueryParam("post") int idPost,
 			@QueryParam("content") String content
 	) {
 		int idUser = UserSession.getInstance().getId();

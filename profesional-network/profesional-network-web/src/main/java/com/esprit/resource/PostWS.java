@@ -84,7 +84,7 @@ public class PostWS {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("share")
-	public Response sharePost(@QueryParam("idPost") int idPost) {
+	public Response sharePost(@QueryParam("post") int idPost) {
 		int idUser = UserSession.getInstance().getId();
 		if (!PostService.sharePost(idPost,idUser))
 		{
@@ -177,6 +177,20 @@ public class PostWS {
 	@Path("user")
 	public Response findUserPosts(@QueryParam("id") int idUser) {
 		List<Post> Posts = PostService.findAllUserPosts(idUser);
+
+		if (Posts == null)
+			return Response.status(Status.NOT_FOUND).entity("No Posts Found").build();
+		else
+			return Response.ok(Posts).build();
+
+	}
+	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("myposts")
+	public Response findUserPosts() {
+		List<Post> Posts = PostService.findAllUserPosts(UserSession.getInstance().getId());
 
 		if (Posts == null)
 			return Response.status(Status.NOT_FOUND).entity("No Posts Found").build();

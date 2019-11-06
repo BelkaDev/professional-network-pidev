@@ -38,8 +38,8 @@ public class NotificationService implements INotificationServiceLocal,INotificat
 			NOTIFICATION_TYPE type,int targetId) {
 			
 
-		Set<NOTIFICATION_TYPE> POST_TYPE = EnumSet.of(NOTIFICATION_TYPE.Comment, NOTIFICATION_TYPE.Share, NOTIFICATION_TYPE.Reaction
-				,NOTIFICATION_TYPE.Follow);
+		Set<NOTIFICATION_TYPE> POST_TYPE = EnumSet.of(NOTIFICATION_TYPE.Comment,
+				NOTIFICATION_TYPE.Follow);
 		NOTIFICATION_TARGET target =  NOTIFICATION_TARGET.None;
 		
 			if (POST_TYPE.contains(type)) { 
@@ -53,6 +53,14 @@ public class NotificationService implements INotificationServiceLocal,INotificat
 			} else if  (type.equals(NOTIFICATION_TYPE.Offer))
 			{
 				 target = NOTIFICATION_TARGET.Offer;
+			}
+			else if (type.equals(NOTIFICATION_TYPE.Share))
+			{
+				target = NOTIFICATION_TARGET.Share;
+			}
+			else if (type.equals(NOTIFICATION_TYPE.Comment))
+			{
+				target = NOTIFICATION_TARGET.Comment;
 			}
 			
 		Notification newNotification = new Notification();

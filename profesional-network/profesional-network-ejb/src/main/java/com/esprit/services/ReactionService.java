@@ -64,7 +64,7 @@ public class ReactionService implements IReactionServiceLocal,IReactionServiceRe
 			if (post.getUser().getId() == follower.getId())
 			{
 				notif_message = reacter.getFirstName()+" "+reacter.getLastName()+
-						" reactmented on your Post.";
+						" reacted on your Post.";
 			}
 			NOTIFICATION_TYPE notif_type = NOTIFICATION_TYPE.Reaction;
 			notificationservice.CreateNotification(follower.getId(),notif_message,notif_type ,react.getReactedPost().getId());
