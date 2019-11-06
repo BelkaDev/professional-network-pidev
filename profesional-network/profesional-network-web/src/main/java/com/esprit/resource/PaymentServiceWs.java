@@ -53,14 +53,14 @@ public class PaymentServiceWs {
 		@Produces(MediaType.APPLICATION_JSON)
 		@Path("cancelPayment/{idPayment}")
 	    public Response CancelPayment(
-	    		@PathParam(value="idPyment")int idPayment
+	    		@PathParam(value="idPayment")int idPayment
 	    		)
 	    {
 		 if(ps.cancelPayment(idPayment)) {
 			 return Response.status(Status.OK).entity("REQUEST SENDED TO ADMIN").build();
 		 }
 		 
-		 return Response.status(Status.NOT_ACCEPTABLE).entity("The payment was validated").build();
+		 return Response.status(Status.NOT_ACCEPTABLE).entity("a request was sended to the admin ").build();
 		 
 	    }
 	 
@@ -122,6 +122,6 @@ public class PaymentServiceWs {
 		 if(ps.removePayment(id)) {
 			 return Response.status(200).entity("Deleted payment with "+id).build();
 		 }
-	     return Response.status(200).entity("payment not found ").build();
+	     return Response.status(Status.NOT_ACCEPTABLE).entity("payment cant be canceled ").build();
 	 }
 }
