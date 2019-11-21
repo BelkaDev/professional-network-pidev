@@ -47,6 +47,10 @@ User user = em.find(User.class, UserSession.getInstance().getId());
 	
 	@Override
 	public void DeleteEnterprise(int id) {
+		
+User user = em.find(User.class, UserSession.getInstance().getId());
+		
+		if(UserSession.getInstance().getRole()==Role.Enterprise_Admin)
 		em.remove(em.find(Enterprise.class, id));
 		}
 	
