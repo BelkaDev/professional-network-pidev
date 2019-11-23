@@ -67,7 +67,7 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 		List<User> user=q.getResultList();
 		for(User u:user)
 		{
-		if(!(u.getUsername().equals(username))&& !(u.getEmail().equals(email)))		{
+		if((u.getUsername().equals(username))||(u.getEmail().equals(email)))		{
 			return true;
 		}
 		

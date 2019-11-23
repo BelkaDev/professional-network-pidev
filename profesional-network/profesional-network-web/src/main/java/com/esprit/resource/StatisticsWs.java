@@ -16,7 +16,7 @@ import com.esprit.services.StatistiqueService;
 public class StatisticsWs {
 	@EJB
 	StatistiqueService cs;
-
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("projectsAdded")

@@ -13,6 +13,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity
 @Table(name = "JOBOFFER")
@@ -41,10 +44,11 @@ public class JobOffer implements Serializable{
 	@Column(name="tags")
 	private String interests;
 	
-
+	@JsonIgnore
 	@OneToMany(mappedBy="jobOffer")
 	private Set<Quiz> quizs;
 
+	@JsonIgnore
 	@ManyToOne
 	Enterprise enterprise;
 

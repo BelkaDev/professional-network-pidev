@@ -229,27 +229,27 @@ public class CandidateWs {
 	@Path("getExperience")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response displayExperience(@QueryParam("id")int id) {
-		return Response.status(Status.FOUND).entity(cs.displayProfileObject(id, new Experience())).build();
+		return Response.status(Status.OK).entity(cs.displayProfileObject(id, new Experience())).build();
 	}
 	
 	@GET
 	@Path("getSkill")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response displaySkill(@QueryParam("id")int id) {
-		return Response.status(Status.FOUND).entity(cs.displayProfileObject(id, new Skill())).build();
+		return Response.status(Status.OK).entity(cs.displayProfileObject(id, new Skill())).build();
 	}
 	@GET
 	@Path("getActivity")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response displayActivity(@QueryParam("id")int id) {
-		return Response.status(Status.FOUND).entity(cs.displayProfileObject(id, new Activity())).build();
+		return Response.status(Status.OK).entity(cs.displayProfileObject(id, new Activity())).build();
 	}
 	
 	@GET
 	@Path("getCertification")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response displayCertification(@QueryParam("id")int id) {
-		return Response.status(Status.FOUND).entity(cs.displayProfileObject(id, new Certification())).build();
+		return Response.status(Status.OK).entity(cs.displayProfileObject(id, new Certification())).build();
 	}
 	
 	@GET

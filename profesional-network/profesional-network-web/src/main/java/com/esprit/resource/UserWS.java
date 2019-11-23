@@ -39,7 +39,7 @@ public class UserWS {
 
 
 	@EJB
-	UserService userservice;
+	UserService userservice = new UserService() ;
 
 	@Context
 	UriInfo uriInfo;
@@ -72,7 +72,7 @@ public class UserWS {
 		
 		User user = new User(email, firstName, lastName, password, gender, birthDate, d, username, role,interests);
 		
-		if(userservice.UsernameMailUnique(user.getUsername(), user.getEmail())) {
+		if(!userservice.UsernameMailUnique(user.getUsername(), user.getEmail())) {
 		userservice.addUser(user);
 
 
@@ -124,6 +124,7 @@ public class UserWS {
 				if (test)
 				{
 					String token = issueToken(username);
+					System.out.print("------------------------ "+ token);
 					userservice.updateToken(username,token);
 					System.out.println("****************** " + token);
 					 return Response.status(Status.CREATED).entity("CONNECTED").build();

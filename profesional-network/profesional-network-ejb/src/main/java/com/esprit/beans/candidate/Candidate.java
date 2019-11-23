@@ -64,25 +64,25 @@ public class Candidate implements Serializable {
 	}
 
 	
-	@JsonIgnoreProperties({"candidate"})
+	@JsonIgnoreProperties({"candidates"})
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name="Candidate_Experience",joinColumns=@JoinColumn(name="Candidate_ID"),
 	inverseJoinColumns=@JoinColumn(name="Experience_ID"))
 	private Set<Experience> experiences = new HashSet<>();
 	
-	@JsonIgnoreProperties({"candidate"})
+	@JsonIgnoreProperties({"candidates"})
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name="Candidate_Certification",joinColumns=@JoinColumn(name="Candidate_ID"),
 	inverseJoinColumns=@JoinColumn(name="Certification_ID"))
 	private Set<Certification> certifications;
 	
-	@JsonIgnoreProperties({"candidate"})
+	@JsonIgnoreProperties({"candidates"})
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name="Candidate_Activity",joinColumns=@JoinColumn(name="Candidate_ID"),
 	inverseJoinColumns=@JoinColumn(name="Skill_ID"))
 	private Set<Activity> activities;
 	
-	@JsonIgnoreProperties({"candidate"})
+	@JsonIgnoreProperties({"candidates"})
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name="Candidate_Skill",joinColumns=@JoinColumn(name="Candidate_ID"),
 	inverseJoinColumns=@JoinColumn(name="Skill_ID"))
@@ -93,6 +93,7 @@ public class Candidate implements Serializable {
 	@JoinColumn(name="Candidate_ID")
 	private Set<Contact> contacts;
 	
+	@JsonIgnoreProperties({"candidate"})
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="Candidate_ID")
 	private Set<Views> views;
@@ -101,12 +102,13 @@ public class Candidate implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="Candidate")
 	private Set<Subscription> subscriptions;
 	
+	@JsonIgnoreProperties({"candidate"})
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="Candidate",fetch = FetchType.EAGER)
 	private Set<JobApplication> jobApplications;
 	
 
 	
-	@JsonIgnore
+	@JsonIgnoreProperties({"candidate"})
 	@OneToMany(mappedBy="candidate")
 	private Set<Quiz> quizs;
 

@@ -227,6 +227,7 @@ public class PaymentService implements IPayementServiceLocal, IPayementServiceRe
 		}
 		else if (!p.isCanceled()) {
 			p.setValidation(true);
+			p.getUserPack().setValid(true);
 			em.merge(p);
 			ns.CreateNotification(p.getUserPack().getUser().getId(), "your payment was validated", NOTIFICATION_TYPE.Payment, p.getId());
 			return true;

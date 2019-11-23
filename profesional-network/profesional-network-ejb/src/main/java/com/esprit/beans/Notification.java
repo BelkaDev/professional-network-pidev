@@ -42,7 +42,6 @@ public class Notification implements Serializable {
     private boolean seen;
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd,HH:00", timezone="CET")
     private Timestamp date;
-	@JsonIgnore
     private Integer targetId;
 	private NOTIFICATION_TARGET target;
 

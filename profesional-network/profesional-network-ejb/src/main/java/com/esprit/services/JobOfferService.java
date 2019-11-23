@@ -130,7 +130,7 @@ public class JobOfferService implements JobOfferServiceRemote {
 	@Override
 	public int ValidateJoboffer(int id) {
 		User user= em.find(User.class, UserSession.getInstance().getId());
-		if(UserSession.getInstance().getRole() == Role.Human_Resouces) {
+	//	if(UserSession.getInstance().getRole() == Role.Enterprise_Admin) {
 		
 		Query query = em.createQuery("update JobOffer j set j.isValid=1 where j.JOid=:id");
 		query.setMaxResults(1);
@@ -152,8 +152,8 @@ public class JobOfferService implements JobOfferServiceRemote {
 		}
 		
 		return validate;
-		}
-		return 0;
+		//}
+	
 	
 	}
 	
@@ -178,7 +178,6 @@ public class JobOfferService implements JobOfferServiceRemote {
 		TypedQuery<JobOffer> queryc = em.createQuery("SELECT j FROM JobOffer j WHERE j.JOtitle LIKE :input or j.JOarea LIKE :input or j.JOdescription LIKE :input or j.JOexperience LIKE :input ORDER BY j.JOdate DESC ",JobOffer.class);
 		queryc.setParameter("input", "%" + search + "%");
 		return queryc.getResultList();
-		
 	}
 
 

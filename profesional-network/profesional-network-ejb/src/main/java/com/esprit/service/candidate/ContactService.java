@@ -137,7 +137,7 @@ public class ContactService implements IContactServiceLocal, IContactServiceRemo
 	}
 	@Override
 	public List<JobOffer> getOffersByEnterprise(int enterpriseId) {
-		return em.createQuery("select j from JOBOFFER j where enterprise_ENT_ID = "+enterpriseId).getResultList();
+		return em.createQuery("select j from JobOffer j where enterprise_ENT_ID = "+enterpriseId).getResultList();
 	}
 	@Override
 	public List<Candidate> getContactsInEnterprise(int candidateId, int enterpriseId) {

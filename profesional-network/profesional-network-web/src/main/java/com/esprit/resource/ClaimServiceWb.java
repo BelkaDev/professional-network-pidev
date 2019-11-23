@@ -21,8 +21,9 @@ import javax.ws.rs.core.Response.Status;
 
 import com.esprit.beans.Claim;
 import com.esprit.beans.State;
-
+import com.esprit.enums.NOTIFICATION_TYPE;
 import com.esprit.services.ClaimService;
+import com.esprit.services.NotificationService;
 
 
 
@@ -35,7 +36,8 @@ import com.esprit.services.ClaimService;
 public class ClaimServiceWb {
 	@EJB
 	ClaimService cs;
-	
+	@EJB
+	NotificationService ns=new NotificationService();
 	
 	 @POST
 	    @Path("addClaim")
@@ -47,6 +49,7 @@ public class ClaimServiceWb {
 	            @QueryParam("claimsOn")int claimsOn
 	    ){
 		 cs.addClaim( description, type, whoClaim, claimsOn);
+		 ns.CreateNotification(4, "claim", NOTIFICATION_TYPE.Message, 0);
 		 return Response.status(Status.CREATED).entity("Add succesful").build();
 	    }
 	 
