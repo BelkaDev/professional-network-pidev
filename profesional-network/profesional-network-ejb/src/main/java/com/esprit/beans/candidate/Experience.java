@@ -18,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity()
 @Table(name="Experience")
 public class Experience implements Serializable {
@@ -34,6 +36,7 @@ public class Experience implements Serializable {
 	private Date startDate;
 	@Column(name="end_date")
 	private Date endDate;
+	@JsonIgnoreProperties({"experiences"})
 	@ManyToMany( cascade=CascadeType.ALL,mappedBy="experiences")
 	private Set<Candidate> candidates = new HashSet<Candidate>();
 	
