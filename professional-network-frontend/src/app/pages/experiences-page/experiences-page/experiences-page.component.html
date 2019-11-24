@@ -1,0 +1,6 @@
+<div *ngFor="let exp of experiences">
+  {{exp.designation}}
+  <div *ngFor="let candidate of exp.candidates">
+    {{candidate.firstName}}
+  </div>
+</div>
