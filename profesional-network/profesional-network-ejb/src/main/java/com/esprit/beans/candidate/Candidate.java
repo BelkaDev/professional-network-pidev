@@ -24,19 +24,15 @@ import javax.validation.constraints.Max;
 
 import com.esprit.beans.Interests;
 import com.esprit.beans.Quiz;
-
+import com.esprit.beans.User;
 import com.esprit.enums.Tags;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "Candidate")
-public class Candidate implements Serializable {
+public class Candidate extends User implements Serializable {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID")
-	private int candidateId;
 	@Column(name = "firstname")
 	private String firstName;
 	@Column(name = "lastname")
@@ -114,12 +110,6 @@ public class Candidate implements Serializable {
 
 	
 
-	public int getCandidateId() {
-		return candidateId;
-	}
-	public void setCandidateId(int candidateId) {
-		this.candidateId = candidateId;
-	}
 	
 	
 	public String getFirstName() {

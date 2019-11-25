@@ -16,6 +16,7 @@ import com.esprit.Iservice.IUserServiceLocal;
 import com.esprit.Iservice.IUserServiceRemote;
 import com.esprit.beans.Enterprise;
 import com.esprit.beans.User;
+import com.esprit.beans.candidate.Candidate;
 import com.esprit.enums.Role;
 import com.esprit.utils.BCrypt;
 import com.esprit.utils.SendingMail;
@@ -40,9 +41,15 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 		user.setEnable(false);
 		user.setConfirm(codeGen.getInstance().randomString(5));
 		em.persist(user);
-		
-			
 	}
+	
+	@Override
+	public void addCandidateUser(User user, int candidateId) {
+		
+		
+	}
+	
+	
 
 	@Override
 	public void addUser(User user) {
@@ -53,7 +60,27 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 		System.out.print(paass);
 		user.setEnable(false);
 		user.setConfirm(codeGen.getInstance().randomString(5));
-		em.persist(user);
+		
+		
+		if(user.getRole()==Role.Candidate)
+		{
+			Candidate c = new Candidate();
+			c.setEmail(user.getEmail());
+			c.setFirstName(user.getFirstName());
+			c.setLastName(user.getLastName());
+			c.setPassword(user.getPassword());
+			c.setGender(user.getGender());
+			c.setBirthDate(user.getBirthDate());
+			c.setAddress(user.getAddress());
+			c.setUsername(user.getUsername());
+			c.setRole(user.getRole());
+			c.setInterests(user.getInterests());
+			em.persist(c);
+		}
+		else
+		{
+			em.persist(user);
+		}
 		
 			
 	}
@@ -211,4 +238,8 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 		System.out.print(interestsList);
 		return interestsList;
 	}
+
+
+
+	
 }
