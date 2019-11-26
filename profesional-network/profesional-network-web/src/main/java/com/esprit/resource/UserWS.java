@@ -125,9 +125,12 @@ public class UserWS {
 				{
 					String token = issueToken(username);
 					System.out.print("------------------------ "+ token);
+					User u=new User();
+					u.setUsername(username);
+					u.setPassword(password);
 					userservice.updateToken(username,token);
 					System.out.println("****************** " + token);
-					 return Response.status(Status.CREATED).entity("CONNECTED").build();
+					 return Response.status(Status.OK).entity(u).build();
 
 				}
 				else {
