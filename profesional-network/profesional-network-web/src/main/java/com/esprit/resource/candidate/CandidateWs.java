@@ -253,29 +253,36 @@ public class CandidateWs {
 	}
 	
 	@GET
+	@Path("getAllExperience")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response displayAllExperience(@QueryParam("id")int id) {
+		return Response.status(Status.OK).entity(cs.displayListOfProfileObject(id, new Experience())).build();
+	}
+	
+	@GET
 	@Path("getCandidateByExperience")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response displayCandidateByExperience(@QueryParam("id")int id) {
-		return Response.status(Status.FOUND).entity(cs.displayCandidatesByProfileObject(id, new Experience())).build();
+		return Response.status(Status.OK).entity(cs.displayCandidatesByProfileObject(id, new Experience())).build();
 	}
 	
 	@GET
 	@Path("getCandidateByActivity")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response displayCandidateByActivity(@QueryParam("id")int id) {
-		return Response.status(Status.FOUND).entity(cs.displayCandidatesByProfileObject(id, new Activity())).build();
+		return Response.status(Status.OK).entity(cs.displayCandidatesByProfileObject(id, new Activity())).build();
 	}
 	@GET
 	@Path("getCandidateBySkill")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response displayCandidateBySkill(@QueryParam("id")int id) {
-		return Response.status(Status.FOUND).entity(cs.displayCandidatesByProfileObject(id, new Skill())).build();
+		return Response.status(Status.OK).entity(cs.displayCandidatesByProfileObject(id, new Skill())).build();
 	}
 	@GET
 	@Path("getCandidateByCertification")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response displayCandidateByCertification(@QueryParam("id")int id) {
-		return Response.status(Status.FOUND).entity(cs.displayCandidatesByProfileObject(id, new Certification())).build();
+		return Response.status(Status.OK).entity(cs.displayCandidatesByProfileObject(id, new Certification())).build();
 	}
 	
 	@PUT
