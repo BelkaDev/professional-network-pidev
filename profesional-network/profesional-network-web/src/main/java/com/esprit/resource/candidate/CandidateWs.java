@@ -123,8 +123,7 @@ public class CandidateWs {
 		e.setType(type);
 		e.setStartDate(startDate);
 		e.setEndDate(endDate);
-		cs.addProfileObject(e, candidateID);
-		return Response.status(Status.CREATED).entity("Experience Added").build();
+		return Response.status(Status.OK).entity(cs.addProfileObject(e, candidateID)).build();
 	}
 	
 	@POST
@@ -197,9 +196,8 @@ public class CandidateWs {
 	@DELETE
 	@Path("deleteExperience")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response deleteExperience(@QueryParam("experienceID")int experienceID,@QueryParam("candidateID")int candidateID) {
-		cs.deleteProfileObject(experienceID, new Experience(), candidateID);
-		return Response.status(Status.OK).entity("the experience has been deleted").build();
+	public Response deleteExperience(@QueryParam("experienceId")int experienceID,@QueryParam("candidateId")int candidateID) {
+		return Response.status(Status.OK).entity(cs.deleteProfileObject(experienceID, new Experience(), candidateID)).build();
 	}
 	@DELETE
 	@Path("deleteSkill")

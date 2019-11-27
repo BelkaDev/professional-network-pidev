@@ -14,6 +14,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.esprit.enums.Rating;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity()
 @Table(name = "skill")
@@ -26,6 +27,7 @@ public class Skill implements Serializable {
 	private String designation;
 	@Column(name="skill_rating")
 	private double rating;
+	@JsonIgnoreProperties({"skills"})
 	@ManyToMany( cascade=CascadeType.ALL,mappedBy="skills")
 	private Set<Candidate> candidates = new HashSet<Candidate>();
 	public int getId() {

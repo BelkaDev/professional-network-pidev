@@ -12,9 +12,9 @@ import com.esprit.beans.candidate.Views;
 @Remote
 public interface ICandidateServiceRemote {
 	public void addCandidate(Candidate c);
-	public void addProfileObject(Object c,int CandidateID);
+	public Object addProfileObject(Object c,int CandidateID);
 	public void addExistingProfileObject(int candidateID, int objectID,Object o);
-	public void deleteProfileObject(int id,Object o,int candidateID);
+	public Object deleteProfileObject(int id,Object o,int candidateID);
 	public void updateProfileObject(int id,Object o);
 	public Object displayProfileObject(int objectID,Object o);
 	public Object displayListOfProfileObject(int candidateId,Object o);
