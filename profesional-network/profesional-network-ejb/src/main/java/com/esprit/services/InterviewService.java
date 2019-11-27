@@ -140,7 +140,7 @@ public class InterviewService implements IInterviewServiceLocal, IInterviewServi
 		System.out.println(jobOffer_id);
 		Set<Quiz> quizs = em.find(JobOffer.class, jobOffer_id).getQuizs();
 		 for (Quiz q : quizs) {
-		ns.CreateNotification(q.getCandidate().getCandidateId() ,
+		ns.CreateNotification(q.getCandidate().getId() ,
 				q.getInterview().getState().toString(), NOTIFICATION_TYPE.Offer,
 				q.getInterview().getId());
 		 }

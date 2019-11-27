@@ -17,6 +17,7 @@ public interface ICandidateServiceRemote {
 	public void deleteProfileObject(int id,Object o,int candidateID);
 	public void updateProfileObject(int id,Object o);
 	public Object displayProfileObject(int objectID,Object o);
+	public Object displayListOfProfileObject(int candidateId,Object o);
 	public List<Candidate> displayCandidates();
 	public Set<Candidate> displayCandidatesByProfileObject(int objectId,Object o);
 	public void addView(int viewerId,int viewedId);

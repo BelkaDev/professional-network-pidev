@@ -188,4 +188,17 @@ public class CandidateService implements ICandidateServiceLocal, ICandidateServi
 		c.getViews().add(v);
 	}
 
+	@Override
+	public Object displayListOfProfileObject(int candidateId, Object o) {
+		Candidate c = em.find(Candidate.class, candidateId);
+		if (o.getClass() == Experience.class) {
+			return c.getExperiences();
+		} else if (o.getClass() == Skill.class) {
+			return c.getSkills();
+		} else if (o.getClass() == Certification.class) {
+			return c.getCertifications();
+		}
+		return c.getActivities();
+	}
+
 }

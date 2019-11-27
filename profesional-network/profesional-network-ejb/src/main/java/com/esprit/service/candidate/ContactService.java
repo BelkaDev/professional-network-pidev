@@ -71,7 +71,7 @@ public class ContactService implements IContactServiceLocal, IContactServiceRemo
 		c.setStatus("accepted");
 		Contact c1 = new Contact();
 		Candidate ca = em.find(Candidate.class, c.getContactId());
-		c1.setContactId(c.getCandidate().getCandidateId());
+		c1.setContactId(c.getCandidate().getId());
 		c1.setStatus("accepted");
 		ca.getContacts().add(c1);
 		
@@ -149,7 +149,7 @@ public class ContactService implements IContactServiceLocal, IContactServiceRemo
 		{
 			for(Candidate i : candidateIdList)
 			{
-				if(c.getCandidateId()==i.getCandidateId())
+				if(c.getId()==i.getId())
 				{
 					toReturn.add(c);
 				}
