@@ -23,7 +23,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import com.esprit.services.UserService;
-
+import com.esprit.utils.UserSession;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -125,12 +125,9 @@ public class UserWS {
 				{
 					String token = issueToken(username);
 					System.out.print("------------------------ "+ token);
-					User u=new User();
-					u.setUsername(username);
-					u.setPassword(password);
 					userservice.updateToken(username,token);
 					System.out.println("****************** " + token);
-					 return Response.status(Status.OK).entity(u).build();
+					 return Response.status(Status.OK).entity(UserSession.getInstance()).build();
 
 				}
 				else {
