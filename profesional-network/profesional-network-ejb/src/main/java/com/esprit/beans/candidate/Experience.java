@@ -18,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity()
 @Table(name="Experience")
 public class Experience implements Serializable {
@@ -25,7 +27,7 @@ public class Experience implements Serializable {
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	@Column(name="Experience_ID")
-	private int experienceId;
+	private int id;
 	@Column(name="designation")
 	private String designation;
 	@Column(name="type")
@@ -34,14 +36,15 @@ public class Experience implements Serializable {
 	private Date startDate;
 	@Column(name="end_date")
 	private Date endDate;
+	@JsonIgnoreProperties({"experiences"})
 	@ManyToMany( cascade=CascadeType.ALL,mappedBy="experiences")
 	private Set<Candidate> candidates = new HashSet<Candidate>();
 	
 	public int getId() {
-		return experienceId;
+		return id;
 	}
 	public void setId(int id) {
-		this.experienceId = id;
+		this.id = id;
 	}
 	public String getDesignation() {
 		return designation;
@@ -76,7 +79,7 @@ public class Experience implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return "Experience [experienceId=" + experienceId + ", designation=" + designation + ", type=" + type
+		return "Experience [experienceId=" + id + ", designation=" + designation + ", type=" + type
 				+ ", startDate=" + startDate + ", endDate=" + endDate + ", candidates=" + candidates + "]";
 	}
 	

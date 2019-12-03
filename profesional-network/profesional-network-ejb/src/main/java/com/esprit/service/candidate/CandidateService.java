@@ -35,21 +35,26 @@ public class CandidateService implements ICandidateServiceLocal, ICandidateServi
 	}
 
 	@Override
-	public void addProfileObject(Object o, int CandidateID) {
+	public Object addProfileObject(Object o, int CandidateID) {
 		Candidate c = em.find(Candidate.class, CandidateID);
 		if (o.getClass() == Experience.class) {
 			Experience e = (Experience) o;
 			c.getExperiences().add(e);
+			return e;
 		} else if (o.getClass() == Skill.class) {
 			Skill s = (Skill) o;
 			c.getSkills().add(s);
+			return s;
 		} else if (o.getClass() == Certification.class) {
 			Certification cert = (Certification) o;
 			c.getCertifications().add(cert);
+			return cert;
 		} else if (o.getClass() == Activity.class) {
 			Activity a = (Activity) o;
 			c.getActivities().add(a);
+			return a;
 		}
+		return null;
 
 	}
 
@@ -74,22 +79,26 @@ public class CandidateService implements ICandidateServiceLocal, ICandidateServi
 	}
 
 	@Override
-	public void deleteProfileObject(int id, Object o, int candidateID) {
+	public Object deleteProfileObject(int id, Object o, int candidateID) {
 		Candidate c = em.find(Candidate.class, candidateID);
 		if (o.getClass() == Experience.class) {
 			Experience e = em.find(Experience.class, id);
 			c.getExperiences().remove(e);
-			System.out.println(e);
+			return e;
 		} else if (o.getClass() == Skill.class) {
 			Skill s = em.find(Skill.class, id);
 			c.getSkills().remove(s);
+			return s;
 		} else if (o.getClass() == Certification.class) {
 			Certification cert = em.find(Certification.class, id);
 			c.getCertifications().remove(cert);
+			return cert;
 		} else if (o.getClass() == Activity.class) {
 			Activity a = em.find(Activity.class, id);
 			c.getActivities().remove(a);
+			return a;
 		}
+		return null;
 	}
 
 	@Override
@@ -186,6 +195,19 @@ public class CandidateService implements ICandidateServiceLocal, ICandidateServi
 		Date d = new Date(System.currentTimeMillis());
 		v.setDate(d);
 		c.getViews().add(v);
+	}
+
+	@Override
+	public Object displayListOfProfileObject(int candidateId, Object o) {
+		Candidate c = em.find(Candidate.class, candidateId);
+		if (o.getClass() == Experience.class) {
+			return c.getExperiences();
+		} else if (o.getClass() == Skill.class) {
+			return c.getSkills();
+		} else if (o.getClass() == Certification.class) {
+			return c.getCertifications();
+		}
+		return c.getActivities();
 	}
 
 }

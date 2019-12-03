@@ -12,11 +12,12 @@ import com.esprit.beans.candidate.Views;
 @Local
 public interface ICandidateServiceLocal {
 	public void addCandidate(Candidate c);
-	public void addProfileObject(Object c,int CandidateID);
+	public Object addProfileObject(Object c,int CandidateID);
 	public void addExistingProfileObject(int candidateID, int objectID,Object o);
-	public void deleteProfileObject(int id,Object o,int candidateID);
+	public Object deleteProfileObject(int id,Object o,int candidateID);
 	public void updateProfileObject(int id,Object o);
 	public Object displayProfileObject(int objectID,Object o);
+	public Object displayListOfProfileObject(int candidateId,Object o);
 	public List<Candidate> displayCandidates();
 	public Set<Candidate> displayCandidatesByProfileObject(int objectId,Object o);
 	public void addView(int viewerId,int viewedId);

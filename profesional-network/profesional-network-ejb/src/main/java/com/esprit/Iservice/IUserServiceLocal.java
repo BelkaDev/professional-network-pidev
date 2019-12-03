@@ -24,6 +24,7 @@ public interface IUserServiceLocal {
 	public boolean UsernameMailUnique(String username,String email);
 	void addEnterpriseUser(User user, int EnterpriseId);
 	List<String> fetchUserInterests(int idUser);
+	void addCandidateUser(User user, int candidateId);
 	List<User> allUsers();
 
 	

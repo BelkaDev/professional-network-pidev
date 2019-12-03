@@ -16,11 +16,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import com.esprit.beans.Enterprise;
 import com.esprit.beans.EnterpriseEvent;
 import com.esprit.beans.User;
-
+import com.esprit.beans.candidate.Experience;
 import com.esprit.services.EnterpriseService;
 import com.esprit.utils.UserSession;
 
@@ -50,7 +51,7 @@ public class EnterpriseWS {
 		Enterprise e =new Enterprise(Ename, Edomain, Elocation, Employeesnumber,Edescription);
 		enterprisews.AddEnterprise(e);
 		
-		return Response.status(200).entity(status).build();
+		return Response.status(Status.CREATED).entity("enterprise added").build();
 	}
 	
 	
@@ -66,7 +67,7 @@ public class EnterpriseWS {
 		
 
 		enterprisews.ModifyEnterprise(id, Ename, Edomain, Elocation, Employeesnumber,Edescription);
-		return Response.status(200).entity(status).build();
+		return Response.status(Status.CREATED).entity(status).build();
 	}
 	
 	
@@ -85,8 +86,9 @@ public class EnterpriseWS {
 	@GET 
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("getallent")
-	public List<Enterprise> getallent() {
-		return enterprisews.getAllEnterprise();
+	public Response getallent() {
+		//return enterprisews.getAllEnterprise();
+		return Response.status(Status.OK).entity(enterprisews.getAllEnterprise()).build();
 	}
 	
 	
@@ -95,6 +97,7 @@ public class EnterpriseWS {
 	@Path("getentbyid")
 	public Enterprise getentbyid(@QueryParam("Eid") int Eid) {
 		return enterprisews.getenterpriseById(Eid);
+		
 	}
 	
 	

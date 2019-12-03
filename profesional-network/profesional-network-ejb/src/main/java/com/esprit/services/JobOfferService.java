@@ -98,6 +98,13 @@ public class JobOfferService implements JobOfferServiceRemote {
 		TypedQuery<JobOffer> q1 = em.createQuery("select j from JobOffer j ", JobOffer.class);
 		return q1.getResultList();
 	}
+	
+	public List<JobOffer> getJobofferByEnt(int entid){
+		Enterprise enterpriseManagedEntity = em.find(Enterprise.class, entid);
+		TypedQuery<JobOffer> q1 = em.createQuery("select j from JobOffer j where j.enterprise=:entid ", JobOffer.class);
+		q1.setParameter("entid", enterpriseManagedEntity);
+		return q1.getResultList();
+	}
 
 	@Override
 	public List<JobOffer> getJobofferByExperience(int JOexperience) {
