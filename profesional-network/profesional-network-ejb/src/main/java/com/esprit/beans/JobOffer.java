@@ -48,7 +48,7 @@ public class JobOffer implements Serializable{
 	@OneToMany(mappedBy="jobOffer")
 	private Set<Quiz> quizs;
 
-	@JsonIgnore
+	
 	@ManyToOne
 	Enterprise enterprise;
 

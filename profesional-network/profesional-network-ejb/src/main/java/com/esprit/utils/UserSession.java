@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.esprit.beans.Address;
+import com.esprit.beans.Enterprise;
 import com.esprit.beans.User;
 import com.esprit.enums.Gender;
 import com.esprit.enums.Role;
@@ -53,6 +54,8 @@ public final class UserSession {
 	private Role role;
 	
 	private String interests;
+	
+	private Enterprise enterprise;
 
 	public UserSession(String username, String password, int id) {
 		super();
@@ -63,7 +66,7 @@ public final class UserSession {
 
 	public UserSession(int id, String email, String firstName, String lastName, String password,
 			boolean recieveMailNotifs, Gender gender, Date date, boolean enable, String confirm, Address address,
-			  String username, String token, Role role,String interests) {
+			  String username, String token, Role role,String interests,Enterprise enterprise) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -80,6 +83,7 @@ public final class UserSession {
 		this.token = token;
 		this.role = role;
 		this.interests=interests;
+		this.enterprise=enterprise;
 	}
 
 	public UserSession() {
@@ -89,7 +93,7 @@ public final class UserSession {
 		if (instance == null) {
 			instance = new UserSession(user.getId(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getPassword(), 
 					user.getRecieveMailNotifs(), user.getGender(), user.getBirthDate(), user.isEnable(), user.getConfirm(), user.getAddress(),
-					 user.getUsername(), user.getToken(), user.getRole(),user.getInterests());
+					 user.getUsername(), user.getToken(), user.getRole(),user.getInterests(),user.getEnterprise());
 		}
 		return instance;
 	}
@@ -233,6 +237,15 @@ public final class UserSession {
 	public void setInterests(String interests) {
 		this.interests = interests;
 	}
+
+	public Enterprise getEnterprise() {
+		return enterprise;
+	}
+
+	public void setEnterprise(Enterprise enterprise) {
+		this.enterprise = enterprise;
+	}
+	
 	
 
 }

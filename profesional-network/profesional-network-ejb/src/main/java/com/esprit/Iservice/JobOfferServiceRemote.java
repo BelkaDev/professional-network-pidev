@@ -20,5 +20,6 @@ public interface JobOfferServiceRemote {
 	public void Notifcandidat();
 	List<String> fetchOfferTags(int idOffer);
 	public List<JobOffer> SearchJoboffer(String search);
+	public List<JobOffer> getJobofferByEnt(int entid);
 }
 

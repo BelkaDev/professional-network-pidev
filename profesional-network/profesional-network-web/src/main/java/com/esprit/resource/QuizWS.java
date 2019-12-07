@@ -36,14 +36,15 @@ public class QuizWS {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response removeQuiz(@QueryParam("id") int quiz_id) {
 		quizService.deleteQuiz(quiz_id);
-		return Response.status(Status.OK).entity("the quiz has been deleted").build();
+		String msg="the quiz has been deleted";
+		return Response.status(Status.OK).entity(msg).build();
 	}
 
 	@GET
 	@Path("getQuiz")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response displayQuiz(@QueryParam("id") int quiz_id) {
-		return Response.status(Status.FOUND).entity(quizService.displayQuiz(quiz_id)).build();
+		return Response.status(Status.OK).entity(quizService.displayQuiz(quiz_id)).build();
 	}
 
 	@PUT
@@ -68,11 +69,13 @@ public class QuizWS {
 	@Path("setInterview")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response setInterview(@QueryParam("id") int quiz_id) {
+		String msg="we are sorry to inform you that you have failed the quiz";
 		if (quizService.setInterview(quiz_id)) {
+			msg="your interview has been set up please check for the time and date";
 			return Response.status(Status.OK)
-					.entity("your interview has been set up please check for the time and date").build();
+					.entity(msg).build();
 		}
-		return Response.status(Status.OK).entity("we are sorry to inform you that you have failed the quiz").build();
+		return Response.status(Status.OK).entity(msg).build();
 	}
 
 	@PUT
@@ -87,7 +90,7 @@ public class QuizWS {
 	@Path("OfferQuiz")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response showOfferQuiz(@QueryParam("idOffer") int offer_id) {
-		return Response.status(Status.FOUND).entity(quizService.getCandidateForOffer(offer_id)).build();
+		return Response.status(Status.OK).entity(quizService.getCandidateForOffer(offer_id)).build();
 	}
 
 	@PUT
@@ -105,7 +108,8 @@ public class QuizWS {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response validate(@QueryParam("idOffer") int offer_id) {
 		quizService.ChooseCnadidate(offer_id);
-		return Response.status(Status.OK).entity("the selection process for interviews has been completed").build();
+		String msg="the selection process for interviews has been completed";
+		return Response.status(Status.OK).entity(msg).build();
 	}
 	@GET
 	@Path("moreoffers")

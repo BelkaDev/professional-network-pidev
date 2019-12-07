@@ -48,6 +48,9 @@ public class EnterpriseEvent implements Serializable {
 	
 	
 	
+	
+	
+	
 	@ManyToOne
 	Enterprise enterprise;
 	
@@ -115,6 +118,7 @@ public class EnterpriseEvent implements Serializable {
 		EEminparticipants = eEminparticipants;
 		EEmaxparticipants = eEmaxparticipants;
 		EEprice = eEprice;
+		
 	}
 
 

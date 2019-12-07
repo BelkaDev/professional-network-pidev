@@ -14,7 +14,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
+import com.esprit.beans.Enterprise;
 import com.esprit.beans.EnterpriseEvent;
 import com.esprit.beans.JobOffer;
 import com.esprit.services.EnterpriseEventService;
@@ -38,14 +40,16 @@ public class EnterpriseEventWS {
 			@QueryParam("EEdescription") String EEdescription,
 			@QueryParam("EEminparticipants") int EEminparticipants,
 			@QueryParam("EEmaxparticipants") int EEmaxparticipants,
-			@QueryParam("EEprice") float EEprice
+			@QueryParam("EEprice") float EEprice,
+			@QueryParam("user") int user
+			
 			
 
 	) {
 		
 		EnterpriseEvent ee= new EnterpriseEvent(EEtitle,EEplace,EESdate,EEEdate,EEdescription,EEminparticipants,EEmaxparticipants,EEprice);
-		enterpriseeventws.AddEnterpriseEvent(ee);
-		return Response.status(200).entity(status).build();
+		enterpriseeventws.AddEnterpriseEvent(ee,user);
+		return Response.status(Status.CREATED).entity(status).build();
 	}
 	
 	
@@ -82,8 +86,9 @@ public class EnterpriseEventWS {
 	@GET 
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("getevent")
-	public List<EnterpriseEvent> getevent() {
-		return enterpriseeventws.getAllEnterpriseEvent();
+	public Response getevent() {
+		//return enterpriseeventws.getAllEnterpriseEvent();
+		return Response.status(Status.OK).entity(enterpriseeventws.getAllEnterpriseEvent()).build();
 	}
 	
 	

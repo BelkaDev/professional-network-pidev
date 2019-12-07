@@ -67,7 +67,7 @@ public class EnterpriseWS {
 		
 
 		enterprisews.ModifyEnterprise(id, Ename, Edomain, Elocation, Employeesnumber,Edescription);
-		return Response.status(200).entity(status).build();
+		return Response.status(Status.CREATED).entity(status).build();
 	}
 	
 	
@@ -95,10 +95,9 @@ public class EnterpriseWS {
 	@GET 
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("getentbyid")
-	public Response getentbyid(@QueryParam("Eid") int Eid) {
-		//return enterprisews.getenterpriseById(Eid);
-		return Response.status(Status.OK).entity(enterprisews.getenterpriseById(Eid)).build();
-
+	public Enterprise getentbyid(@QueryParam("Eid") int Eid) {
+		return enterprisews.getenterpriseById(Eid);
+		
 	}
 	
 	

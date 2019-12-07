@@ -107,7 +107,7 @@ public class Candidate extends User implements Serializable {
 	
 
 	
-	@JsonIgnoreProperties({"candidate"})
+	@JsonIgnore
 	@OneToMany(mappedBy="candidate")
 	private Set<Quiz> quizs;
 

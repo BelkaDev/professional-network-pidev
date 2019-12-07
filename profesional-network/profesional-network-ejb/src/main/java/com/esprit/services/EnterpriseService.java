@@ -31,7 +31,7 @@ public class EnterpriseService  implements EnterpriseSeviceRemote{
 		
 User user = em.find(User.class, UserSession.getInstance().getId());
 		
-		if(UserSession.getInstance().getRole()==Role.Enterprise_Admin) {
+		//if(UserSession.getInstance().getRole()==Role.Enterprise_Admin) {
 			
 			em.persist(enterprise);
 			Enterprise ent = em.find(Enterprise.class, enterprise.getEid());
@@ -41,8 +41,8 @@ User user = em.find(User.class, UserSession.getInstance().getId());
 			return enterprise.getEid();
 		}
 		
-		return 0;
-	    }
+		//return 0;
+	    //}
 	
 	
 	@Override
@@ -69,13 +69,13 @@ User user = em.find(User.class, UserSession.getInstance().getId());
 		System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaa"+UserSession.getInstance().getId());
 		User user = em.find(User.class, UserSession.getInstance().getId());
 		
-		if(user.getRole()==Role.Enterprise_Admin && user.getEnterprise().getEid()==id ) {
+		//if(user.getRole()==Role.Enterprise_Admin && user.getEnterprise().getEid()==id ) {
 			int modified = query.executeUpdate();
 			
 			return modified;
-		}
+		//}
 		
-		return 0;
+		//return 0;
 		
 		
 	}

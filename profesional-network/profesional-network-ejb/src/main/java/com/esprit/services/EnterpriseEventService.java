@@ -26,23 +26,23 @@ public class EnterpriseEventService implements EnterpriseEventServiceRemote{
 	EntityManager em;
 
 	@Override
-	public int AddEnterpriseEvent(EnterpriseEvent event) {
-		User user = em.find(User.class, UserSession.getInstance().getId());
+	public int AddEnterpriseEvent(EnterpriseEvent event,int user) {
+		User us = em.find(User.class, user);
 		
-		if(UserSession.getInstance().getRole()==Role.Enterprise_Admin) {
+		//if(UserSession.getInstance().getRole()==Role.Enterprise_Admin) {
 		
 		
 		
-		Enterprise entrepriseManagedEntity = em.find(Enterprise.class, user.getEnterprise().getEid());
+		Enterprise entrepriseManagedEntity = em.find(Enterprise.class, us.getEnterprise().getEid());
 
 		event.setEnterprise(entrepriseManagedEntity);
 		event.setEEvues(0);
-		event.setEEstate(0);
+		event.setEEstate(1);
 		event.setEEtickets(0);
 		em.persist(event);
 		return event.getEEid();
-		}
-		return 0;
+		//}
+		//return 0;
 	}
 
 	@Override

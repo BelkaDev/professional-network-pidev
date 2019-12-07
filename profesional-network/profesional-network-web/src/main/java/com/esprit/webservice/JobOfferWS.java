@@ -14,6 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import com.esprit.beans.JobOffer;
 import com.esprit.services.JobOfferService;
@@ -30,8 +31,16 @@ public class JobOfferWS {
 	@GET 
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("getjoboffer")
-	public List<JobOffer> getjooboffer() {
-		return jobofferws.getAllJobOffer();
+	public Response getjooboffer() {
+		//return jobofferws.getAllJobOffer();
+		return Response.status(Status.OK).entity(jobofferws.getAllJobOffer()).build();
+	}
+	
+	@GET 
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("getjobofferbyent")
+	public Response getjoobofferbyent(@QueryParam("entid") int entid) {
+		return Response.status(Status.OK).entity(jobofferws.getJobofferByEnt(entid)).build();
 	}
 	
 	@GET 
