@@ -8,7 +8,6 @@ import javax.ejb.Remote;
 import com.esprit.beans.Enterprise;
 import com.esprit.beans.JobOffer;
 import com.esprit.beans.candidate.Candidate;
-import com.esprit.beans.candidate.Contact;
 import com.esprit.beans.candidate.Subscription;
 
 @Remote
@@ -18,7 +17,8 @@ public interface IContactServiceRemote {
 	public void acceptRequest(int requestId);
 	public void cancelRequest(int requestId);
 	public void blockCandidate(int blocker,int toBlock);
-	public Set<Contact> getRequests(int receiverId);
+	//public Set<Contact> getRequests(int receiverId);
+	public Candidate followCandidate(int follower,int followed);
 	public Set<Candidate> getFriendsList(int candidateId);
 	public List<Candidate> searchForCandidates(String criteria);
 	public List<Enterprise> searchForEnterprise(String criteria);
