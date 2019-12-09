@@ -85,7 +85,7 @@ public class UserWS {
 
 	@POST
     @Path("addentuser")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)	
     public Response addEnterpriseUser(
             @QueryParam("username")String username,
             @QueryParam("email")String email,

@@ -90,6 +90,14 @@ public class EnterpriseEventService implements EnterpriseEventServiceRemote{
 
 	}
 	
+	
+	public List<EnterpriseEvent> getEventByEnt(int entid){
+		Enterprise enterpriseManagedEntity = em.find(Enterprise.class, entid);
+		TypedQuery<EnterpriseEvent> q1 = em.createQuery("select e from EnterpriseEvent e where e.enterprise=:entid ", EnterpriseEvent.class);
+		q1.setParameter("entid", enterpriseManagedEntity);
+		return q1.getResultList();
+	}
+	
 
 	
 	

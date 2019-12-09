@@ -1,12 +1,18 @@
 package com.esprit.webservice;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.Key;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.EJB;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -15,11 +21,17 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.io.IOUtils;
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+
 import com.esprit.beans.Enterprise;
 import com.esprit.beans.EnterpriseEvent;
+import com.esprit.beans.FileUpload;
 import com.esprit.beans.User;
 import com.esprit.beans.candidate.Experience;
 import com.esprit.services.EnterpriseService;
@@ -45,14 +57,19 @@ public class EnterpriseWS {
 			@QueryParam("Edomain") String Edomain,
 			@QueryParam("Elocation") String Elocation,
 			@QueryParam("Employeesnumber") int Employeesnumber, 
-			@QueryParam("Edescription") String Edescription
-
+			@QueryParam("Edescription") String Edescription,
+			@QueryParam("userid") int userid,
+			@QueryParam("file") String filename
 	) {
+	    FileUpload fileS = new FileUpload();
+	    fileS.setPath(filename);
+	    
 		Enterprise e =new Enterprise(Ename, Edomain, Elocation, Employeesnumber,Edescription);
-		enterprisews.AddEnterprise(e);
+		enterprisews.AddEnterprise(e,userid,filename);
 		
 		return Response.status(Status.CREATED).entity("enterprise added").build();
 	}
+	
 	
 	
 	@PUT
@@ -99,6 +116,22 @@ public class EnterpriseWS {
 		return enterprisews.getenterpriseById(Eid);
 		
 	}
+	
+	
+	@GET 
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("getsubsbyent")
+	public Response getsubscriptionbyent(@QueryParam("entid") int entid) {
+		
+		return Response.status(Status.OK).entity(enterprisews.getsubscriberByEnt(entid)).build();
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

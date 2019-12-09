@@ -22,6 +22,7 @@ public class Subscription implements Serializable {
 	private int enterpriseId;
 	@ManyToOne
 	private Candidate Candidate;
+	
 
 	public int getID() {
 		return ID;

@@ -32,10 +32,10 @@ public class EventParticipationService implements EventParticipationServiceRemot
 	EntityManager em;
 
 	@Override
-	public int addParticipation(EventParticipation ep,int eventId) {
-		User user = em.find(User.class, UserSession.getInstance().getId());
+	public int addParticipation(EventParticipation ep,int eventId ,int userid) {
+		User user = em.find(User.class, userid);
 		ep.setUser(user);
-		if(UserSession.getInstance().getRole()==Role.Candidate) {
+		//if(UserSession.getInstance().getRole()==Role.Candidate) {
 		
 		
 		EnterpriseEvent enterpriseeventManagedEntity = em.find(EnterpriseEvent.class, eventId);
@@ -66,7 +66,7 @@ public class EventParticipationService implements EventParticipationServiceRemot
 	        ep.setRidactionCode(generatedString);
 	            
 	        String contenu =("your participation has been registered  , you can now access the event with the following  ridaction code =" + generatedString);
-			SendingMail sm = new SendingMail(contenu, UserSession.getInstance().getEmail(), "ridaction code");
+			SendingMail sm = new SendingMail(contenu, "zied.kouki.1@esprit.tn", "ridaction code");
 			SendingMail.envoyer();
 			
 			
@@ -77,7 +77,7 @@ public class EventParticipationService implements EventParticipationServiceRemot
 		
 		em.persist(ep);
 			
-		}
+		//}
 		
 		return ep.getEPid();
 		
@@ -99,9 +99,9 @@ public class EventParticipationService implements EventParticipationServiceRemot
 	
 	
 	@Override
-	public boolean UniquePart(int eventId)
+	public boolean UniquePart(int eventId,int userid)
 	{
-		User user = em.find(User.class, UserSession.getInstance().getId());
+		User user = em.find(User.class, userid);
 		EnterpriseEvent event=em.find(EnterpriseEvent.class, eventId);	
 			
 		

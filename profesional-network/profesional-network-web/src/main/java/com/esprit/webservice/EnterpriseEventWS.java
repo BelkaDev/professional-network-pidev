@@ -79,7 +79,7 @@ public class EnterpriseEventWS {
 	@Path("deleteevent")
 	public Response deleteevent(@QueryParam("EEid") int id) {
 		enterpriseeventws.DeleteEnterpriseEvent(id);;
-		return Response.status(200).entity(status).build();
+		return Response.status(Status.OK).entity(status).build();
 	}
 	
 	
@@ -100,6 +100,13 @@ public class EnterpriseEventWS {
 		return enterpriseeventws.geteventById(EEid);
 	}
 	
+	
+	@GET 
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("geteventbyent")
+	public Response getjoobofferbyent(@QueryParam("entid") int entid) {
+		return Response.status(Status.OK).entity(enterpriseeventws.getEventByEnt(entid)).build();
+	}
 	
 	
 	

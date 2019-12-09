@@ -19,8 +19,8 @@ public class SendingMail {
      public static String destination ;
      public static String subject ;
  public SendingMail(String contenu,String destination , String subject) {
-     mailUsername = "mouhib.benrhouma@esprit.tn";
-     mailPassword = "Mou200697";
+     mailUsername = "koukiziedd711@gmail.com";
+     mailPassword = "deizniktout711";
      this.contenu=contenu ;
      this.destination=destination ;
      this.subject=subject ;
@@ -33,6 +33,7 @@ public static void envoyer () {
      props.put("mail.smtp.auth", "true");
      props.put("mail.smtp.host", "smtp.gmail.com");
      props.put("mail.smtp.port", "587");
+     props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 
      Session session = Session.getInstance(props,
        new javax.mail.Authenticator() {
