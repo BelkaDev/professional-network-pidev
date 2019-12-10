@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.esprit.beans.candidate.Skill;
 import com.esprit.service.candidate.ContactService;
 
 @Path("contact")
@@ -29,18 +30,25 @@ public class ContactWs {
 		return Response.status(Status.CREATED).entity("Request Sent").build();
 	}
 	
-	@GET
+	/*@GET
 	@Path("getRequests")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getRequests(@QueryParam("receiverId") int receiverId) {
 		return Response.status(Status.FOUND).entity(cs.getRequests(receiverId)).build();
+	}*/
+	
+	@POST
+	@Path("followContact")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addSkill(@QueryParam("follower") int follower,@QueryParam("followed") int followed) {
+		return Response.status(Status.CREATED).entity(cs.followCandidate(follower, followed)).build();
 	}
 	
 	@GET
 	@Path("getFriendsList")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFriendsList(@QueryParam("candidateId") int candidateId) {
-		return Response.status(Status.FOUND).entity(cs.getFriendsList(candidateId)).build();
+		return Response.status(Status.OK).entity(cs.getFriendsList(candidateId)).build();
 	}
 	
 	

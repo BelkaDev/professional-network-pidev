@@ -40,8 +40,10 @@ public class Candidate extends User implements Serializable {
 	@Column(name = "biography")
 	private String biography;
 	@Column(name = "candidate_rating")
-	@Max(5)
 	private double rating;
+	
+	@Column(name = "title")
+	private String title;
 	
 	@Column(name="cv")
 	private String cv;
@@ -84,10 +86,11 @@ public class Candidate extends User implements Serializable {
 	inverseJoinColumns=@JoinColumn(name="Skill_ID"))
 	private Set<Skill> skills;
 	
-	@JsonIgnoreProperties({"candidate"})
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name="Candidate_ID")
-	private Set<Contact> contacts;
+	@JsonIgnoreProperties({"contacts"})
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name="contact",joinColumns=@JoinColumn(name="Candidate_ID"),
+	inverseJoinColumns=@JoinColumn(name="Contact_ID"))
+	private Set<Candidate> contacts;
 	
 	@JsonIgnoreProperties({"candidate"})
 	@OneToMany(cascade = CascadeType.ALL)
@@ -104,7 +107,7 @@ public class Candidate extends User implements Serializable {
 	
 
 	
-	@JsonIgnoreProperties({"candidate"})
+	@JsonIgnore
 	@OneToMany(mappedBy="candidate")
 	private Set<Quiz> quizs;
 
@@ -162,15 +165,12 @@ public class Candidate extends User implements Serializable {
 	}
 	
 	
-	public Set<Contact> getContacts() {
+	public Set<Candidate> getContacts() {
 		return contacts;
 	}
-	public void setContacts(Set<Contact> contacts) {
+	public void setContacts(Set<Candidate> contacts) {
 		this.contacts = contacts;
 	}
-	
-	
-	
 	public Set<Subscription> getSubscriptions() {
 		return subscriptions;
 	}

@@ -127,6 +127,7 @@ public class UserWS {
 					System.out.print("------------------------ "+ token);
 					userservice.updateToken(username,token);
 					System.out.println("****************** " + token);
+					System.out.println(UserSession.getInstance());
 					 return Response.status(Status.OK).entity(UserSession.getInstance()).build();
 
 				}
