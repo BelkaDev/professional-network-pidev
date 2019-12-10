@@ -127,10 +127,7 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 			UserSession.getInstance().cleanUserSession();
 			UserSession.getInstance(user);
 			return true;
-		}
-
-		else
-			return false;
+	
 
 	}
 	@Override

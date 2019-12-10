@@ -155,8 +155,15 @@ public class UserWS {
 
 			return userservice.getUserById();
 
+	}
+	
 
-
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("all")
+	public Response All() {
+			return Response.status(Status.ACCEPTED)
+					.entity(userservice.allUsers()).build();
 	}
 
 	@PUT

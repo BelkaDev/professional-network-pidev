@@ -13,7 +13,7 @@ import com.esprit.enums.POST_TYPE;
 @Local
 public interface IPostServiceLocal {
 	 
-	 void addPost(int idUser,String content, FileUpload file);
+	 Post addPost(int idUser,String content, FileUpload file);
 	 boolean updatePost(int id,String content,FileUpload file);
 	 boolean deletePost(int id);
 	 boolean sharePost(int idPost,int idUser);
