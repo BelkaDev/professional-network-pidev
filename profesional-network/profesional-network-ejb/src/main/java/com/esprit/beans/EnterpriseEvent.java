@@ -3,6 +3,7 @@ package com.esprit.beans;
 import java.io.Serializable;
 import java.sql.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -45,21 +46,29 @@ public class EnterpriseEvent implements Serializable {
 	int EEstate;
 	
 	
-	
-	
-	
-	
-	
+
 	
 	@ManyToOne
 	Enterprise enterprise;
 	
 	
-	
+	@OneToOne(cascade=CascadeType.ALL)
+    private FileUpload fileUpload;
 	
 	
 
 	
+	public FileUpload getFile() {
+		return fileUpload;
+	}
+
+	public void setFile(FileUpload fileUpload) {
+		this.fileUpload = fileUpload;
+	}
+
+
+
+
 	public EnterpriseEvent() {
 		super();
 	}

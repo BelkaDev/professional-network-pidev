@@ -3,6 +3,7 @@ package com.esprit.services;
 import java.sql.Date;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -13,6 +14,7 @@ import javax.persistence.TypedQuery;
 import com.esprit.Iservice.EnterpriseEventServiceRemote;
 import com.esprit.beans.Enterprise;
 import com.esprit.beans.EnterpriseEvent;
+import com.esprit.beans.FileUpload;
 import com.esprit.beans.JobOffer;
 import com.esprit.beans.User;
 import com.esprit.enums.Role;
@@ -21,16 +23,22 @@ import com.esprit.utils.UserSession;
 @Stateless
 @LocalBean
 public class EnterpriseEventService implements EnterpriseEventServiceRemote{
+	@EJB
+	FileService fileService;
 	
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
 
 	@Override
-	public int AddEnterpriseEvent(EnterpriseEvent event,int user) {
+	public int AddEnterpriseEvent(EnterpriseEvent event,int user,String filename) {
 		User us = em.find(User.class, user);
 		
 		//if(UserSession.getInstance().getRole()==Role.Enterprise_Admin) {
-		
+		FileUpload newfile = new FileUpload();
+		newfile.setPath(filename);
+		newfile.setType(null);
+		fileService.addFile(newfile);
+		event.setFile(newfile);
 		
 		
 		Enterprise entrepriseManagedEntity = em.find(Enterprise.class, us.getEnterprise().getEid());
@@ -72,7 +80,7 @@ public class EnterpriseEventService implements EnterpriseEventServiceRemote{
 
 	@Override
 	public List<EnterpriseEvent> getAllEnterpriseEvent() {
-		TypedQuery<EnterpriseEvent> q1 = em.createQuery("select e from EnterpriseEvent e ", EnterpriseEvent.class);
+		TypedQuery<EnterpriseEvent> q1 = em.createQuery("select e from EnterpriseEvent e ORDER BY EEid DESC ", EnterpriseEvent.class);
 		return q1.getResultList();
 	
 	}

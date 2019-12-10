@@ -12,7 +12,7 @@ public interface IUserServiceRemote {
 	public boolean authenticate(String username, String password);
 	public void updateToken(String username,String token);
 	public void confirmCode(String code, int idUser);
-	public void logout() ;
+	public void logout(int id) ;
 	public void disableMailNotifications();
 	public void enableMailNotifications();
 	public List<User> getAdmin();

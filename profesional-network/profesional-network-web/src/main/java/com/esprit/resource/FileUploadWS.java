@@ -50,7 +50,7 @@ public class FileUploadWS {
 		
 	    FileUpload file = new FileUpload();
 	    file.setPath(filename);
-	    fileService.addFile("C:/Users/Zied/Images/"+filename, null);
+//	    fileService.addFile("C:/Users/Zied/Images/"+filename, null);
 	    return Response.status(200).entity( "{\"file\":\""+filename+"\"}").build();
 
 	}

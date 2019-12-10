@@ -97,7 +97,7 @@ public class JobOfferService implements JobOfferServiceRemote {
 	}
 
 	public List<JobOffer> getAllJobOffer() {
-		TypedQuery<JobOffer> q1 = em.createQuery("select j from JobOffer j ", JobOffer.class);
+		TypedQuery<JobOffer> q1 = em.createQuery("select j from JobOffer j ORDER BY JOid DESC ", JobOffer.class);
 		return q1.getResultList();
 	}
 	

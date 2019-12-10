@@ -57,8 +57,8 @@ public class JobOfferWS {
 	@GET 
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("getjobofferbyid")
-	public JobOffer getjoobofferbyid(@QueryParam("JOid") int JOid) {
-		return jobofferws.getJobofferById(JOid);
+	public Response getjoobofferbyid(@QueryParam("JOid") int JOid) {
+		return Response.status(Status.OK).entity(jobofferws.getJobofferById(JOid)).build();
 	}
 	
 	

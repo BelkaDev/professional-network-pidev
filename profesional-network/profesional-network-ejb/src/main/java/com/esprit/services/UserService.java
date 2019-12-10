@@ -141,9 +141,9 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 		
 	}
 	@Override
-	public void logout() {
+	public void logout(int id) {
 		System.out.println("------------------------------------------- "+UserSession.getInstance().getUsername());
-		User user=em.find(User.class, UserSession.getInstance().getId());
+		User user=em.find(User.class, id);
 		user.setToken(null);
 		em.merge(user);
 		UserSession.getInstance().cleanUserSession();
