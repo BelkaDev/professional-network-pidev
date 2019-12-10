@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.ejb.Remote;
 
 import com.esprit.beans.Interview;
+import com.esprit.beans.Quiz;
 
 @Remote
 public interface IInterviewServiceRemote {
@@ -27,7 +28,7 @@ public interface IInterviewServiceRemote {
 
 	public void setStateRejected(int interview_id);
 	
-	public void acceptCandidate(int joboffer_id);
+	public Quiz acceptCandidate(int joboffer_id);
 	
 	public Set<Interview> getInterviewsForOffer(int jobOffer_id);
 	

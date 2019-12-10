@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -23,7 +24,7 @@ public class Question implements Serializable {
 	private int id;
 	@Column(name = "question")
 	private String question;
-	@OneToMany(fetch=FetchType.EAGER,cascade = CascadeType.ALL)
+	@ManyToMany(fetch=FetchType.EAGER,cascade = CascadeType.ALL)
 	private Set<Answer> answers;
 	public int getId() {
 		return id;

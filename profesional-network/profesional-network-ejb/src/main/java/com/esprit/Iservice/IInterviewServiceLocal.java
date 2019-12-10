@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.ejb.Local;
 
 import com.esprit.beans.Interview;
+import com.esprit.beans.Quiz;
 
 @Local
 public interface IInterviewServiceLocal {
@@ -27,7 +28,7 @@ public interface IInterviewServiceLocal {
 
 	public void setStateRejected(int interview_id);
 
-	public void acceptCandidate(int joboffer_id);
+	public Quiz acceptCandidate(int joboffer_id);
 
 	public Set<Interview> getInterviewsForOffer(int jobOffer_id);
 
