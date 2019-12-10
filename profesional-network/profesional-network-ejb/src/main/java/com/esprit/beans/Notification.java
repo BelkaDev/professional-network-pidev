@@ -32,7 +32,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Notification implements Serializable { 
     
 	private static final long serialVersionUID = 1L;
-	@JsonIgnore
 	private Integer id;	
     private String message;
 	@JsonIgnore

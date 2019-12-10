@@ -14,8 +14,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import com.esprit.beans.JobOffer;
+import com.esprit.beans.candidate.Experience;
 import com.esprit.services.JobOfferService;
 
 @Path("joboffer")
@@ -30,15 +32,24 @@ public class JobOfferWS {
 	@GET 
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("getjoboffer")
-	public List<JobOffer> getjooboffer() {
-		return jobofferws.getAllJobOffer();
+	public Response getjooboffer() {
+		//return jobofferws.getAllJobOffer();
+		return Response.status(Status.OK).entity(jobofferws.getAllJobOffer()).build();
+	}
+	
+	@GET 
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("getjobofferbyent")
+	public Response getjoobofferbyent(@QueryParam("entid") int entid) {
+		return Response.status(Status.OK).entity(jobofferws.getJobofferByEnt(entid)).build();
 	}
 	
 	@GET 
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("getjobofferbyexp")
-	public List<JobOffer> getjoobofferbyexp(@QueryParam("JOexperience") int JOexperience) {
-		return jobofferws.getJobofferByExperience(JOexperience);
+	public Response getjoobofferbyexp(@QueryParam("JOexperience") int JOexperience) {
+		//return jobofferws.getJobofferByExperience(JOexperience);
+		return Response.status(Status.OK).entity(jobofferws.getJobofferByExperience(JOexperience)).build();
 	}
 	
 	
@@ -46,8 +57,8 @@ public class JobOfferWS {
 	@GET 
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("getjobofferbyid")
-	public JobOffer getjoobofferbyid(@QueryParam("JOid") int JOid) {
-		return jobofferws.getJobofferById(JOid);
+	public Response getjoobofferbyid(@QueryParam("JOid") int JOid) {
+		return Response.status(Status.OK).entity(jobofferws.getJobofferById(JOid)).build();
 	}
 	
 	
@@ -77,14 +88,15 @@ public class JobOfferWS {
 			@QueryParam("JOarea") String JOarea,
 			@QueryParam("JOdescription") String JOdescription, 
 			@QueryParam("JOexperience") int JOexperience,
-			@QueryParam("interests") String interests
+			@QueryParam("interests") String interests,
+			@QueryParam("entid") int entid
 			
 
 	) {
 		JobOffer j = new JobOffer(JOtitle, JOarea, JOdescription,JOexperience,interests);
 
-		jobofferws.AddJobOffer(j);
-		return Response.status(200).entity(status).build();
+		jobofferws.AddJobOffer(j,entid);
+		return Response.status(Status.CREATED).entity(status).build();
 	}
 	
 	
@@ -95,22 +107,24 @@ public class JobOfferWS {
 	public Response updatejoboffer(@QueryParam("JOid") int id,
 			@QueryParam("JOtitle") String JOtitle,
 			@QueryParam("JOarea") String JOarea,
-			@QueryParam("JOdescription") String JOdescription
+			@QueryParam("JOdescription") String JOdescription,
+			@QueryParam("JOexperience") int JOexperience,
+			@QueryParam("interests") String interests
 	) {
 		
-		jobofferws.ModifyJobOffer(id, JOtitle, JOarea, JOdescription);
+		jobofferws.ModifyJobOffer(id, JOtitle, JOarea, JOdescription,JOexperience,interests);
 
-		return Response.status(200).entity(status).build();
-	}
+		return Response.status(Status.CREATED).entity(status).build();
+		}
 	
 	
 
 	@DELETE
 	@Path("deletejoboffer")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response deletejoboffer(@QueryParam("id") int id) {
-		jobofferws.DeleteJobOffer(id);
-		return Response.status(200).entity(status).build();
+	public Response deletejoboffer(@QueryParam("JOid") int JOid) {
+		jobofferws.DeleteJobOffer(JOid);
+		return Response.status(Status.OK).entity(status).build();
 	}
 	
 	
@@ -121,7 +135,7 @@ public class JobOfferWS {
 	public Response validatejoboffer(@QueryParam("JOid") int id) {
 		jobofferws.ValidateJoboffer(id);
 		
-		return Response.status(200).entity(status).build();
+		return Response.status(Status.OK).entity(status).build();
 	}
 	
 	

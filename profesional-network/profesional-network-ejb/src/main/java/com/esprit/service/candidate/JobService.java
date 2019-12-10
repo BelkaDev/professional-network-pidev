@@ -27,18 +27,28 @@ public class JobService implements IJobServiceLocal, IJobServiceRemote {
 	}
 
 	@Override
-	public void applyForAJob(int candidateId, int jobId) {
+	public Candidate applyForAJob(int candidateId, int jobId) {
 		Candidate c = em.find(Candidate.class, candidateId);
 		JobApplication ja = new JobApplication();
 		ja.setCandidate(c);
 		ja.setJobId(jobId);
 		ja.setStatus("pending");
+		em.persist(ja);
 		c.getJobApplications().add(ja);
+		return c;
 	}
 
 	@Override
 	public Set<JobApplication> getJobApplications(int candidateId) {
 		return em.find(Candidate.class, candidateId).getJobApplications();
+	}
+
+	@Override
+	public Candidate cancelApplication(int candidateId,int jobApplicationId) {
+		JobApplication j = em.find(JobApplication.class, jobApplicationId);
+		Candidate c = em.find(Candidate.class, candidateId);
+		em.remove(j);
+		return c;
 	}
 	
 	

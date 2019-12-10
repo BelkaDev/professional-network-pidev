@@ -11,6 +11,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.esprit.beans.Interview;
+import com.esprit.beans.Quiz;
 import com.esprit.services.InterviewService;
 
 @Path("interviews")
@@ -18,21 +20,23 @@ public class InterviewWS {
 	@EJB
 	InterviewService interviewService=new InterviewService();
 	
+	public static Interview i=new Interview();
+	
 	@PUT
 	@Path("setDate")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response setDate(@QueryParam("id")int interview_id,@QueryParam("date")String date,@QueryParam("idC")int candidate_id,@QueryParam("idJO")int jobOffer_id) {
 		System.out.println(date);
 		if(interviewService.setDate(interview_id, date,candidate_id,jobOffer_id))
-			return Response.status(Status.OK).entity("the date has been set").build();
-		return Response.status(Status.BAD_REQUEST).entity("invalid date").build();
+			return Response.status(Status.OK).entity(i).build();
+		return Response.status(Status.BAD_REQUEST).entity(i).build();
 	}
 	@DELETE
 	@Path("deleteInterview")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response cancelInterview(@QueryParam("id")int interview_id) {
 		interviewService.CancelInterview(interview_id);
-		return Response.status(Status.FOUND).entity("the interview has beeen canceled").build();
+		return Response.status(Status.FOUND).entity(i).build();
 	}
 	
 	@PUT
@@ -40,22 +44,23 @@ public class InterviewWS {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response setTime(@QueryParam("id")int interview_id,@QueryParam("time")String time) {
 		if(interviewService.setTime(interview_id, time))
-			return Response.status(Status.OK).entity("the time has been set").build();
-		return Response.status(Status.BAD_REQUEST).entity("invalid time has to be between 9 and 18").build();
+			return Response.status(Status.OK).entity(i).build();
+		return Response.status(Status.BAD_REQUEST).entity(i).build();
 	}
 	@PUT
 	@Path("setScore")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response setInterviewScore(@QueryParam("idI")int interview_id,@QueryParam("score")double score) {
 		interviewService.setScore(interview_id, score);
-		return Response.status(Status.OK).entity("the score for this interview has been set").build();
+		return Response.status(Status.OK).entity(i).build();
 	}
 	@PUT
 	@Path("chooseWinner")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response selectCandidate(@QueryParam("idJo")int joboffer_id) {
-		interviewService.acceptCandidate(joboffer_id);
-		return Response.status(Status.OK).entity("Welcome your new employee").build();
+		Quiz in=interviewService.acceptCandidate(joboffer_id);
+		
+		return Response.status(Status.OK).entity(in).build();
 	}
 
 }

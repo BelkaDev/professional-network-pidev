@@ -10,7 +10,7 @@ import com.esprit.beans.EventParticipation;
 public interface EventParticipationServiceRemote {
 
 	
-	public int addParticipation(EventParticipation ep,int eventId);
+	public int addParticipation(EventParticipation ep,int eventId, int userid);
 	public List<EventParticipation> getallParticipation();
-	public boolean UniquePart(int eventId);
+	public boolean UniquePart(int eventId,int userid);
 }

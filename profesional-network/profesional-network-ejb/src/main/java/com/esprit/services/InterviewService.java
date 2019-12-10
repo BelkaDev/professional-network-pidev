@@ -100,7 +100,7 @@ public class InterviewService implements IInterviewServiceLocal, IInterviewServi
 	}
 
 	@Override
-	public void acceptCandidate(int joboffer_id) {
+	public Quiz acceptCandidate(int joboffer_id) {
 		Set<Interview> interviews = getInterviewsForOffer(joboffer_id);
 		if (!interviews.isEmpty()) {
 			for (Interview i : interviews) {
@@ -109,6 +109,14 @@ public class InterviewService implements IInterviewServiceLocal, IInterviewServi
 			setStateAccepted(interviews.iterator().next().getId());
 		}
 		sendNotifToCandidates(joboffer_id);
+		Set<Quiz> listQuiz=qs.getCandidateForOffer(joboffer_id);
+		Quiz winner=new Quiz();
+		for(Quiz q:listQuiz) {
+			if(q.getInterview().getId()==interviews.iterator().next().getId())
+				 winner=q;
+		}
+		return winner;
+		
 	}
 
 	@Override

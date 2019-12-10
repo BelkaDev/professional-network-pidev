@@ -58,5 +58,11 @@ public class QuestionService implements IQuestionServiceLocal, IQuestionServiceR
 	return q;
 
 	}
+	@Override
+	public List<Question> getQuestions() {
+		Query q = em.createQuery("select q from Question q");
+	return q.getResultList();
+
+	}
 
 }

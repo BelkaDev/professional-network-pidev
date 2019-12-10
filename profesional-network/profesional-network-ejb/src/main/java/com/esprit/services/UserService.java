@@ -42,26 +42,26 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 		user.setConfirm(codeGen.getInstance().randomString(5));
 		em.persist(user);
 	}
-	
+
 	@Override
 	public void addCandidateUser(User user, int candidateId) {
-		
-		
+
+
 	}
-	
-	
+
+
 
 	@Override
 	public void addUser(User user) {
-		 
+
 		String salt=BCrypt.gensalt();
 		String paass=BCrypt.hashpw(user.getPassword(), salt);
 		user.setPassword(paass);
 		System.out.print(paass);
 		user.setEnable(false);
 		user.setConfirm(codeGen.getInstance().randomString(5));
-		
-		
+
+
 		if(user.getRole()==Role.Candidate)
 		{
 			Candidate c = new Candidate();
@@ -81,43 +81,53 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 		{
 			em.persist(user);
 		}
-		
-			
+
+
 	}
-	
-	
+
+
 	@Override
 	public boolean UsernameMailUnique(String username,String email)
 	{
-		TypedQuery<User> q=  em.createQuery("SELECT u from User u ",User.class); 
-		
+		TypedQuery<User> q=  em.createQuery("SELECT u from User u ",User.class);
+
 		List<User> user=q.getResultList();
 		for(User u:user)
 		{
 		if((u.getUsername().equals(username))||(u.getEmail().equals(email)))		{
 			return true;
 		}
-		
+
 		}
 		return false;
 	}
 	@Override
 	public boolean authenticate(String username, String password) {
 
-		TypedQuery<User> q=  em.createQuery("SELECT u from User u where u.username= :username ",User.class); 
+		TypedQuery<User> q=  em.createQuery("SELECT u from User u where u.username= :username ",User.class);
 		q.setParameter("username", username);
 		System.out.println();
 		User user=q.getSingleResult();
 		System.out.println(user);
 		if(BCrypt.checkpw(password, user.getPassword())&& user.isEnable()==true)
 		{
+			if(user.getRole()==Role.Candidate)
+			{
+				Candidate c = em.find(Candidate.class, user.getId());
+
+				UserSession.clearCandidateSession();
+				UserSession.setCandidateSession(c);
+				UserSession.getInstance().cleanUserSession();
+				UserSession.getInstance(user);
+
+				return true;
+			}
 			UserSession.getInstance().cleanUserSession();
 			UserSession.getInstance(user);
-			return true;
 		}
+			return true;
 
-		else
-			return false;
+
 
 	}
 	@Override
@@ -138,12 +148,12 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 			user.setEnable(true);
 			em.merge(user);
 		}
-		
+
 	}
 	@Override
-	public void logout() {
+	public void logout(int id) {
 		System.out.println("------------------------------------------- "+UserSession.getInstance().getUsername());
-		User user=em.find(User.class, UserSession.getInstance().getId());
+		User user=em.find(User.class, id);
 		user.setToken(null);
 		em.merge(user);
 		UserSession.getInstance().cleanUserSession();
@@ -160,13 +170,13 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 		User user=em.find(User.class, UserSession.getInstance().getId());
 		return user;
 	}
-	
+
 	public List<User> getUserByRole(){
-		
+
 		return em.createQuery("select u from User u where u.role= :role", User.class)
 				.setParameter("role", Role.Candidate)
 				.getResultList();
-		
+
 	}
 	@Override
 	public void ResetingPassword(String userName) {
@@ -174,37 +184,37 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 		q.setParameter("username", userName);
 		User u=q.getSingleResult();
 		System.out.println("************************"+u.getEmail());
-		u.setEnable(false);		
+		u.setEnable(false);
 		u.setConfirm(codeGen.getInstance().randomString(5));
 		em.merge(u);
 		String salt=BCrypt.gensalt();
 		String paass=BCrypt.hashpw(u.getConfirm(), salt);
 		u.setPassword(paass);
 		em.merge(u);
-		
-			
+
+
 			String contenu ="Password Reset :Your new password: "+u.getConfirm();
 			SendingMail sm = new SendingMail(contenu, u.getEmail(), "inscription");
 			SendingMail.envoyer();
-				
-			
-		
-		
+
+
+
+
 	}
 	@Override
 	public void UpdatePassword(String userName, String NewPassword) {
 		TypedQuery<User> q=  em.createQuery("SELECT u from User u where u.username= :username ",User.class);
 		q.setParameter("username", userName);
 		User u=q.getSingleResult();
-		
-		
-		
+
+
+
 		String salt=BCrypt.gensalt();
 		String paass=BCrypt.hashpw(NewPassword, salt);
 		u.setPassword(paass);
 		em.merge(u);
 	}
-	
+
 	@Override
 	public void disableMailNotifications()
 	{
@@ -214,7 +224,7 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 	}
 	@Override
 	public void enableMailNotifications()
-	
+
 	{
 		User user = getUserById();
 		user.setRecieveMailNotifs(true);
@@ -241,5 +251,5 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 
 
 
-	
+
 }

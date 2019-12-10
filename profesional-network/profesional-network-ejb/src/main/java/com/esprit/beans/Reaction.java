@@ -32,9 +32,9 @@ public class Reaction implements Serializable {
 	private int id;
     private Timestamp date;
     private REACTION_TYPE type;
-    @JsonIgnore
+    @JsonIgnoreProperties({"content","user","comments","reactions","date"})
     private Post reactedPost;
-    @JsonIgnore
+    @JsonIgnoreProperties({"whoclaims","messages","comments","reactions","password"})
     private User reactingUser;
      
     @Id

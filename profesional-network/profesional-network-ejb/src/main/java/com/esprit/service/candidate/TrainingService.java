@@ -44,9 +44,7 @@ public class TrainingService implements ITrainingServiceLocal,ITrainingServiceRe
 
 	@Override
 	public List<Training> displayTraining(int candidateId) {
-		if(cs.isPremium(candidateId))
 		return em.createQuery("select t from Training t").getResultList();
-		return null;
 	}
 	
 	

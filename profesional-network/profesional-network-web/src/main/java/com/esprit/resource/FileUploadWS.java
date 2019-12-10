@@ -1,5 +1,6 @@
 package com.esprit.resource;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -14,12 +15,18 @@ import java.util.*;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
+import com.esprit.beans.FileUpload;
+import com.esprit.services.FileService;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import org.apache.commons.io.IOUtils;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
 
 
@@ -29,6 +36,9 @@ import org.apache.commons.io.IOUtils;
 @Path("/files")
 @RequestScoped
 public class FileUploadWS {
+	@EJB
+	FileService fileService;
+	private final String status = "{\"status\":\"ok\"}" ;
 	private static final String UPLOAD_FOLDER = System.getProperty("user.dir")+"/files/";
 	@Context
 	private UriInfo context;
@@ -36,11 +46,12 @@ public class FileUploadWS {
 	@POST
 	@Path("upload") 
 	@Consumes("*/*")
-	public Response uploadFile(MultipartFormDataInput input) throws IOException {
+	public Response getFile(String filename) throws IOException {
 		
-		CreateFolderIfNotExist(UPLOAD_FOLDER);
-		String fileName = uploadFile(input.getFormDataMap());
-	    return Response.status(200).entity("uploaded file to "+ fileName).build();
+	    FileUpload file = new FileUpload();
+	    file.setPath(filename);
+//	    fileService.addFile("C:/Users/Zied/Images/"+filename, null);
+	    return Response.status(200).entity( "{\"file\":\""+filename+"\"}").build();
 
 	}
 
@@ -49,25 +60,11 @@ public class FileUploadWS {
 	    if (!dir.exists()) dir.mkdirs();
 	}
 	
-	private String uploadFile( Map<String, List<InputPart>> uploadForm)
+	private String uploadFile( String filename ) throws IOException
 	{
-    String fileName = "";
-	List<InputPart> inputParts = uploadForm.get("file");
-	for (InputPart inputPart : inputParts) {
-	 try {
-			MultivaluedMap<String, String> header = inputPart.getHeaders();
-			fileName = getFileName(header);
-			InputStream inputStream = inputPart.getBody(InputStream.class,null);
-			byte [] bytes = IOUtils.toByteArray(inputStream);
-			fileName = UPLOAD_FOLDER + fileName;
-			writeFile(bytes,fileName);
-			System.out.println("Done");
-
-		  } catch (IOException e) {
-			e.printStackTrace();
-		  }
-	}
-			return fileName;
+		CreateFolderIfNotExist(UPLOAD_FOLDER);
+	    String path = UPLOAD_FOLDER + filename;
+	    return path;
 	}
 	
 	private String getFileName(MultivaluedMap<String, String> header) {

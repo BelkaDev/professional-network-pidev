@@ -14,8 +14,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
+import com.esprit.beans.Enterprise;
 import com.esprit.beans.EnterpriseEvent;
+import com.esprit.beans.FileUpload;
 import com.esprit.beans.JobOffer;
 import com.esprit.services.EnterpriseEventService;
 
@@ -38,14 +41,19 @@ public class EnterpriseEventWS {
 			@QueryParam("EEdescription") String EEdescription,
 			@QueryParam("EEminparticipants") int EEminparticipants,
 			@QueryParam("EEmaxparticipants") int EEmaxparticipants,
-			@QueryParam("EEprice") float EEprice
+			@QueryParam("EEprice") float EEprice,
+			@QueryParam("user") int user,
+			@QueryParam("file") String filename
+			
 			
 
 	) {
-		
+		FileUpload fileS = new FileUpload();
+	    fileS.setPath(filename);
+	    
 		EnterpriseEvent ee= new EnterpriseEvent(EEtitle,EEplace,EESdate,EEEdate,EEdescription,EEminparticipants,EEmaxparticipants,EEprice);
-		enterpriseeventws.AddEnterpriseEvent(ee);
-		return Response.status(200).entity(status).build();
+		enterpriseeventws.AddEnterpriseEvent(ee,user,filename);
+		return Response.status(Status.CREATED).entity(status).build();
 	}
 	
 	
@@ -75,15 +83,16 @@ public class EnterpriseEventWS {
 	@Path("deleteevent")
 	public Response deleteevent(@QueryParam("EEid") int id) {
 		enterpriseeventws.DeleteEnterpriseEvent(id);;
-		return Response.status(200).entity(status).build();
+		return Response.status(Status.OK).entity(status).build();
 	}
 	
 	
 	@GET 
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("getevent")
-	public List<EnterpriseEvent> getevent() {
-		return enterpriseeventws.getAllEnterpriseEvent();
+	public Response getevent() {
+		//return enterpriseeventws.getAllEnterpriseEvent();
+		return Response.status(Status.OK).entity(enterpriseeventws.getAllEnterpriseEvent()).build();
 	}
 	
 	
@@ -95,6 +104,13 @@ public class EnterpriseEventWS {
 		return enterpriseeventws.geteventById(EEid);
 	}
 	
+	
+	@GET 
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("geteventbyent")
+	public Response getjoobofferbyent(@QueryParam("entid") int entid) {
+		return Response.status(Status.OK).entity(enterpriseeventws.getEventByEnt(entid)).build();
+	}
 	
 	
 	

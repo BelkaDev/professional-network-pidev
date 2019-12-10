@@ -21,6 +21,7 @@ import javax.persistence.OneToOne;
 import com.esprit.enums.POST_TYPE;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -30,10 +31,11 @@ public class Comment implements Serializable {
 	
 	private int id;
     private String content;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd,HH:00", timezone="CET")
     private Timestamp date;
     @JsonIgnore
     private Post commentedPost;
-    @JsonIgnore
+    @JsonIgnoreProperties({"whoclaims","messages","comments","reactions","password"})
     private User commentingUser;
     
     public Comment() {

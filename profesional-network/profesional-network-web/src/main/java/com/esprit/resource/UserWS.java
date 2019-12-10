@@ -30,6 +30,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import com.esprit.beans.Address;
 import com.esprit.beans.User;
+import com.esprit.beans.candidate.Candidate;
 import com.esprit.enums.Gender;
 import com.esprit.enums.Role;
 
@@ -40,7 +41,7 @@ public class UserWS {
 
 	@EJB
 	UserService userservice = new UserService() ;
-
+	private final String status = "{\"status\":\"ok\"}" ;
 	@Context
 	UriInfo uriInfo;
 	@POST
@@ -85,7 +86,7 @@ public class UserWS {
 
 	@POST
     @Path("addentuser")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)	
     public Response addEnterpriseUser(
             @QueryParam("username")String username,
             @QueryParam("email")String email,
@@ -127,6 +128,14 @@ public class UserWS {
 					System.out.print("------------------------ "+ token);
 					userservice.updateToken(username,token);
 					System.out.println("****************** " + token);
+					System.out.println(UserSession.getInstance());
+					System.out.println("TITLEE= "+UserSession.getCandidateSession().getTitle());
+					System.out.println("ROLE=="+ UserSession.getInstance().getRole()+Role.Candidate);
+					System.out.println(Role.Candidate==UserSession.getInstance().getRole());
+					if(UserSession.getInstance().getRole()==Role.Candidate)
+					{
+						return Response.status(Status.OK).entity(UserSession.getCandidateSession()).build();
+					}
 					 return Response.status(Status.OK).entity(UserSession.getInstance()).build();
 
 				}
@@ -146,8 +155,15 @@ public class UserWS {
 
 			return userservice.getUserById();
 
+	}
+	
 
-
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("all")
+	public Response All() {
+			return Response.status(Status.ACCEPTED)
+					.entity(userservice.allUsers()).build();
 	}
 
 	@PUT
@@ -185,11 +201,11 @@ public class UserWS {
 	@Path("logout")
 	@Produces(MediaType.APPLICATION_JSON)
 
-	public Response Logout(
+	public Response Logout(@QueryParam("id") int id
 
 	) {
-		userservice.logout();
-		return Response.status(Status.ACCEPTED).entity("ACCEPTED").build();
+		userservice.logout(id);
+		return Response.status(Status.ACCEPTED).entity(status).build();
 	}
 	private String issueToken(String username) {
 		// Issue a token (can be a random String persisted to a database or a JWT token)

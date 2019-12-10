@@ -22,6 +22,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Max;
 
+import com.esprit.beans.Enterprise;
 import com.esprit.beans.Interests;
 import com.esprit.beans.Quiz;
 import com.esprit.beans.User;
@@ -40,8 +41,12 @@ public class Candidate extends User implements Serializable {
 	@Column(name = "biography")
 	private String biography;
 	@Column(name = "candidate_rating")
-	@Max(5)
 	private double rating;
+	
+	@Column(name = "title")
+	private String title;
+	@Column(name="imageUrl")
+	private String imageUrl;
 	
 	@Column(name="cv")
 	private String cv;
@@ -84,10 +89,11 @@ public class Candidate extends User implements Serializable {
 	inverseJoinColumns=@JoinColumn(name="Skill_ID"))
 	private Set<Skill> skills;
 	
-	@JsonIgnoreProperties({"candidate"})
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name="Candidate_ID")
-	private Set<Contact> contacts;
+	@JsonIgnoreProperties({"contacts"})
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name="contact",joinColumns=@JoinColumn(name="Candidate_ID"),
+	inverseJoinColumns=@JoinColumn(name="Contact_ID"))
+	private Set<Candidate> contacts;
 	
 	@JsonIgnoreProperties({"candidate"})
 	@OneToMany(cascade = CascadeType.ALL)
@@ -95,16 +101,16 @@ public class Candidate extends User implements Serializable {
 	private Set<Views> views;
 	
 	@JsonIgnoreProperties({"candidate"})
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="Candidate")
-	private Set<Subscription> subscriptions;
+	@ManyToMany(cascade = CascadeType.ALL)
+	private Set<Enterprise> subscriptions;
 	
 	@JsonIgnoreProperties({"candidate"})
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="Candidate",fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="Candidate",fetch = FetchType.EAGER)
 	private Set<JobApplication> jobApplications;
 	
 
 	
-	@JsonIgnoreProperties({"candidate"})
+	@JsonIgnore
 	@OneToMany(mappedBy="candidate")
 	private Set<Quiz> quizs;
 
@@ -162,19 +168,17 @@ public class Candidate extends User implements Serializable {
 	}
 	
 	
-	public Set<Contact> getContacts() {
+	public Set<Candidate> getContacts() {
 		return contacts;
 	}
-	public void setContacts(Set<Contact> contacts) {
+	public void setContacts(Set<Candidate> contacts) {
 		this.contacts = contacts;
 	}
 	
-	
-	
-	public Set<Subscription> getSubscriptions() {
+	public Set<Enterprise> getSubscriptions() {
 		return subscriptions;
 	}
-	public void setSubscriptions(Set<Subscription> subscriptions) {
+	public void setSubscriptions(Set<Enterprise> subscriptions) {
 		this.subscriptions = subscriptions;
 	}
 	public Set<Views> getViews() {
@@ -203,6 +207,20 @@ public class Candidate extends User implements Serializable {
 	public void setCv(String cv) {
 		this.cv = cv;
 	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+	
+	
 	
 	
 	

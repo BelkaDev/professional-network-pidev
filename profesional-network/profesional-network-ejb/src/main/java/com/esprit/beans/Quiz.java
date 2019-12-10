@@ -14,11 +14,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.esprit.beans.candidate.Candidate;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity()
 public class Quiz implements Serializable {
@@ -30,7 +33,7 @@ public class Quiz implements Serializable {
 	private double score;
 	@Enumerated(EnumType.STRING)
 	private QuizState state;
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Question> questions;
 	@OneToOne
 	private Interview interview;
