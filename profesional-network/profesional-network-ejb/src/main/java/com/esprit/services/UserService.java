@@ -107,10 +107,23 @@ public class UserService implements IUserServiceLocal, IUserServiceRemote {
 		TypedQuery<User> q=  em.createQuery("SELECT u from User u where u.username= :username ",User.class); 
 		q.setParameter("username", username);
 		
+		
 		User user=q.getSingleResult();
+
 		
 		if(BCrypt.checkpw(password, user.getPassword())&& user.isEnable()==true)
 		{
+			if(user.getRole()==Role.Candidate)
+			{
+				Candidate c = em.find(Candidate.class, user.getId());
+				
+				UserSession.clearCandidateSession();
+				UserSession.setCandidateSession(c);
+				UserSession.getInstance().cleanUserSession();
+				UserSession.getInstance(user);
+				
+				return true;
+			}
 			UserSession.getInstance().cleanUserSession();
 			UserSession.getInstance(user);
 			return true;

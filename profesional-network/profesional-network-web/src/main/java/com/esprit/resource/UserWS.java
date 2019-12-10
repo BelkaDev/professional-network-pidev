@@ -30,6 +30,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import com.esprit.beans.Address;
 import com.esprit.beans.User;
+import com.esprit.beans.candidate.Candidate;
 import com.esprit.enums.Gender;
 import com.esprit.enums.Role;
 
@@ -128,6 +129,13 @@ public class UserWS {
 					userservice.updateToken(username,token);
 					System.out.println("****************** " + token);
 					System.out.println(UserSession.getInstance());
+					System.out.println("TITLEE= "+UserSession.getCandidateSession().getTitle());
+					System.out.println("ROLE=="+ UserSession.getInstance().getRole()+Role.Candidate);
+					System.out.println(Role.Candidate==UserSession.getInstance().getRole());
+					if(UserSession.getInstance().getRole()==Role.Candidate)
+					{
+						return Response.status(Status.OK).entity(UserSession.getCandidateSession()).build();
+					}
 					 return Response.status(Status.OK).entity(UserSession.getInstance()).build();
 
 				}

@@ -15,6 +15,7 @@ import javax.persistence.PersistenceContext;
 import com.esprit.beans.Address;
 import com.esprit.beans.Enterprise;
 import com.esprit.beans.User;
+import com.esprit.beans.candidate.Candidate;
 import com.esprit.enums.Gender;
 import com.esprit.enums.Role;
 
@@ -23,6 +24,20 @@ public final class UserSession {
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
 	private static UserSession instance;
+	private static Candidate CANDIDATE_SESSION=null;
+	
+	public static void clearCandidateSession()
+	{
+		CANDIDATE_SESSION=null;
+	}
+	public static void setCandidateSession(Candidate c)
+	{
+		CANDIDATE_SESSION=c;
+	}
+	public static Candidate getCandidateSession()
+	{
+		return CANDIDATE_SESSION;
+	}
 
 	private int id;
 

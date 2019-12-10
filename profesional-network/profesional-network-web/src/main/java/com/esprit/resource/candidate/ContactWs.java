@@ -40,8 +40,22 @@ public class ContactWs {
 	@POST
 	@Path("followContact")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addSkill(@QueryParam("follower") int follower,@QueryParam("followed") int followed) {
-		return Response.status(Status.CREATED).entity(cs.followCandidate(follower, followed)).build();
+	public Response followContact(@QueryParam("follower") int follower,@QueryParam("followed") int followed) {
+		return Response.status(Status.OK).entity(cs.followCandidate(follower, followed)).build();
+	}
+	
+	@DELETE
+	@Path("unfollowContact")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response unfollowContact(@QueryParam("follower") int follower,@QueryParam("followed") int followed) {
+		return Response.status(Status.OK).entity(cs.unfollowCandidate(follower, followed)).build();
+	}
+	
+	@GET
+	@Path("getOffers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response displayCandidates() {
+		return Response.status(Status.OK).entity(cs.getOffers()).build();
 	}
 	
 	@GET
@@ -108,23 +122,17 @@ public class ContactWs {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response subscribeToEnterprise(@QueryParam("candidateId") int candidateId,
 			@QueryParam("enterpriseId") int enterpriseId) {
-		cs.subscribeToEnterprise(candidateId, enterpriseId);
-		return Response.status(Status.CREATED).entity("Subscribed").build();
+		return Response.status(Status.CREATED).entity(cs.subscribeToEnterprise(candidateId, enterpriseId)).build();
 	}
 	
-	@GET
-	@Path("getSubscriptions")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getSubscriptions(@QueryParam("candidateId") int candidateId) {
-		return Response.status(Status.FOUND).entity(cs.getSubscriptions(candidateId)).build();
-	}
+	
 	
 	@DELETE
-	@Path("cancelSubscription")
+	@Path("unsubscribe")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response cancelSubscription(@QueryParam("subscriptionId") int subscriptionId) {
-		cs.cancelSubscription(subscriptionId);
-		return Response.status(Status.OK).entity("the Subscription has been canceled").build();
+	public Response cancelSubscription(@QueryParam("candidateId") int candidateId,
+			@QueryParam("enterpriseId") int enterpriseId) {
+		return Response.status(Status.OK).entity(cs.unsubscribeFromEnterprise(candidateId, enterpriseId)).build();
 	}
 	
 	

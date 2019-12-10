@@ -8,7 +8,7 @@ import javax.ejb.Local;
 import com.esprit.beans.Enterprise;
 import com.esprit.beans.JobOffer;
 import com.esprit.beans.candidate.Candidate;
-import com.esprit.beans.candidate.Subscription;
+//import com.esprit.beans.candidate.Subscription;
 @Local
 public interface IContactServiceLocal {
 
@@ -27,9 +27,9 @@ public interface IContactServiceLocal {
 	public List<Candidate> getContactsInEnterprise(int candidateId,int enterpriseId);
 	
 	
-	public void subscribeToEnterprise(int candidateId,int enterpriseId);
-	public Set<Subscription> getSubscriptions(int candidateId);
-	public void cancelSubscription(int subscriptionId);
+	public Candidate subscribeToEnterprise(int candidateId,int enterpriseId);
+	//public Set<Subscription> getSubscriptions(int candidateId);
+	public Candidate unsubscribeFromEnterprise(int candidateId,int enterpriseId);
 
 	
 }

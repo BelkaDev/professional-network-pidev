@@ -92,7 +92,7 @@ public class CandidateWs {
 	@POST
 	@Path("addCandidate")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addCandidate(@QueryParam("firstName") String firstName,@QueryParam("lastName") String lastName,@QueryParam("biography") String biography,
+	public Response addCandidate(@QueryParam("firstName") String firstName,@QueryParam("lastName") String lastName,@QueryParam("bio") String biography,
 			@QueryParam("rating") double rating,MultipartFormDataInput input) {
 		CreateFolderIfNotExist(UPLOAD_FOLDER);
 		String fileName = uploadFile(input.getFormDataMap());
@@ -109,8 +109,28 @@ public class CandidateWs {
 	@GET
 	@Path("getCandidates")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response displayCandidates() {
-		return Response.status(Status.FOUND).entity(cs.displayCandidates()).build();
+	public Response displayCandidates(@QueryParam("id") int id) {
+		return Response.status(Status.OK).entity(cs.displayCandidates(id)).build();
+	}
+	
+	@GET
+	@Path("getCandidateById")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response displayCandidate(@QueryParam("id") int id) {
+		return Response.status(Status.OK).entity(cs.getCandidateById(id)).build();
+	}
+	
+	@PUT
+	@Path("updateBasicCandidate")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateBasicCAndidate(@QueryParam("id") int id, @QueryParam("firstName") String firstName,
+			@QueryParam("lastName")String lastName,@QueryParam("title")String title,@QueryParam("bio")String bio) {
+		Candidate c = new Candidate();
+		c.setFirstName(firstName);
+		c.setLastName(lastName);
+		c.setTitle(title);
+		c.setBiography(bio);
+		return Response.status(Status.OK).entity(cs.updateBasicCandidate(id, c)).build();
 	}
 
 	@POST

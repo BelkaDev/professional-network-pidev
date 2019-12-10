@@ -39,6 +39,6 @@ public class TrainingWs {
 	@Path("getTraining")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getTraining(@QueryParam("candidateId") int candidateId) {
-		return Response.status(Status.FOUND).entity(ts.displayTraining(candidateId)).build();
+		return Response.status(Status.OK).entity(ts.displayTraining(candidateId)).build();
 	}
 }

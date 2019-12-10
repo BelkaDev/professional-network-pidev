@@ -18,7 +18,7 @@ public interface ICandidateServiceLocal {
 	public void updateProfileObject(int id,Object o);
 	public Object displayProfileObject(int objectID,Object o);
 	public Object displayListOfProfileObject(int candidateId,Object o);
-	public List<Candidate> displayCandidates();
+	public List<Candidate> displayCandidates(int id);
 	public Set<Candidate> displayCandidatesByProfileObject(int objectId,Object o);
 	public void addView(int viewerId,int viewedId);
 	public Set<Views> displayViews(int candidateId);

@@ -22,7 +22,7 @@ import com.esprit.beans.candidate.Candidate;
 import com.esprit.beans.candidate.Certification;
 import com.esprit.beans.candidate.Experience;
 import com.esprit.beans.candidate.Skill;
-import com.esprit.beans.candidate.Subscription;
+//import com.esprit.beans.candidate.Subscription;
 import com.esprit.enums.NOTIFICATION_TARGET;
 import com.esprit.enums.NOTIFICATION_TYPE;
 import com.esprit.services.NotificationService;
@@ -150,22 +150,8 @@ public class ContactService implements IContactServiceLocal, IContactServiceRemo
 		}
 		return toReturn;
 	}
-	@Override
-	public void subscribeToEnterprise(int candidateId, int enterpriseId) {
-		Subscription s = new Subscription();
-		s.setEnterpriseId(enterpriseId);
-		Candidate c = em.find(Candidate.class, candidateId);
-		s.setCandidate(c);
-		c.getSubscriptions().add(s);
-	}
-	@Override
-	public Set<Subscription> getSubscriptions(int candidateId) {
-		return em.find(Candidate.class, candidateId).getSubscriptions();
-	}
-	@Override
-	public void cancelSubscription(int subscriptionId) {
-		em.remove(em.find(Subscription.class, subscriptionId));
-	}
+
+	
 	@Override
 	public Candidate followCandidate(int follower, int followed) {
 		Candidate c = em.find(Candidate.class, follower);
@@ -174,4 +160,31 @@ public class ContactService implements IContactServiceLocal, IContactServiceRemo
 		return c;
 		
 	}
+	@Override
+	public Candidate unfollowCandidate(int follower, int followed) {
+		Candidate c = em.find(Candidate.class, follower);
+		Candidate c1=em.find(Candidate.class, followed);
+		c.getContacts().remove(c1);
+		return c;
+	}
+	@Override
+	public Candidate subscribeToEnterprise(int candidateId, int enterpriseId) {
+		Candidate c = em.find(Candidate.class, candidateId);
+		Enterprise e = em.find(Enterprise.class, enterpriseId);
+		c.getSubscriptions().add(e);
+		return c;
+	}
+	@Override
+	public Candidate unsubscribeFromEnterprise(int candidateId, int enterpriseId) {
+		Candidate c = em.find(Candidate.class, candidateId);
+		Enterprise e = em.find(Enterprise.class, enterpriseId);
+		c.getSubscriptions().remove(e);
+		return c;
+	}
+	@Override
+	public List<JobOffer> getOffers() {
+		return em.createQuery("select j from JobOffer j",JobOffer.class).getResultList();
+	}
 }
+
+
