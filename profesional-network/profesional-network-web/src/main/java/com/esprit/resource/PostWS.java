@@ -46,7 +46,7 @@ public class PostWS {
 	private static final String UPLOAD_FOLDER = System.getProperty("user.dir")+"/files/";
 	@Context
 	private UriInfo context;
-	private final String out = "success" ;
+	private final String out = "{  \"response\" : \"success\" }" ;
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -55,7 +55,7 @@ public class PostWS {
 	) {
 		int idUser = UserSession.getInstance().getId();
 		PostService.addPost(idUser,content,null);
-	    return Response.status(200).entity("shared post with no files").build();
+	    return Response.status(200).entity(out).build();
 		
 	}
 	
@@ -120,7 +120,7 @@ public class PostWS {
 		{
 		return Response.status(Status.OK).entity("post updated").build();
 		}
-		return Response.status(Status.NOT_FOUND).entity("Error").build();
+		return Response.status(Status.NOT_FOUND).entity(out).build();
 	}
 	
 	@PUT
@@ -139,7 +139,7 @@ public class PostWS {
 		{
 		return Response.status(Status.OK).entity("post updated").build();
 		}
-		return Response.status(Status.NOT_FOUND).entity("Error").build();
+		return Response.status(Status.NOT_FOUND).entity(out).build();
 	}
 	
 	@GET
@@ -152,7 +152,7 @@ public class PostWS {
 		{
 		return Response.status(Status.OK).entity(p).build();
 		}
-		return Response.status(Status.NOT_FOUND).entity("Post not found").build();
+		return Response.status(Status.NOT_FOUND).entity(out).build();
 	}
 	
 

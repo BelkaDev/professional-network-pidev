@@ -36,34 +36,39 @@ public class ReactionService implements IReactionServiceLocal,IReactionServiceRe
 	public boolean addReaction(int idUser,int idPost,
 			REACTION_TYPE type){
 		
-		User reacter = em.find(User.class,idUser);
-		Post post = em.find(Post.class,idPost);
+		User reactingUser = em.find(User.class,idUser);
+		Post reactedPost = em.find(Post.class,idPost);
 		Reaction react = new Reaction();
 		Timestamp date = new Timestamp(System.currentTimeMillis());
 		react.setDate(date);
 		react.setType(type);
-		react.setReactingUser(reacter);
-		react.setReactedPost(post);
+		react.setReactingUser(reactingUser);
+		react.setReactedPost(reactedPost);
 			
 		
 		if ((react.getReactedPost() == null && react.getReactingUser() == null)){
-			return false;}
+			return false;
+			}
+		else if (this.userAlreadyReacted(idUser, idPost)){
+			System.out.println(idUser + "already reacted on " + idPost);
+			return false;
+			}
 			else {
 				em.persist(react);
 			}
 		
-		// notifying the post followers about the new Reaction
+		// notifying the reactedPost followers about the new Reaction
 
 		List<User> followers = followingservice.PostFollowers(idPost);
-		String notif_message = reacter.getFirstName()+" "+reacter.getLastName()+
-				" reacted on a post you follow.";
+		String notif_message = reactingUser.getFirstName()+" "+reactingUser.getLastName()+
+				" reacted on a reactedPost you follow.";
 		
 		if (followers!=null)
 		{
 		for (User follower : followers) {
-			if (post.getUser().getId() == follower.getId())
+			if (reactedPost.getUser().getId() == follower.getId())
 			{
-				notif_message = reacter.getFirstName()+" "+reacter.getLastName()+
+				notif_message = reactingUser.getFirstName()+" "+reactingUser.getLastName()+
 						" reacted on your Post.";
 			}
 			NOTIFICATION_TYPE notif_type = NOTIFICATION_TYPE.Reaction;
@@ -104,7 +109,7 @@ public class ReactionService implements IReactionServiceLocal,IReactionServiceRe
 
 	@Override
 	public List<Reaction> findPostReactions(int id) {
-		List<Reaction> reacts = em.createQuery("select r from Reaction r where r.post.id=:Id",Reaction.class)
+		List<Reaction> reacts = em.createQuery("select r from Reaction r where r.reactedPost.id=:Id",Reaction.class)
 				.setParameter("Id", id).getResultList();
 		return reacts;
 	}
@@ -113,7 +118,7 @@ public class ReactionService implements IReactionServiceLocal,IReactionServiceRe
 
 	@Override
 	public List<Reaction> findUserReactions(int id) {
-		List<Reaction> reacts = em.createQuery("select r from Reaction r where r.reacter.id=:Id",Reaction.class)
+		List<Reaction> reacts = em.createQuery("select r from Reaction r where r.reactingUser.id=:Id",Reaction.class)
 				.setParameter("Id", id).getResultList();
 		return reacts;
 	}
@@ -121,9 +126,9 @@ public class ReactionService implements IReactionServiceLocal,IReactionServiceRe
 	
 	@Override
 	public boolean userAlreadyReacted(int idUser, int idPost) {
-		Reaction react = em.createQuery("select r from Reaction r where r.reacter.id=:IdU AND r.post.id=:IdP",Reaction.class)
-				.setParameter("IdU", idUser).setParameter("IdP", idPost ).getSingleResult();
-		return (react!=null);
+		List<Reaction> react = em.createQuery("select r from Reaction r where r.reactingUser.id=:IdU AND r.reactedPost.id=:IdP",Reaction.class)
+				.setParameter("IdU", idUser).setParameter("IdP", idPost ).getResultList();
+		return (!react.isEmpty());
 	}
 
 	@Override

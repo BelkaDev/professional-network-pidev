@@ -26,8 +26,7 @@ public class CommentWS {
 	@EJB
 	CommentService CommentService;
 	
-
-	private final String out = "success" ;
+	private final String out = "{  \"response\" : \"success\" }" ;
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

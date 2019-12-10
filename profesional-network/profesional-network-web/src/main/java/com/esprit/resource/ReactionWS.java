@@ -26,7 +26,7 @@ import com.esprit.utils.UserSession;
 public class ReactionWS {
 	@EJB
 	ReactionService ReactionService;
-	private final String out = "success";
+	private final String out = "{  \"response\" : \"success\" }" ;
 
 	@POST
 		@Consumes(MediaType.APPLICATION_JSON)
@@ -49,7 +49,7 @@ public class ReactionWS {
 	public Response removeReaction(@QueryParam("id") int id) {
 		if(ReactionService.deleteReaction(id))
 		{
-		return Response.status(Status.OK).entity("the reaction has been deleted").build();
+		return Response.status(Status.OK).entity(out).build();
 		}
 		return Response.status(Status.NOT_FOUND).entity("reaction doesn't exist").build();
 		
@@ -103,6 +103,17 @@ public class ReactionWS {
 			return Response.status(Status.NOT_FOUND).entity("No Reactions Found").build();
 		else
 			return Response.status(Status.OK).entity(reactions).build();
-
 	}	
+	
+	@GET
+	@Path("liked")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response alreadyLiked(@QueryParam("post") int idPost) {
+
+		boolean ok = ReactionService.userAlreadyReacted(UserSession.getInstance().getId(), idPost);
+		if (ok == true)
+			return Response.status(Status.OK).entity(out).build();
+		else
+			return Response.status(Status.NOT_FOUND).entity("post not liked").build();
+	}
 }
