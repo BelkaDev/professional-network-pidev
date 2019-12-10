@@ -6,6 +6,7 @@ import javax.ejb.Local;
 
 import com.esprit.beans.Claim;
 import com.esprit.beans.State;
+import com.esprit.beans.User;
 
 
 @Local
@@ -20,5 +21,6 @@ public interface IClaimServiceLocal {
 	public List<Claim> getClaimUntreated();
 	public List<Claim> getClaimInProgress();
 	public String findUserInClaimById(int id);
+	public User findUser(int id);
 	
 }

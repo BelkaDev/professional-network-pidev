@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.esprit.beans.Payement;
-
+import com.esprit.beans.User;
 import com.esprit.services.PaymentService;
 @Path("payment")
 public class PaymentServiceWs {
@@ -107,9 +107,9 @@ public class PaymentServiceWs {
 			 )
 	 {
 		if(ps.validatePayment(id)) {
-		 return Response.status(200).entity("your payment was validated succesuly").build();
+		 return Response.status(200).entity(ps.getPaymentById(id)).build();
 	 }
-		return Response.status(Status.NOT_ACCEPTABLE).entity("your payment was canceled").build();
+		return Response.status(Status.NOT_ACCEPTABLE).entity(ps.getPaymentById(id)).build();
 		 
 	 }
 	 @DELETE
@@ -124,4 +124,23 @@ public class PaymentServiceWs {
 		 }
 	     return Response.status(Status.NOT_ACCEPTABLE).entity("payment cant be canceled ").build();
 	 }
+	 
+	 @GET
+	 @Path("getPaymentById/{id}")
+	 @Produces(MediaType.APPLICATION_JSON)
+	 public Response getPaymentById(@PathParam(value="id")int id) {
+		 
+		   return Response.status(Status.OK).entity(ps.getPaymentById(id)).build();
+	     
+	 }
+	 @GET
+	 @Path("getUserByPayment/{id}")
+	 @Produces(MediaType.APPLICATION_JSON)
+	 public Response getUserByPayment(@PathParam(value="id")int id) {
+		 return Response.status(Status.OK).entity(ps.getUserByPayment(id)).build();
+	 }
+	 
+	 
+	 
+	 
 }

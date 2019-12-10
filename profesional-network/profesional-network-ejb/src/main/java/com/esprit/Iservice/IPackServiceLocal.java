@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.Local;
 
 import com.esprit.beans.Pack;
+import com.esprit.beans.User;
 import com.esprit.beans.UserPack;
 import com.esprit.enums.PackType;
 
@@ -20,6 +21,7 @@ public interface IPackServiceLocal {
 	public void addPackToPayIt(int packId);
 	public Pack findPackById(int id);
 	public void bonusPack(UserPack up);
+	public List<UserPack> getUsersByPack(int id);
 	
 	
 }

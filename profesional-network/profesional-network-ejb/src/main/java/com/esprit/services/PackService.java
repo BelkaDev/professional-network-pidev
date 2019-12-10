@@ -87,7 +87,7 @@ public class PackService implements IPackServiceLocal, IPackServiceRemote {
 	
 	@Override
 	public void addPackToPayIt(int packId) {
-		User u = em.find(User.class, UserSession.getInstance().getId());
+		User u = em.find(User.class, 1);
 		Pack p = em.find(Pack.class, packId);
 		System.out.println("/**********************************"+u.getId()+" "+ p.getId());
 		UserPack up = new UserPack();
@@ -121,6 +121,16 @@ public class PackService implements IPackServiceLocal, IPackServiceRemote {
 		query.setParameter("id",u );
 		UserPack results = query.getSingleResult();
 		return results;
+		
+	}
+	@Override
+	public List<UserPack> getUsersByPack(int id)
+	{
+		Pack p =em.find(Pack.class, id);
+		TypedQuery<UserPack> query = em.createQuery("select e from UserPack e where e.pack= :id",UserPack.class);
+		query.setParameter("id",p );
+		
+		return query.getResultList();
 		
 	}
 

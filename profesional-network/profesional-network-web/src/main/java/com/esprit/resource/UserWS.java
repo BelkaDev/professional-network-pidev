@@ -73,7 +73,7 @@ public class UserWS {
 		User user = new User(email, firstName, lastName, password, gender, birthDate, d, username, role,interests);
 		
 		if(!userservice.UsernameMailUnique(user.getUsername(), user.getEmail())) {
-		userservice.addUser(user);
+		
 
 
 	 	return Response.status(Status.CREATED).entity("ADDED").build();
