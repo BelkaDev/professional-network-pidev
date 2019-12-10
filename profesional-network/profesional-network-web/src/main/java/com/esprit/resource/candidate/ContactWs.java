@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.esprit.beans.candidate.Skill;
 import com.esprit.service.candidate.ContactService;
 
 @Path("contact")
@@ -29,18 +30,39 @@ public class ContactWs {
 		return Response.status(Status.CREATED).entity("Request Sent").build();
 	}
 	
-	@GET
+	/*@GET
 	@Path("getRequests")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getRequests(@QueryParam("receiverId") int receiverId) {
 		return Response.status(Status.FOUND).entity(cs.getRequests(receiverId)).build();
+	}*/
+	
+	@POST
+	@Path("followContact")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response followContact(@QueryParam("follower") int follower,@QueryParam("followed") int followed) {
+		return Response.status(Status.OK).entity(cs.followCandidate(follower, followed)).build();
+	}
+	
+	@DELETE
+	@Path("unfollowContact")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response unfollowContact(@QueryParam("follower") int follower,@QueryParam("followed") int followed) {
+		return Response.status(Status.OK).entity(cs.unfollowCandidate(follower, followed)).build();
+	}
+	
+	@GET
+	@Path("getOffers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response displayCandidates() {
+		return Response.status(Status.OK).entity(cs.getOffers()).build();
 	}
 	
 	@GET
 	@Path("getFriendsList")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFriendsList(@QueryParam("candidateId") int candidateId) {
-		return Response.status(Status.FOUND).entity(cs.getFriendsList(candidateId)).build();
+		return Response.status(Status.OK).entity(cs.getFriendsList(candidateId)).build();
 	}
 	
 	
@@ -100,23 +122,17 @@ public class ContactWs {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response subscribeToEnterprise(@QueryParam("candidateId") int candidateId,
 			@QueryParam("enterpriseId") int enterpriseId) {
-		cs.subscribeToEnterprise(candidateId, enterpriseId);
-		return Response.status(Status.CREATED).entity("Subscribed").build();
+		return Response.status(Status.CREATED).entity(cs.subscribeToEnterprise(candidateId, enterpriseId)).build();
 	}
 	
-	@GET
-	@Path("getSubscriptions")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getSubscriptions(@QueryParam("candidateId") int candidateId) {
-		return Response.status(Status.FOUND).entity(cs.getSubscriptions(candidateId)).build();
-	}
+	
 	
 	@DELETE
-	@Path("cancelSubscription")
+	@Path("unsubscribe")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response cancelSubscription(@QueryParam("subscriptionId") int subscriptionId) {
-		cs.cancelSubscription(subscriptionId);
-		return Response.status(Status.OK).entity("the Subscription has been canceled").build();
+	public Response cancelSubscription(@QueryParam("candidateId") int candidateId,
+			@QueryParam("enterpriseId") int enterpriseId) {
+		return Response.status(Status.OK).entity(cs.unsubscribeFromEnterprise(candidateId, enterpriseId)).build();
 	}
 	
 	

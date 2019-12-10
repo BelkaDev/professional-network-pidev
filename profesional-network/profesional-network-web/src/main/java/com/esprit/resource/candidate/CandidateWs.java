@@ -92,7 +92,7 @@ public class CandidateWs {
 	@POST
 	@Path("addCandidate")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addCandidate(@QueryParam("firstName") String firstName,@QueryParam("lastName") String lastName,@QueryParam("biography") String biography,
+	public Response addCandidate(@QueryParam("firstName") String firstName,@QueryParam("lastName") String lastName,@QueryParam("bio") String biography,
 			@QueryParam("rating") double rating,MultipartFormDataInput input) {
 		CreateFolderIfNotExist(UPLOAD_FOLDER);
 		String fileName = uploadFile(input.getFormDataMap());
@@ -109,8 +109,28 @@ public class CandidateWs {
 	@GET
 	@Path("getCandidates")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response displayCandidates() {
-		return Response.status(Status.FOUND).entity(cs.displayCandidates()).build();
+	public Response displayCandidates(@QueryParam("id") int id) {
+		return Response.status(Status.OK).entity(cs.displayCandidates(id)).build();
+	}
+	
+	@GET
+	@Path("getCandidateById")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response displayCandidate(@QueryParam("id") int id) {
+		return Response.status(Status.OK).entity(cs.getCandidateById(id)).build();
+	}
+	
+	@PUT
+	@Path("updateBasicCandidate")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateBasicCAndidate(@QueryParam("id") int id, @QueryParam("firstName") String firstName,
+			@QueryParam("lastName")String lastName,@QueryParam("title")String title,@QueryParam("bio")String bio) {
+		Candidate c = new Candidate();
+		c.setFirstName(firstName);
+		c.setLastName(lastName);
+		c.setTitle(title);
+		c.setBiography(bio);
+		return Response.status(Status.OK).entity(cs.updateBasicCandidate(id, c)).build();
 	}
 
 	@POST
@@ -133,8 +153,7 @@ public class CandidateWs {
 		Skill s = new Skill();
 		s.setDesignation(designation);
 		s.setRating(rating);
-		cs.addProfileObject(s, candidateID);
-		return Response.status(Status.CREATED).entity("Skill Added").build();
+		return Response.status(Status.CREATED).entity(cs.addProfileObject(s, candidateID)).build();
 	}
 	
 	@POST
@@ -202,9 +221,8 @@ public class CandidateWs {
 	@DELETE
 	@Path("deleteSkill")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response deleteSkill(@QueryParam("skillID")int skillID,@QueryParam("candidateID")int candidateID) {
-		cs.deleteProfileObject(skillID, new Skill(), candidateID);
-		return Response.status(Status.OK).entity("the Skill has been deleted").build();
+	public Response deleteSkill(@QueryParam("skillId")int skillID,@QueryParam("candidateId")int candidateID) {
+		return Response.status(Status.OK).entity(cs.deleteProfileObject(skillID, new Skill(), candidateID)).build();
 	}
 	
 	@DELETE
@@ -256,6 +274,12 @@ public class CandidateWs {
 	public Response displayAllExperience(@QueryParam("id")int id) {
 		return Response.status(Status.OK).entity(cs.displayListOfProfileObject(id, new Experience())).build();
 	}
+	@GET
+	@Path("getAllSkill")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response displayAllSkill(@QueryParam("id")int id) {
+		return Response.status(Status.OK).entity(cs.displayListOfProfileObject(id, new Skill())).build();
+	}
 	
 	@GET
 	@Path("getCandidateByExperience")
@@ -293,10 +317,10 @@ public class CandidateWs {
 		e.setEndDate(endDate);
 		e.setType(type);
 		cs.updateProfileObject(id, e);
-		return Response.status(Status.OK).entity("Experience updated").build();
+		return Response.status(Status.OK).entity(e).build();
 	}
 	
-	@PUT
+	@POST
 	@Path("updateActivity")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response updateActivity(@QueryParam("id") int id,@QueryParam("designation")String designation,@QueryParam("Date")Date date ) {

@@ -169,8 +169,8 @@ public class CandidateService implements ICandidateServiceLocal, ICandidateServi
 	}
 
 	@Override
-	public List<Candidate> displayCandidates() {
-		return em.createQuery("select c from Candidate c",Candidate.class).getResultList();
+	public List<Candidate> displayCandidates(int id) {
+		return em.createQuery("select c from Candidate c where not id = "+id,Candidate.class).getResultList();
 	}
 
 
@@ -209,5 +209,22 @@ public class CandidateService implements ICandidateServiceLocal, ICandidateServi
 		}
 		return c.getActivities();
 	}
+
+	@Override
+	public Candidate updateBasicCandidate(int candidateId, Candidate c) {
+		Candidate old = em.find(Candidate.class, candidateId);
+		old.setFirstName(c.getFirstName());
+		old.setLastName(c.getLastName());
+		old.setTitle(c.getTitle());
+		old.setBiography(c.getBiography());
+		return old;
+	}
+
+	@Override
+	public Candidate getCandidateById(int candidateId) {
+		return em.find(Candidate.class, candidateId);
+	}
+
+	
 
 }

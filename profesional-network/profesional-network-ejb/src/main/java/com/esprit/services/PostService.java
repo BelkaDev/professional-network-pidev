@@ -41,7 +41,7 @@ public class PostService implements IPostServiceLocal,IPostServiceRemote {
 	MimeTypeToEnums mimetypetoenums ;
 
 	@Override
-	public void addPost(int idUser,String content, FileUpload file) {
+	public Post addPost(int idUser,String content, FileUpload file) {
 
 
 		User poster = em.find(User.class,idUser);
@@ -69,7 +69,7 @@ public class PostService implements IPostServiceLocal,IPostServiceRemote {
 		post.setType(mimetypetoenums.toPostType(mimeType));	
 		if ((post.getUser() == null )){
 			System.out.println("The user doesn't exist.");
-			return ;
+			return null;
 			}
 		else {
 				em.persist(post);
@@ -90,6 +90,7 @@ public class PostService implements IPostServiceLocal,IPostServiceRemote {
 		NOTIFICATION_TYPE type = NOTIFICATION_TYPE.Follow;
 		notificationservice.CreateNotification(usr.getId(),notif_message,type ,idPost);
 		}
+		return post;
 		
 		}
 

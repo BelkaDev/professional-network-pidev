@@ -3,12 +3,14 @@ package com.esprit.resource;
 
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -30,7 +32,7 @@ public class NotificationWS {
 	
 	@EJB
     NotificationService notificationService = new NotificationService();
-
+	private final String out = "{  \"response\" : \"success\" }" ;
     @GET
     @Path("all")
     @Asynchronous
@@ -64,6 +66,19 @@ public class NotificationWS {
 		else
 		return Response.status(Status.OK).entity(notifs).build();
 	}
+
+	@DELETE
+	@Path("delete")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response removeNotif(@QueryParam("id") int id) {
+
+		if(notificationService.deleteNotif(id))
+		{
+		return Response.status(Status.OK).entity(out).build();
+		}
+		return Response.status(Status.NOT_FOUND).entity("Error").build();
+		
+	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -75,7 +90,13 @@ public class NotificationWS {
 		else
 		return Response.status(Status.OK).entity(notif).build();
 	}
-	
+	@DELETE
+	@Path("seeAll")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response removeNotifs(List<Notification> list ) {
+		System.out.println(list);
+        return Response.status(Status.OK).entity(out).build();
+			}
 
 }
 
