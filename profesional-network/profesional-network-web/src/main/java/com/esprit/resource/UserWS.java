@@ -129,7 +129,7 @@ public class UserWS {
 					userservice.updateToken(username,token);
 					System.out.println("****************** " + token);
 					System.out.println(UserSession.getInstance());
-					System.out.println("TITLEE= "+UserSession.getCandidateSession().getTitle());
+						//System.out.println("TITLEE= "+UserSession.getCandidateSession().getTitle());
 					System.out.println("ROLE=="+ UserSession.getInstance().getRole()+Role.Candidate);
 					System.out.println(Role.Candidate==UserSession.getInstance().getRole());
 					if(UserSession.getInstance().getRole()==Role.Candidate)

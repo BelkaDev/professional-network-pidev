@@ -79,7 +79,19 @@ public class PostWS {
 	    return Response.status(200).entity("uploaded file to "+ fileName).build();
 		
 	}
-	
+	@POST
+	@Consumes("*/*")
+	@Path("addFile")
+	public Response addPostWFile(@QueryParam("content") String content,
+			@QueryParam("file") String filename
+	) {
+			int idUser = UserSession.getInstance().getId();
+		
+		    FileUpload fileS = new FileUpload();
+		    fileS.setPath(filename);
+		    PostService.addPostWithFile(idUser,content,filename);
+		    return Response.status(200).entity(out).build();
+	}
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
