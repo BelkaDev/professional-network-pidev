@@ -116,16 +116,7 @@ public class EnterpriseWS {
 		return enterprisews.getenterpriseById(Eid);
 		
 	}
-	
-	
-	@GET 
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("getsubsbyent")
-	public Response getsubscriptionbyent(@QueryParam("entid") int entid) {
-		
-		return Response.status(Status.OK).entity(enterprisews.getsubscriberByEnt(entid)).build();
-	}
-	
+
 	
 	
 	

@@ -15,6 +15,7 @@ import javax.persistence.PersistenceContext;
 
 import com.esprit.Iservice.IPostServiceLocal;
 import com.esprit.Iservice.IPostServiceRemote;
+import com.esprit.beans.Enterprise;
 import com.esprit.beans.FileUpload;
 import com.esprit.beans.Post;
 import com.esprit.beans.User;
@@ -131,6 +132,27 @@ public class PostService implements IPostServiceLocal,IPostServiceRemote {
 		return true;
 	}
 
+	public int addPostWithFile(int idUser,String content,String filename)
+	{
+	Timestamp date = new Timestamp(System.currentTimeMillis());
+	FileUpload newfile = new FileUpload();
+	newfile.setPath(filename);
+	newfile.setType(null);
+	fileService.addFile(newfile);
+	Post post = new Post();
+	User poster = em.find(User.class,idUser);
+	post.setFile(newfile);
+	post.setDate(date);
+	post.setType(POST_TYPE.Image);
+	post.setContent(content);
+	post.setUser(poster);
+	post.setAuthor(poster.getId());
+	
+	//if(UserSession.getInstance().getRole()==Role.Enterprise_Admin) {
+		em.persist(post);
+		em.flush();
+		return 1;
+	}
 	@Override
 	public boolean deletePost(int id) {
 		Post post = em.find(Post.class, id);
