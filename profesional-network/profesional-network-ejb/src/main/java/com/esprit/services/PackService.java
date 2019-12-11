@@ -58,6 +58,7 @@ public class PackService implements IPackServiceLocal, IPackServiceRemote {
 	public void updatePack(int id, String title, PackType type, double price, Date startDate, Date endDate,
 			double reduction) {
 		Pack p = em.find(Pack.class, id);
+	
 		p.setTitle(title);
 		p.setType(type);
 		p.setStartDate(startDate);
@@ -86,8 +87,8 @@ public class PackService implements IPackServiceLocal, IPackServiceRemote {
 	}
 	
 	@Override
-	public void addPackToPayIt(int packId) {
-		User u = em.find(User.class, 1);
+	public void addPackToPayIt(int idU,int packId) {
+		User u = em.find(User.class, idU);
 		Pack p = em.find(Pack.class, packId);
 		System.out.println("/**********************************"+u.getId()+" "+ p.getId());
 		UserPack up = new UserPack();
@@ -96,12 +97,7 @@ public class PackService implements IPackServiceLocal, IPackServiceRemote {
 		up.setUser(u);
 		System.out.println("*************"+up.getPack()+" "+up.getUser());
 		up.setValid(false);
-		if(p.getReduction()!=0)
-		{
-		up.setStartDate(p.getStartDate());
-		up.setEndDate(p.getEndDate());
 		
-		}
 		em.persist(up);
 		u.getPacks().add(up);
 		p.getUsers().add(up);
@@ -133,6 +129,15 @@ public class PackService implements IPackServiceLocal, IPackServiceRemote {
 		return query.getResultList();
 		
 	}
+	public UserPack getUserPack(int idp,int idu) {
+		Pack p =em.find(Pack.class, idp);
+		User u =em.find(User.class, idu);
+		TypedQuery<UserPack> query = em.createQuery("select e from UserPack e where e.pack= :id and e.user=:id1",UserPack.class);
+		query.setParameter("id",p );
+		query.setParameter("id1", u);
+		
+		return query.getSingleResult();
+	}
 
 	public double daysLeft(Date debut, Date fin) {
 
@@ -146,6 +151,12 @@ public class PackService implements IPackServiceLocal, IPackServiceRemote {
 	public Pack findPackById(int id) {
 		return em.find(Pack.class, id);
 	}
+	public UserPack getUserPack(int id) {
+		Pack p=em.find(Pack.class, id);
+		TypedQuery<UserPack> query=em.createQuery("select e from UserPack e where e.pack=:id",UserPack.class);
+		query.setParameter("id",p);
+		return query.getSingleResult();
+	}
 
 	public List<User> getUsers() {
 
@@ -154,5 +165,6 @@ public class PackService implements IPackServiceLocal, IPackServiceRemote {
 
 		return results;
 	}
+	
 
 }

@@ -18,7 +18,7 @@ public interface IPackServiceLocal {
 	public void deletePack(int id);
 	public List<Pack> allpacks();
 	public Pack getPack(int id);
-	public void addPackToPayIt(int packId);
+	public void addPackToPayIt(int idU,int packId);
 	public Pack findPackById(int id);
 	public void bonusPack(UserPack up);
 	public List<UserPack> getUsersByPack(int id);

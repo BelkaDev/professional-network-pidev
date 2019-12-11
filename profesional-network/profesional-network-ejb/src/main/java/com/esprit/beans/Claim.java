@@ -31,10 +31,10 @@ public class Claim implements Serializable {
 	private State state;
 	@Column(name="type")
 	private String type;
-	@JsonIgnore
+	
 	@ManyToOne 
 	private User whoClaim; 
-	@JsonIgnore	
+	
 	@ManyToOne
 	private User claimsOn;
 	@Column(name="date")

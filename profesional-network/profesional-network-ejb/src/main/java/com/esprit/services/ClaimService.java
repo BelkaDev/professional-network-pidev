@@ -39,9 +39,9 @@ public class ClaimService implements IClaimServiceLocal,IClaimServiceRemote {
 		java.sql.Date d=java.sql.Date.valueOf(LocalDate.now());
 		
 		c.setDate(d);
-		c.setDescription(description);
+		c.setDescription("probleme sur mouhib ben rhouma");
 		c.setState(State.untreated);
-		c.setType("intreated");
+		c.setType("probleme");
 		c.setClaimsOn(claimsOn);
 		c.setWhoClaim(whoClaim);
 		em.persist(c);

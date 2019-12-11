@@ -139,7 +139,12 @@ public class PaymentServiceWs {
 	 public Response getUserByPayment(@PathParam(value="id")int id) {
 		 return Response.status(Status.OK).entity(ps.getUserByPayment(id)).build();
 	 }
-	 
+	 @GET
+	 @Path("getUserPack/{id}")
+	 @Produces(MediaType.APPLICATION_JSON)
+	 public Response getUserPack(@PathParam(value="id")int id) {
+		 return Response.status(Status.OK).entity(ps.getUserPack(id)).build();
+	 }
 	 
 	 
 	 

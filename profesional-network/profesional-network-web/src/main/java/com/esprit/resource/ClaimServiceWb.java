@@ -63,17 +63,11 @@ public class ClaimServiceWb {
 	 @GET
 		@Produces(MediaType.APPLICATION_JSON)
 		@Path("allClaims")
-	    public List<String> getClaims()
+	    public List<Claim> getClaims()
 	    {
-		 List<String> all=new ArrayList<String>();
-		 List<Claim> c=cs.allClaims();
-		 for(Claim a : c)
-		 {
-			 
-			 all.add(a.toString());
-		 }
 		 
-		 return all;
+		  return cs.allClaims();
+		
 		 
 		 
 		 

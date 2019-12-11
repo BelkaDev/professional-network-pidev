@@ -9,14 +9,14 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-
+import javax.enterprise.inject.Typed;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import com.esprit.Iservice.IPayementServiceLocal;
 import com.esprit.Iservice.IPayementServiceRemote;
-
+import com.esprit.beans.Pack;
 import com.esprit.beans.Payement;
 import com.esprit.beans.User;
 import com.esprit.beans.UserPack;
@@ -108,10 +108,10 @@ public class PaymentService implements IPayementServiceLocal, IPayementServiceRe
 		}
 		return true;
 	}
-	@SuppressWarnings("deprecation")
+	
 	@Override
 	public boolean payPack(int idPack, String numCard, int cvv, Date expirationDate) {
-		UserPack up = em.find(UserPack.class, idPack);
+		UserPack up = this.getUserPack(idPack);
 		Payement p = new Payement();
 		int length = numCard.length();
 		int length1 = Integer.toString(cvv).length();
@@ -137,7 +137,10 @@ public class PaymentService implements IPayementServiceLocal, IPayementServiceRe
 //			up.setStartDate(Date.valueOf(LocalDate.now()));
 //		up.setEndDate(endDatePack(up.getPack().getTitle()));
 			//up.setPayment(em.find(Payement.class,p));
-			
+			TypedQuery<Payement> query=em.createQuery("select e from Payement e where e.numCard=:k",Payement.class);
+			query.setParameter("k", numCard);
+			Payement l=query.getSingleResult();
+			up.setPayment(l);
 			
 			return true;
 		}
@@ -151,18 +154,14 @@ public class PaymentService implements IPayementServiceLocal, IPayementServiceRe
 		
 		
 		Payement p = em.find(Payement.class, idPack);
-		if(UserSession.getInstance().equals(null)){
-			return false;
-		}
-		else if(p.getUserPack().getUser().getId()==UserSession.getInstance().getId()) {
+		
 		if (p.isValidation()) {
 			return false;
 		}
-		p.setCanceled(true);
+		else{p.setCanceled(true);
 		em.merge(p);
 		return true;
 		}
-		return false;
 	}
 
 	@Override
@@ -265,4 +264,15 @@ public class PaymentService implements IPayementServiceLocal, IPayementServiceRe
 		query.setParameter("id", em.find(Payement.class, id));
 		return query.getSingleResult();
 	}
+	public UserPack getUserPack(int id) {
+		
+		User u=em.find(User.class, 1);
+		TypedQuery<UserPack> query=em.createQuery("select e from UserPack e where e.user=:id",UserPack.class);
+		query.setParameter("id",u);
+		
+			UserPack a=query.getSingleResult();				
+		
+	return a;
+	}
+	
 }

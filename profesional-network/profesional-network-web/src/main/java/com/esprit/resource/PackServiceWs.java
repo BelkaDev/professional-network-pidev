@@ -132,10 +132,10 @@ public class PackServiceWs {
 	}
 
 	@PUT
-	@Path("payPack/{idP}")
+	@Path("payPack/{idU}/{idP}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response payPack( @PathParam(value = "idP") int idP) {
-		ps.addPackToPayIt( idP);
+	public Response payPack(@PathParam(value="idU")int idU, @PathParam(value = "idP") int idP) {
+		ps.addPackToPayIt(idU, idP);
 		return Response.status(200).entity(ps.findPackById(idP)).build();
 	}
 	@GET
@@ -143,6 +143,13 @@ public class PackServiceWs {
 	@Path("userByPack/{id}")
 	public List<UserPack> getUserByPack(@PathParam(value = "id") int id) {
 		return ps.getUsersByPack(id);
+		
+	}
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("userByPack1/{id}")
+	public UserPack getUserByPack1(@PathParam(value = "id") int id) {
+		return ps.getUserPack(id);
 		
 	}
 	
