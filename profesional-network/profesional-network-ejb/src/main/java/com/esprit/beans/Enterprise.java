@@ -40,6 +40,7 @@ public class Enterprise implements Serializable {
 	
 	
 	
+	
 	//@OneToMany(cascade = CascadeType.ALL, mappedBy = "enterprise")
 		//private Set<JobOffer> joboffer;
 	
