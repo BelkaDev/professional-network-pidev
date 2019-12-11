@@ -19,7 +19,7 @@ import com.esprit.beans.EnterpriseEvent;
 import com.esprit.beans.FileUpload;
 import com.esprit.beans.JobOffer;
 import com.esprit.beans.User;
-import com.esprit.beans.candidate.Subscription;
+//import com.esprit.beans.candidate.Subscription;
 import com.esprit.enums.Role;
 import com.esprit.utils.UserSession;
 
@@ -106,7 +106,7 @@ User user = em.find(User.class, userid);
 		return q1.getResultList();
 	}
 	
-	@Override
+	/*@Override
 	public List<Subscription> getsubscriberByEnt(int entid) {
 		
 		TypedQuery<Subscription> q1 = em.createQuery("select e from Subscription e where enterpriseId=:entid", Subscription.class);
@@ -115,7 +115,7 @@ User user = em.find(User.class, userid);
 		
 		
 
-	} 
+	} */
 	
 	
 	
