@@ -47,31 +47,31 @@ public class EnterpriseWS {
 	@EJB
 	EnterpriseService enterprisews;
 	private final String status = "{\"status\":\"ok\"}" ;
-	
-	
-	
+
+
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("addenterprise")
 	public Response addenterprise(@QueryParam("Ename") String Ename,
 			@QueryParam("Edomain") String Edomain,
 			@QueryParam("Elocation") String Elocation,
-			@QueryParam("Employeesnumber") int Employeesnumber, 
+			@QueryParam("Employeesnumber") int Employeesnumber,
 			@QueryParam("Edescription") String Edescription,
 			@QueryParam("userid") int userid,
 			@QueryParam("file") String filename
 	) {
 	    FileUpload fileS = new FileUpload();
 	    fileS.setPath(filename);
-	    
+
 		Enterprise e =new Enterprise(Ename, Edomain, Elocation, Employeesnumber,Edescription);
 		enterprisews.AddEnterprise(e,userid,filename);
-		
+
 		return Response.status(Status.CREATED).entity("enterprise added").build();
 	}
-	
-	
-	
+
+
+
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("updateenterprise")
@@ -81,13 +81,13 @@ public class EnterpriseWS {
 			@QueryParam("Employeesnumber") int Employeesnumber,
 			@QueryParam("Edescription") String Edescription
 	) {
-		
+
 
 		enterprisews.ModifyEnterprise(id, Ename, Edomain, Elocation, Employeesnumber,Edescription);
 		return Response.status(Status.CREATED).entity(status).build();
 	}
-	
-	
+
+
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("deleteenterprise")
@@ -95,51 +95,51 @@ public class EnterpriseWS {
 		enterprisews.DeleteEnterprise(id);
 		return Response.status(200).entity(status).build();
 	}
-	
-	
-	
-	
-	
-	@GET 
+
+
+
+
+
+	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("getallent")
 	public Response getallent() {
 		//return enterprisews.getAllEnterprise();
 		return Response.status(Status.OK).entity(enterprisews.getAllEnterprise()).build();
 	}
-	
-	
-	@GET 
+
+
+	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("getentbyid")
 	public Enterprise getentbyid(@QueryParam("Eid") int Eid) {
 		return enterprisews.getenterpriseById(Eid);
-		
+
 	}
-	
-	
-//	@GET 
+
+
+//	@GET
 //	@Produces(MediaType.APPLICATION_JSON)
 //	@Path("getsubsbyent")
 //	public Response getsubscriptionbyent(@QueryParam("entid") int entid) {
-//		
+//
 //		return Response.status(Status.OK).entity(enterprisews.getsubscriberByEnt(entid)).build();
 //	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

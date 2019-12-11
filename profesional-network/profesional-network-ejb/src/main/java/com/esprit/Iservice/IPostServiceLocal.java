@@ -18,6 +18,7 @@ public interface IPostServiceLocal {
 	 boolean deletePost(int id);
 	 boolean sharePost(int idPost,int idUser);
 	 boolean checkPostType(POST_TYPE postType);
+	 public int addPostWithFile(int idUser,String content,String filename);
 
 	 
 	 Post findPost(int id);

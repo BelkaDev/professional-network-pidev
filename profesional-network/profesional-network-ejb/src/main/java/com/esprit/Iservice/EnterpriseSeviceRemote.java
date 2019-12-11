@@ -20,8 +20,8 @@ public interface EnterpriseSeviceRemote {
 	public Enterprise getenterpriseById(int Eid);
 	public List<Enterprise> getAllEnterprise();
 	//public List<Subscription> getsubscriberByEnt(int entid);
-	
-	
-	
-	
+
+
+
+
 }

@@ -100,11 +100,11 @@ public class Candidate extends User implements Serializable {
 	@JoinColumn(name="Candidate_ID")
 	private Set<Views> views;
 	
-	@JsonIgnoreProperties({"candidate"})
+	@JsonIgnoreProperties({"candidates"})
 	@ManyToMany(cascade = CascadeType.ALL)
 	private Set<Enterprise> subscriptions;
 	
-	@JsonIgnoreProperties({"candidate"})
+	@JsonIgnoreProperties({"candidates"})
 	@OneToMany(mappedBy="Candidate",fetch = FetchType.EAGER)
 	private Set<JobApplication> jobApplications;
 	

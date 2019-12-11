@@ -29,7 +29,7 @@ public class EnterpriseService  implements EnterpriseSeviceRemote{
 
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
-	
+
 	@EJB
 	FileService fileService;
 	@Override
@@ -40,7 +40,7 @@ public class EnterpriseService  implements EnterpriseSeviceRemote{
 		fileService.addFile(newfile);
 		enterprise.setFile(newfile);
 User user = em.find(User.class, userid);
-		
+
 		//if(UserSession.getInstance().getRole()==Role.Enterprise_Admin) {
 			em.persist(enterprise);
 			Enterprise ent = em.find(Enterprise.class, enterprise.getEid());
@@ -49,22 +49,22 @@ User user = em.find(User.class, userid);
 
 			return enterprise.getEid();
 		}
-		
+
 		//return 0;
 	    //}
-	
-	
+
+
 	@Override
 	public void DeleteEnterprise(int id) {
-		
+
 		User user = em.find(User.class, UserSession.getInstance().getId());
-		
+
 		if(UserSession.getInstance().getRole()==Role.Enterprise_Admin)
 		em.remove(em.find(Enterprise.class, id));
 		}
-	
-	
-	
+
+
+
 	@Override
 	public int ModifyEnterprise(int id, String name, String domain, String location, int empnumber, String descrip) {
 		Query query = em.createQuery("update Enterprise e set e.Ename=:name, e.Edomain=:domain, e.Elocation=:location , e.Edescription=:descrip , e.Employeesnumber=:empnumber  where e.Eid=:id");
@@ -74,24 +74,24 @@ User user = em.find(User.class, userid);
 		query.setParameter("location", location);
 		query.setParameter("empnumber", empnumber);
 		query.setParameter("descrip", descrip);
-		
+
 		System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaa"+UserSession.getInstance().getId());
 		User user = em.find(User.class, UserSession.getInstance().getId());
-		
+
 		//if(user.getRole()==Role.Enterprise_Admin && user.getEnterprise().getEid()==id ) {
 			int modified = query.executeUpdate();
-			
+
 			return modified;
 		//}
-		
+
 		//return 0;
-		
-		
+
+
 	}
 
 	@Override
 	public Enterprise getenterpriseById(int Eid) {
-		
+
 		TypedQuery<Enterprise> q1 = em.createQuery("select e from Enterprise e where Eid=:Eid", Enterprise.class);
 		q1.setParameter("Eid", Eid);
 		Enterprise e= q1.getSingleResult();
@@ -99,26 +99,26 @@ User user = em.find(User.class, userid);
 		return e;
 
 	}
-	
+
 	@Override
 	public List<Enterprise> getAllEnterprise() {
 		TypedQuery<Enterprise> q1 = em.createQuery("select e from Enterprise e", Enterprise.class);
 		return q1.getResultList();
 	}
-	
+
 //	@Override
 //	public List<Subscription> getsubscriberByEnt(int entid) {
-//		
+//
 //		TypedQuery<Subscription> q1 = em.createQuery("select e from Subscription e where enterpriseId=:entid", Subscription.class);
 //		q1.setParameter("entid", entid);
 //		return q1.getResultList();
-//		
-//		
 //
-//	} 
-	
-	
-	
-	
+//
+//
+//	}
+
+
+
+
 
 }

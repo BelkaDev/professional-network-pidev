@@ -145,6 +145,15 @@ public class CandidateWs {
 		e.setEndDate(endDate);
 		return Response.status(Status.OK).entity(cs.addProfileObject(e, candidateID)).build();
 	}
+	@POST
+	@Path("addActivity")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addActivity(@QueryParam("designation") String designation,@QueryParam("Date") Date date, @QueryParam("candidateID") int candidateID) {
+		Activity a = new Activity();
+		a.setDesignation(designation);
+		a.setDate(date);
+		return Response.status(Status.OK).entity(cs.addProfileObject(a, candidateID)).build();
+	}
 	
 	@POST
 	@Path("addSkill")
@@ -156,16 +165,7 @@ public class CandidateWs {
 		return Response.status(Status.CREATED).entity(cs.addProfileObject(s, candidateID)).build();
 	}
 	
-	@POST
-	@Path("addActivity")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response addActivity(@QueryParam("designation") String designation,@QueryParam("Date") Date date, @QueryParam("candidateID") int candidateID) {
-		Activity a = new Activity();
-		a.setDesignation(designation);
-		a.setDate(date);
-		cs.addProfileObject(a, candidateID);
-		return Response.status(Status.CREATED).entity("Activity Added").build();
-	}
+	
 	@POST
 	@Path("addCertification")
 	@Produces(MediaType.APPLICATION_JSON)
