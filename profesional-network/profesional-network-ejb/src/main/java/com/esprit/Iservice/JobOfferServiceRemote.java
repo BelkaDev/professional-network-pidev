@@ -9,9 +9,9 @@ import com.esprit.beans.JobOffer;
 @Remote
 public interface JobOfferServiceRemote {
 
-	public int AddJobOffer(JobOffer joboffer);
-	public void DeleteJobOffer(int id);
-	public int ModifyJobOffer(int id, String title, String area, String descrip);
+	public int AddJobOffer(JobOffer joboffer,int entid);
+	public void DeleteJobOffer(int JOid);
+	public int ModifyJobOffer(int id, String title, String area, String descrip, int exp, String interests);
 	public List<JobOffer> getAllJobOffer();
 	public List<JobOffer> getJobofferByExperience(int JOexperience);
 	public List<JobOffer> getJobofferOrderByVues();

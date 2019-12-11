@@ -26,7 +26,8 @@ public class AnswerWs {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addAnswer(@QueryParam("answer") String answer) {
 		answerService.addAnswer(answer);
-		return Response.status(Status.OK).entity("anwser added successfully").build();
+		Answer a = new Answer();
+		return Response.status(Status.OK).entity(a).build();
 	}
 
 	@PUT
@@ -34,7 +35,8 @@ public class AnswerWs {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response setCorrect(@QueryParam("id") int answer_id) {
 		answerService.SetCorrectAnswer(answer_id);
-		return Response.status(Status.FOUND).entity("this answer has been set to correct answer").build();
+		Answer a = new Answer();
+		return Response.status(Status.OK).entity(a).build();
 	}
 
 	@DELETE
@@ -42,7 +44,8 @@ public class AnswerWs {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response removeAnswer(@QueryParam("id") int answer_id) {
 		answerService.deleteAnswer(answer_id);
-		return Response.status(Status.OK).entity("answer has been removed").build();
+		Answer a = new Answer();
+		return Response.status(Status.OK).entity(a).build();
 	}
 
 	@PUT
@@ -50,14 +53,21 @@ public class AnswerWs {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response updateAnswer(@QueryParam("id") int answer_id, @QueryParam("answer") String answer) {
 		answerService.updateAnswer(answer_id, answer);
-		return Response.status(Status.OK).entity("answer modified successfully").build();
+		Answer a = new Answer();
+		return Response.status(Status.OK).entity(a).build();
 	}
 	@GET
 	@Path("getAnswer")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAnswer(@QueryParam("id")int answer_id) {
 		Answer a=answerService.displayAnswer(answer_id);
-		return Response.status(Status.FOUND).entity(a).build();
+		return Response.status(Status.OK).entity(a).build();
+	}
+	@GET
+	@Path("getAnswers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllAnswers() {
+		return Response.status(Status.OK).entity(answerService.getAnswers()).build();
 	}
 
 }

@@ -70,6 +70,15 @@ public class Pack implements Serializable {
 	}
 	
 	
+	public Pack(String titre, String description2, double prix, PackType type2) {
+		this.title=titre;
+		this.description=description2;
+		this.price=prix;
+		this.type=type2;
+		// TODO Auto-generated constructor stub
+	}
+
+
 	public int getId() {
 		return id;
 	}

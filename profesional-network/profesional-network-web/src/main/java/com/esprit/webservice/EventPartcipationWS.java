@@ -3,6 +3,7 @@ package com.esprit.webservice;
 import java.sql.Date;
 
 import javax.ejb.EJB;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -25,28 +26,40 @@ public class EventPartcipationWS {
 	@EJB
 	EventParticipationService eventparticipationws;
 	private final String status = "{\"status\":\"ok\"}" ;
-	
+	private final String statusfailed = "{\"status\":\"already participated\"}" ;
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("addparticipation")
 	public Response addparticipation( 
-			@QueryParam("eventId") int eventId
+			@QueryParam("eventId") int eventId,
+			@QueryParam("userid") int userid
 			
 
 	) {
 		EventParticipation ep = new EventParticipation();
-		if(eventparticipationws.UniquePart(eventId)) {
+		if(eventparticipationws.UniquePart(eventId,userid)) {
 			
 
 		
-		eventparticipationws.addParticipation(ep, eventId);
-		return Response.status(Status.CREATED).entity("ADDED").build();
+		eventparticipationws.addParticipation(ep, eventId,userid);
+		return Response.status(Status.CREATED).entity(status).build();
  	}
-	return Response.status(Status.NOT_ACCEPTABLE).entity("you already participated").build();
-	 
-
+	return Response.status(Status.NOT_ACCEPTABLE).entity(status).build();
  	}
+	
+	@GET 
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("getuniquepart")
+	public Response getjoobofferbyent(@QueryParam("eventId") int eventId,
+									  @QueryParam("userid") int userid) {
+		if(eventparticipationws.UniquePart(eventId, userid)){
+			return Response.status(Status.CREATED).entity(status).build();
+		}
+		return Response.status(Status.NOT_ACCEPTABLE).entity(statusfailed).build();
+	}
+	
+	
 	
 	
 }

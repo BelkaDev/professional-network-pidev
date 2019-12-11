@@ -118,10 +118,11 @@ public class PaymentService implements IPayementServiceLocal, IPayementServiceRe
 		Date d = Date.valueOf(LocalDate.now());
 		p.setCardExpirationDate(expirationDate);
 		// int a=Integer.parseInt(numCard);
-		if(!(up.getUser().getId()==UserSession.getInstance().getId())) {
-			return false;
-		}
-		else if(!(numCardvalid(numCard))) {
+//		if(!(up.getUser().getId()==UserSession.getInstance().getId())) {
+//			return false;
+//		}
+//		else 
+			if(!(numCardvalid(numCard))) {
 			return false;
 		}
 		else if ((length == 16) && (length1 == 3) && (expirationDate.after(d))) {
@@ -133,10 +134,10 @@ public class PaymentService implements IPayementServiceLocal, IPayementServiceRe
 			p.setUserPack(up);
 
 			em.persist(p);
-			up.setStartDate(new Date(d.getYear(), d.getMonth(), d.getDay()));
-			up.setEndDate(endDatePack(up.getPack().getTitle()));
-			up.setPayment(p);
-			em.merge(up);
+//			up.setStartDate(Date.valueOf(LocalDate.now()));
+//		up.setEndDate(endDatePack(up.getPack().getTitle()));
+			//up.setPayment(em.find(Payement.class,p));
+			
 			
 			return true;
 		}
@@ -182,16 +183,16 @@ public class PaymentService implements IPayementServiceLocal, IPayementServiceRe
 	@Override
 	public List<Payement> ConsultPayments() {
 		User u =em.find(User.class,UserSession.getInstance().getId());
-		if(UserSession.getInstance().equals(null)){
-			return null;
-		}
-		else if(u.getRole().equals(Role.Admin)) {
+//		if(UserSession.getInstance().equals(null)){
+//			return null;
+//		}
+//		else if(u.getRole().equals(Role.Admin)) {
 		TypedQuery<Payement> list = em.createQuery("select e from Payement e ", Payement.class);
 
 		return list.getResultList();
 		
-		}
-		return null;
+//		}
+//		return null;
 	}
 
 	@Override
@@ -219,20 +220,14 @@ public class PaymentService implements IPayementServiceLocal, IPayementServiceRe
 	public boolean validatePayment(int idUserPack) {
 
 		Payement p = em.find(Payement.class, idUserPack);
-		if(UserSession.getInstance().equals(null)){
-			return false;
-		}
-		else if(!(UserSession.getInstance().getRole().equals(Role.Admin))) {
-			return false;
-		}
-		else if (!p.isCanceled()) {
+		
 			p.setValidation(true);
 			p.getUserPack().setValid(true);
 			em.merge(p);
-			ns.CreateNotification(p.getUserPack().getUser().getId(), "your payment was validated", NOTIFICATION_TYPE.Payment, p.getId());
+			//ns.CreateNotification(p.getUserPack().getUser().getId(), "your payment was validated", NOTIFICATION_TYPE.Payment, p.getId());
 			return true;
-		}
-		return false;
+		
+		
 	}
 
 	@Override
@@ -261,5 +256,13 @@ public class PaymentService implements IPayementServiceLocal, IPayementServiceRe
 		}
 		return false;
 	}
-
+	
+	public Payement getPaymentById(int id) {
+		return em.find(Payement.class, id); 
+	}
+	public User getUserByPayment(int id) {
+		TypedQuery<User> query=em.createQuery("select e.user from UserPack e where e.payment=:id",User.class);
+		query.setParameter("id", em.find(Payement.class, id));
+		return query.getSingleResult();
+	}
 }

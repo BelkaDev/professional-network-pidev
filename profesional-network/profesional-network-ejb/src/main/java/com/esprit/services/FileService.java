@@ -28,10 +28,7 @@ public class FileService implements IFileServiceLocal,IFileServiceRemote {
 	
 
 	@Override
-	public boolean addFile(String path, FILE_TYPE type) {
-		FileUpload file = new FileUpload();
-		file.setPath(path);
-		file.setType(type);
+	public boolean addFile(FileUpload file) {;
 		em.persist(file);
 		return true;
 	}

@@ -1,5 +1,7 @@
 package com.esprit.Iservice;
 
+import java.util.List;
+
 import javax.ejb.Local;
 
 import com.esprit.beans.Answer;
@@ -11,5 +13,6 @@ public interface IAnswerServiceLocal {
 	public void SetCorrectAnswer(int answer_id);
 	public void updateAnswer(int answer_id,String answer);
 	public Answer displayAnswer(int answer_id);
+	public List<Answer> getAnswers();
 
 }

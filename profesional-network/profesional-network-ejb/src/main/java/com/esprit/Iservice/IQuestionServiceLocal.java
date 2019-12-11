@@ -15,5 +15,6 @@ public interface IQuestionServiceLocal {
 	public void updateQuestion(int question_id,String question);
 	public void assignResponseToQuestion(int question_id,int answer_id);
 	public Question DisplayQuestion(int question_id);
+	public List<Question> getQuestions();
 
 }

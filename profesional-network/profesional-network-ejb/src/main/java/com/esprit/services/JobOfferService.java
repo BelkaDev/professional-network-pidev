@@ -41,11 +41,11 @@ public class JobOfferService implements JobOfferServiceRemote {
 	
 	
 	@Override
-	public int AddJobOffer(JobOffer joboffer) {
+	public int AddJobOffer(JobOffer joboffer,int entid) {
 		User user= em.find(User.class, UserSession.getInstance().getId());
-		if (UserSession.getInstance().getRole() == Role.Project_Leader) {
+		//if (UserSession.getInstance().getRole() == Role.Project_Leader) {
 
-			Enterprise enterpriseManagedEntity = em.find(Enterprise.class, user.getEnterprise().getEid());
+			Enterprise enterpriseManagedEntity = em.find(Enterprise.class,entid);
 			joboffer.setEnterprise(enterpriseManagedEntity);
 			joboffer.setIsValid(0);
 			joboffer.setVuesNumber(0);
@@ -59,7 +59,7 @@ public class JobOfferService implements JobOfferServiceRemote {
 			return joboffer.getJOid();
 		}
 
-		else if (UserSession.getInstance().getRole() == Role.Human_Resouces ) {
+		/*else if (UserSession.getInstance().getRole() == Role.Human_Resouces ) {
 			
 			Enterprise enterpriseManagedEntity = em.find(Enterprise.class, user.getEnterprise().getEid());
 			joboffer.setEnterprise(enterpriseManagedEntity);
@@ -74,28 +74,30 @@ public class JobOfferService implements JobOfferServiceRemote {
 		}
 
 		return 0;
+	}*/
+
+	@Override
+	public void DeleteJobOffer(int JOid) {
+		em.remove(em.find(JobOffer.class, JOid));
+
 	}
 
 	@Override
-	public void DeleteJobOffer(int id) {
-		em.remove(em.find(JobOffer.class, id));
-
-	}
-
-	@Override
-	public int ModifyJobOffer(int id, String title, String area, String descrip) {
+	public int ModifyJobOffer(int id, String title, String area, String descrip, int exp, String interests) {
 		Query query = em.createQuery(
-				"update JobOffer j set j.JOtitle=:title, j.JOarea=:area, j.JOdescription=:descrip  where j.JOid=:id");
+				"update JobOffer j set j.JOtitle=:title, j.JOarea=:area, j.JOdescription=:descrip, j.JOexperience=:exp, j.interests=:interests   where j.JOid=:id");
 		query.setParameter("id", id);
 		query.setParameter("title", title);
 		query.setParameter("area", area);
 		query.setParameter("descrip", descrip);
+		query.setParameter("exp", exp);
+		query.setParameter("interests", interests);
 		int modified = query.executeUpdate();
 		return modified;
 	}
 
 	public List<JobOffer> getAllJobOffer() {
-		TypedQuery<JobOffer> q1 = em.createQuery("select j from JobOffer j ", JobOffer.class);
+		TypedQuery<JobOffer> q1 = em.createQuery("select j from JobOffer j ORDER BY JOid DESC ", JobOffer.class);
 		return q1.getResultList();
 	}
 	

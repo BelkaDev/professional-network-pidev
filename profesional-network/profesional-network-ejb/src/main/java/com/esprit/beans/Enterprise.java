@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
@@ -33,10 +34,8 @@ public class Enterprise implements Serializable {
 	int Employeesnumber;
 	@Column(name="ENT_DESCRIPTION") 
 	String Edescription;
-	
-	
-	
-	
+	@OneToOne(cascade=CascadeType.ALL)
+    private FileUpload fileUpload;
 	
 	
 	
@@ -50,6 +49,12 @@ public class Enterprise implements Serializable {
 	//@OneToMany(cascade = CascadeType.ALL, mappedBy = "enterprise")
 		//private Set<EnterpriseUser> Euser;
 	
+
+
+
+
+
+
 	public Enterprise() {
 		super();
 	}
@@ -67,13 +72,14 @@ public class Enterprise implements Serializable {
 		Elocation = elocation;
 		Employeesnumber = employeesnumber;
 		Edescription = edescription;
+
 	}
 
 
 
 
 
-	public Enterprise(String ename, String edomain, String elocation, int employeesnumber, String edescription) {
+	public Enterprise(String ename, String edomain, String elocation, int employeesnumber, String edescription ) {
 		super();
 		Ename = ename;
 		Edomain = edomain;
@@ -85,12 +91,13 @@ public class Enterprise implements Serializable {
 
 
 
+	   public FileUpload getFile() {
+			return fileUpload;
+		}
 
-	
-
-
-
-
+		public void setFile(FileUpload fileUpload) {
+			this.fileUpload = fileUpload;
+		}
 
 	public String getElocation() {
 		return Elocation;

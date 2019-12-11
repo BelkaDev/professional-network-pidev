@@ -41,7 +41,7 @@ public class UserWS {
 
 	@EJB
 	UserService userservice = new UserService() ;
-
+	private final String status = "{\"status\":\"ok\"}" ;
 	@Context
 	UriInfo uriInfo;
 	@POST
@@ -74,7 +74,7 @@ public class UserWS {
 		User user = new User(email, firstName, lastName, password, gender, birthDate, d, username, role,interests);
 		
 		if(!userservice.UsernameMailUnique(user.getUsername(), user.getEmail())) {
-		userservice.addUser(user);
+		
 
 
 	 	return Response.status(Status.CREATED).entity("ADDED").build();
@@ -86,7 +86,7 @@ public class UserWS {
 
 	@POST
     @Path("addentuser")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)	
     public Response addEnterpriseUser(
             @QueryParam("username")String username,
             @QueryParam("email")String email,
@@ -201,11 +201,11 @@ public class UserWS {
 	@Path("logout")
 	@Produces(MediaType.APPLICATION_JSON)
 
-	public Response Logout(
+	public Response Logout(@QueryParam("id") int id
 
 	) {
-		userservice.logout();
-		return Response.status(Status.ACCEPTED).entity("ACCEPTED").build();
+		userservice.logout(id);
+		return Response.status(Status.ACCEPTED).entity(status).build();
 	}
 	private String issueToken(String username) {
 		// Issue a token (can be a random String persisted to a database or a JWT token)

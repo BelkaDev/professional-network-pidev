@@ -1,6 +1,7 @@
 package com.esprit.services;
 
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -27,15 +28,17 @@ public class ClaimService implements IClaimServiceLocal,IClaimServiceRemote {
 	@PersistenceContext(unitName = "pidevtwin-ejb")
 	EntityManager em;
 
-	@SuppressWarnings("deprecation")
+	
 	@Override
 	public void addClaim(String description, String type, int Whoclaim, int claimOn) {
 		UserSession user=UserSession.getInstance();
 		User whoClaim=em.find(User.class, user.getId());
 		User claimsOn=em.find(User.class, claimOn);
 		Claim c =new Claim();
-		Date date=new Date();
-		c.setDate(new java.sql.Date(date.getYear(), date.getMonth(), date.getDay()));
+		//Date date=new Date();
+		java.sql.Date d=java.sql.Date.valueOf(LocalDate.now());
+		
+		c.setDate(d);
 		c.setDescription(description);
 		c.setState(State.untreated);
 		c.setType("intreated");
@@ -112,6 +115,10 @@ public class ClaimService implements IClaimServiceLocal,IClaimServiceRemote {
 	{
 		User u=em.find(User.class, id);
 		return u.getFirstName()+" "+u.getLastName();
+	}
+	@Override
+	public User findUser(int id) {
+		return em.find(User.class, id);
 	}
 	
 	

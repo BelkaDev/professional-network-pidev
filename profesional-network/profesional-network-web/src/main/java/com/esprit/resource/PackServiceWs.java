@@ -1,6 +1,7 @@
 package com.esprit.resource;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import javax.ws.rs.core.Response.Status;
 
 import com.esprit.beans.Pack;
 import com.esprit.beans.User;
+import com.esprit.beans.UserPack;
 import com.esprit.enums.PackType;
 import com.esprit.services.PackService;
 import com.esprit.utils.UserSession;
@@ -100,9 +102,9 @@ public class PackServiceWs {
 			@QueryParam("type") PackType type
 
 	) {
-
+		Pack p=new Pack(titre, description, prix, type);
 		ps.addPack(titre, description, prix, type);
-		return Response.status(Status.CREATED).entity("Add succesful").build();
+		return Response.status(Status.CREATED).entity(p).build();
 	}
 
 	@PUT
@@ -114,9 +116,10 @@ public class PackServiceWs {
 			@QueryParam("dateFin") Date dateFin
 
 	) {
-		ps.addReduction(id, reduction, dateDebut, dateFin);
+		Date d=Date.valueOf(LocalDate.now());
+		ps.addReduction(id, reduction, d,d);
 
-		return Response.status(200).entity("reduction added sucefully").build();
+		return Response.status(200).entity(ps.findPackById(id)).build();
 	}
 
 	@DELETE
@@ -133,7 +136,16 @@ public class PackServiceWs {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response payPack( @PathParam(value = "idP") int idP) {
 		ps.addPackToPayIt( idP);
-		return Response.status(200).entity("pack paid " + UserSession.getInstance().getId()).build();
+		return Response.status(200).entity(ps.findPackById(idP)).build();
 	}
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("userByPack/{id}")
+	public List<UserPack> getUserByPack(@PathParam(value = "id") int id) {
+		return ps.getUsersByPack(id);
+		
+	}
+	
+
 
 }

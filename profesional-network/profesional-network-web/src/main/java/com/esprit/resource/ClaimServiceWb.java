@@ -48,9 +48,14 @@ public class ClaimServiceWb {
 	            @QueryParam("whoClaim")int whoClaim,
 	            @QueryParam("claimsOn")int claimsOn
 	    ){
+		 Claim c =new Claim();
+		 c.setClaimsOn(cs.findUser(claimsOn));
+		 c.setWhoClaim(cs.findUser(whoClaim));
+		 c.setDescription(description);
+		 c.setType(type);
 		 cs.addClaim( description, type, whoClaim, claimsOn);
-		 ns.CreateNotification(4, "claim", NOTIFICATION_TYPE.Message, 0);
-		 return Response.status(Status.CREATED).entity("Add succesful").build();
+		// ns.CreateNotification(4, "claim", NOTIFICATION_TYPE.Message, 0);
+		 return Response.status(Status.CREATED).entity(c).build();
 	    }
 	 
 	 

@@ -10,9 +10,10 @@ import com.esprit.beans.EnterpriseEvent;
 @Remote
 public interface EnterpriseEventServiceRemote {
 
-	public int AddEnterpriseEvent(EnterpriseEvent event,int user);
+	public int AddEnterpriseEvent(EnterpriseEvent event,int user,String filename);
 	public void DeleteEnterpriseEvent(int id);
 	public int ModifyEnterpriseEvent(int id, String title, String place,Date sdate, Date edate, String descrip, int minpart, int maxpart,float eprice  );
 	public List<EnterpriseEvent> getAllEnterpriseEvent();
 	public EnterpriseEvent geteventById(int EEid);
+	public List<EnterpriseEvent> getEventByEnt(int entid);
 }

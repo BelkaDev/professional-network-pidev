@@ -30,7 +30,8 @@ public class QuestionWs {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addQuestion(@QueryParam("question") String question) {
 		questionService.addQuestion(question);
-		return Response.status(Status.OK).entity("the question has been added").build();
+		Question q=new Question();
+		return Response.status(Status.OK).entity(q).build();
 	}
 
 	@PUT
@@ -38,14 +39,16 @@ public class QuestionWs {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response updateQuestion(@QueryParam("id") int question_id, @QueryParam("question") String question) {
 		questionService.updateQuestion(question_id, question);
-		return Response.status(Status.OK).entity("question updated").build();
+		Question q=new Question();
+		return Response.status(Status.OK).entity(q).build();
 	}
 	@DELETE
 	@Path("deleteQuestion")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteQuestion(@QueryParam("id")int question_id) {
 		questionService.deleteQuestion(question_id);
-		return Response.status(Status.OK).entity("question has been deleted").build();
+		Question q=new Question();
+		return Response.status(Status.OK).entity(q).build();
 	}
 	@GET
 	@Path("displayQuesiton")
@@ -59,6 +62,13 @@ public class QuestionWs {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response assignAnswerToQuestion(@QueryParam("idQ")int question_id,@QueryParam("idA")int answer_id) {
 		questionService.assignResponseToQuestion(question_id, answer_id);
-		return Response.status(Status.OK).entity("the answer has been assigned to the question").build();
+		Question q=new Question();
+		return Response.status(Status.OK).entity(q).build();
+	}
+	@GET
+	@Path("getQuestions")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllQuestions() {
+		return Response.status(Status.OK).entity(questionService.getQuestions()).build();
 	}
 }

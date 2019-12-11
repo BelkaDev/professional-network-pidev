@@ -6,6 +6,7 @@ import javax.ejb.Remote;
 
 import com.esprit.beans.Claim;
 import com.esprit.beans.State;
+import com.esprit.beans.User;
 
 
 @Remote
@@ -19,4 +20,5 @@ public interface IClaimServiceRemote {
 	public List<Claim> getClaimUntreated();
 	public List<Claim> getClaimInProgress();
 	public String findUserInClaimById(int id);
+	public User findUser(int id);
 }
